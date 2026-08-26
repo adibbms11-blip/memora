@@ -6,7 +6,9 @@
 <title>Memora — Akun</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box
+}
 
 body{
   margin:0;
@@ -190,7 +192,9 @@ body{
 
 <main class="page">
 
-  <div class="brand">memora</div>
+  <div class="brand">
+    memora
+  </div>
 
   <div class="intro" id="intro">
     Buat akun untuk mulai membuat galeri.
@@ -203,30 +207,49 @@ body{
     </div>
 
     <div class="tabs">
-      <button id="reg" onclick="mode('register')">
+
+      <button
+        id="reg"
+        onclick="mode('register')">
         Daftar
       </button>
 
-      <button id="sign" onclick="mode('signin')">
+      <button
+        id="sign"
+        onclick="mode('signin')">
         Masuk
       </button>
+
     </div>
 
-    <div class="error" id="error"></div>
+    <div
+      class="error"
+      id="error">
+    </div>
 
-    <div class="success" id="success"></div>
+    <div
+      class="success"
+      id="success">
+    </div>
 
     <form onsubmit="submitForm(event)">
 
-      <div class="field" id="nameWrap">
+      <!-- NAMA -->
+      <div
+        class="field"
+        id="nameWrap">
+
         <label>Nama</label>
 
         <input
           id="name"
           placeholder="Nama kamu"
-        >
+          autocomplete="name">
+
       </div>
 
+
+      <!-- EMAIL -->
       <div class="field">
 
         <label>Email</label>
@@ -235,11 +258,13 @@ body{
           id="email"
           type="email"
           placeholder="nama@email.com"
-          required
-        >
+          autocomplete="email"
+          required>
 
       </div>
 
+
+      <!-- PASSWORD -->
       <div class="field">
 
         <label>Password</label>
@@ -249,12 +274,16 @@ body{
           type="password"
           placeholder="Minimal 6 karakter"
           minlength="6"
-          required
-        >
+          autocomplete="new-password"
+          required>
 
       </div>
 
-      <div class="field" id="confirmWrap">
+
+      <!-- CONFIRM PASSWORD -->
+      <div
+        class="field"
+        id="confirmWrap">
 
         <label>Ulangi Password</label>
 
@@ -262,50 +291,70 @@ body{
           id="confirm"
           type="password"
           placeholder="Ketik ulang password"
-        >
+          autocomplete="new-password">
 
       </div>
 
+
+      <!-- SUBMIT -->
       <button
         class="submit"
         id="submit"
-        type="submit"
-      >
+        type="submit">
+
         Buat akun
+
       </button>
 
     </form>
+
 
     <div class="or">
       <span>atau</span>
     </div>
 
+
+    <!-- GOOGLE -->
     <button
       class="google"
       id="googleBtn"
-      onclick="googleLogin()"
-    >
+      onclick="googleLogin()">
+
       Masuk dengan Google
+
     </button>
 
   </div>
 
-  <div class="foot" id="foot"></div>
+
+  <div
+    class="foot"
+    id="foot">
+  </div>
+
 
   <div class="back">
-    <a href="choose.html">← Kembali</a>
+
+    <a href="choose.html">
+      ← Kembali
+    </a>
+
   </div>
 
 </main>
 
 
-<!-- SUPABASE -->
+<!-- =====================================================
+     SUPABASE JAVASCRIPT CLIENT
+===================================================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
 /* =====================================================
-   SUPABASE CONFIG
+   SUPABASE CONFIGURATION
 ===================================================== */
 
 const SUPABASE_URL =
@@ -314,7 +363,9 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_MWrUTn7S0cX1Ff50ebZvFQ_GxtiwiTy";
 
+
 const { createClient } = supabase;
+
 
 const sb = createClient(
   SUPABASE_URL,
@@ -323,161 +374,271 @@ const sb = createClient(
 
 
 /* =====================================================
-   ACCOUNT TYPE
+   URL PARAMETERS
 ===================================================== */
 
-const q = new URLSearchParams(location.search);
+const q =
+  new URLSearchParams(location.search);
+
+
+/*
+   mode:
+   register
+   signin
+*/
 
 let current =
   q.get("mode") || "register";
 
+
+/*
+   type:
+   photographer
+   memories
+*/
+
 let type =
   q.get("type") ||
-  localStorage.getItem("memora_account_type") ||
+  localStorage.getItem(
+    "memora_account_type"
+  ) ||
   "photographer";
 
 
 /* =====================================================
-   LABEL
+   ACCOUNT TYPE LABEL
 ===================================================== */
 
-document.getElementById("label").textContent =
+document.getElementById(
+  "label"
+).textContent =
+
   type === "photographer"
+
     ? "memora · for photographers"
+
     : "memora · for memories";
 
 
 /* =====================================================
-   MODE REGISTER / SIGN IN
+   REGISTER / SIGN IN MODE
 ===================================================== */
 
 function mode(m){
 
   current = m;
 
-  document.getElementById("reg").className =
-    m === "register" ? "active" : "";
 
-  document.getElementById("sign").className =
-    m === "signin" ? "active" : "";
+  /* TAB ACTIVE */
 
-  document.getElementById("nameWrap").style.display =
-    m === "register" ? "block" : "none";
+  document.getElementById(
+    "reg"
+  ).className =
+    m === "register"
+      ? "active"
+      : "";
 
-  document.getElementById("confirmWrap").style.display =
-    m === "register" ? "block" : "none";
 
-  document.getElementById("submit").textContent =
+  document.getElementById(
+    "sign"
+  ).className =
+    m === "signin"
+      ? "active"
+      : "";
+
+
+  /* NAMA */
+
+  document.getElementById(
+    "nameWrap"
+  ).style.display =
+    m === "register"
+      ? "block"
+      : "none";
+
+
+  /* CONFIRM PASSWORD */
+
+  document.getElementById(
+    "confirmWrap"
+  ).style.display =
+    m === "register"
+      ? "block"
+      : "none";
+
+
+  /* BUTTON */
+
+  document.getElementById(
+    "submit"
+  ).textContent =
     m === "register"
       ? "Buat akun"
       : "Masuk";
 
-  document.getElementById("intro").textContent =
+
+  /* DESCRIPTION */
+
+  document.getElementById(
+    "intro"
+  ).textContent =
+
     m === "register"
+
       ? "Buat akun untuk mulai membuat galeri."
+
       : "Masuk untuk melanjutkan ke Memora.";
 
-  document.getElementById("foot").innerHTML =
+
+  /* FOOTER */
+
+  document.getElementById(
+    "foot"
+  ).innerHTML =
+
     m === "register"
 
-      ? 'Sudah punya akun? <a href="#" onclick="mode(\'signin\');return false">Masuk di sini</a>'
+      ?
 
-      : 'Belum punya akun? <a href="#" onclick="mode(\'register\');return false">Buat akun</a>';
+      'Sudah punya akun? <a href="#" onclick="mode(\'signin\');return false">Masuk di sini</a>'
+
+      :
+
+      'Belum punya akun? <a href="#" onclick="mode(\'register\');return false">Buat akun</a>';
+
 
   clearMessages();
 }
 
 
 /* =====================================================
-   REGISTER / LOGIN
+   SUBMIT FORM
 ===================================================== */
 
 async function submitForm(e){
 
   e.preventDefault();
 
+
   clearMessages();
 
+
   const email =
-    document.getElementById("email")
-      .value
-      .trim();
+    document.getElementById(
+      "email"
+    ).value.trim();
+
 
   const pass =
-    document.getElementById("pass")
-      .value;
+    document.getElementById(
+      "pass"
+    ).value;
+
 
   const submit =
-    document.getElementById("submit");
+    document.getElementById(
+      "submit"
+    );
+
 
   submit.disabled = true;
 
+
   submit.textContent =
+
     current === "register"
+
       ? "Membuat akun..."
+
       : "Memproses...";
 
 
   try{
 
-    /* ================================================
+
+    /* =================================================
        REGISTER
-    ================================================ */
+    ================================================= */
 
     if(current === "register"){
 
       const name =
-        document.getElementById("name")
-          .value
-          .trim();
+        document.getElementById(
+          "name"
+        ).value.trim();
+
 
       const confirm =
-        document.getElementById("confirm")
-          .value;
+        document.getElementById(
+          "confirm"
+        ).value;
+
+
+      /* VALIDASI NAMA */
 
       if(!name){
 
-        err("Isi nama kamu dulu.");
+        err(
+          "Isi nama kamu dulu."
+        );
 
         return;
       }
+
+
+      /* VALIDASI PASSWORD */
 
       if(pass.length < 6){
 
-        err("Password minimal 6 karakter.");
+        err(
+          "Password minimal 6 karakter."
+        );
 
         return;
       }
+
+
+      /* VALIDASI CONFIRM */
 
       if(pass !== confirm){
 
-        err("Password belum sama.");
+        err(
+          "Password belum sama."
+        );
 
         return;
       }
 
 
-      const { data, error } =
-        await sb.auth.signUp({
+      /* ================================================
+         SUPABASE SIGN UP
+      ================================================= */
 
-          email: email,
+      const {
+        data,
+        error
+      } = await sb.auth.signUp({
 
-          password: pass,
+        email: email,
 
-          options: {
+        password: pass,
 
-            data: {
+        options: {
 
-              full_name: name,
+          data: {
 
-              account_type: type
+            full_name: name,
 
-            }
+            account_type: type
 
           }
 
-        });
+        }
 
+      });
+
+
+      /* ERROR */
 
       if(error){
 
@@ -487,54 +648,91 @@ async function submitForm(e){
 
 
       /*
-       * Supabase bisa memakai email confirmation.
-       * Kalau confirmation aktif, session belum langsung tersedia.
+       * Simpan tipe akun lokal sementara.
        */
 
-      if(data.session){
+      localStorage.setItem(
+        "memora_account_type",
+        type
+      );
 
-        localStorage.setItem(
-          "memora_account_type",
-          type
-        );
+
+      /* ================================================
+         JIKA SESSION LANGSUNG AKTIF
+      ================================================= */
+
+      if(data.session){
 
         success(
           "Akun berhasil dibuat. Mengarahkan..."
         );
 
-        setTimeout(() => {
 
-          goToDashboard();
+        setTimeout(
+          () => {
 
-        }, 700);
+            goToDashboard(
+              type
+            );
 
-      }else{
+          },
+          700
+        );
+
+
+      }
+
+      /* ================================================
+         JIKA EMAIL CONFIRMATION AKTIF
+      ================================================= */
+
+      else{
 
         success(
           "Akun berhasil dibuat. Cek email kamu untuk verifikasi, lalu masuk."
         );
 
-        mode("signin");
+
+        /*
+         * Pindah ke mode login.
+         */
+
+        setTimeout(
+          () => {
+
+            mode(
+              "signin"
+            );
+
+          },
+          1800
+        );
 
       }
 
+
       return;
+
     }
 
 
-    /* ================================================
-       SIGN IN
-    ================================================ */
+    /* =================================================
+       LOGIN
+    ================================================= */
 
-    const { data, error } =
-      await sb.auth.signInWithPassword({
+    const {
+      data,
+      error
+    } = await sb.auth.signInWithPassword({
 
-        email: email,
+      email: email,
 
-        password: pass
+      password: pass
 
-      });
+    });
 
+
+    /* ERROR */
 
     if(error){
 
@@ -543,13 +741,26 @@ async function submitForm(e){
     }
 
 
-    /* Ambil tipe akun dari metadata */
+    /* =================================================
+       AMBIL ACCOUNT TYPE
+    ================================================= */
 
     const accountType =
-      data.user?.user_metadata?.account_type ||
-      type ||
+
+      data.user
+        ?.user_metadata
+        ?.account_type
+
+      ||
+
+      type
+
+      ||
+
       "photographer";
 
+
+    /* SIMPAN TIPE */
 
     localStorage.setItem(
       "memora_account_type",
@@ -557,21 +768,36 @@ async function submitForm(e){
     );
 
 
+    /* =================================================
+       REDIRECT
+    ================================================= */
+
     success(
       "Berhasil masuk. Mengarahkan..."
     );
 
 
-    setTimeout(() => {
+    setTimeout(
+      () => {
 
-      goToDashboard(accountType);
+        goToDashboard(
+          accountType
+        );
 
-    }, 500);
+      },
+      500
+    );
 
 
-  }catch(error){
+  }
 
-    console.error(error);
+  catch(error){
+
+    console.error(
+      "Supabase Auth Error:",
+      error
+    );
+
 
     err(
       translateError(
@@ -579,13 +805,19 @@ async function submitForm(e){
       )
     );
 
-  }finally{
+  }
+
+  finally{
 
     submit.disabled = false;
 
+
     submit.textContent =
+
       current === "register"
+
         ? "Buat akun"
+
         : "Masuk";
 
   }
@@ -601,10 +833,15 @@ async function googleLogin(){
 
   clearMessages();
 
+
   const button =
-    document.getElementById("googleBtn");
+    document.getElementById(
+      "googleBtn"
+    );
+
 
   button.disabled = true;
+
 
   button.textContent =
     "Menghubungkan...";
@@ -612,10 +849,9 @@ async function googleLogin(){
 
   try{
 
+
     /*
-     * Simpan tipe akun sementara.
-     * Nanti setelah Google login kita bisa
-     * mengambilnya kembali.
+     * Simpan pilihan tipe akun
      */
 
     localStorage.setItem(
@@ -624,25 +860,41 @@ async function googleLogin(){
     );
 
 
+    /*
+     * URL setelah Google login
+     */
+
     const redirectUrl =
+
       window.location.origin +
+
       window.location.pathname +
+
       "?mode=signin&type=" +
-      encodeURIComponent(type);
+
+      encodeURIComponent(
+        type
+      );
 
 
-    const { error } =
-      await sb.auth.signInWithOAuth({
+    /* ================================================
+       GOOGLE OAUTH
+    ================================================= */
 
-        provider: "google",
+    const {
+      error
+    } = await sb.auth.signInWithOAuth({
 
-        options: {
+      provider: "google",
 
-          redirectTo: redirectUrl
+      options: {
 
-        }
+        redirectTo:
+          redirectUrl
 
-      });
+      }
+
+    });
 
 
     if(error){
@@ -651,10 +903,15 @@ async function googleLogin(){
 
     }
 
+  }
 
-  }catch(error){
+  catch(error){
 
-    console.error(error);
+    console.error(
+      "Google Auth Error:",
+      error
+    );
+
 
     err(
       translateError(
@@ -662,7 +919,9 @@ async function googleLogin(){
       )
     );
 
+
     button.disabled = false;
+
 
     button.textContent =
       "Masuk dengan Google";
@@ -678,8 +937,14 @@ async function googleLogin(){
 
 async function checkSession(){
 
-  const { data } =
-    await sb.auth.getSession();
+  const {
+    data
+  } = await sb.auth.getSession();
+
+
+  /*
+   * Belum login
+   */
 
   if(!data.session){
 
@@ -688,17 +953,38 @@ async function checkSession(){
   }
 
 
+  /*
+   * User sudah login
+   */
+
   const user =
     data.session.user;
 
 
+  /*
+   * Ambil account type
+   */
+
   const accountType =
-    user?.user_metadata?.account_type ||
+
+    user
+      ?.user_metadata
+      ?.account_type
+
+    ||
+
     localStorage.getItem(
       "memora_account_type"
-    ) ||
+    )
+
+    ||
+
     "photographer";
 
+
+  /*
+   * Simpan
+   */
 
   localStorage.setItem(
     "memora_account_type",
@@ -707,33 +993,48 @@ async function checkSession(){
 
 
   /*
-   * Kalau sudah login dan membuka auth.html,
-   * langsung arahkan ke dashboard.
+   * Langsung dashboard
    */
 
-  goToDashboard(accountType);
+  goToDashboard(
+    accountType
+  );
 
 }
 
 
 /* =====================================================
-   REDIRECT
+   REDIRECT DASHBOARD
 ===================================================== */
 
-function goToDashboard(accountType){
+function goToDashboard(
+  accountType
+){
 
   const selectedType =
-    accountType ||
-    type ||
+
+    accountType
+
+    ||
+
+    type
+
+    ||
+
     "photographer";
 
 
-  if(selectedType === "photographer"){
+  if(
+    selectedType ===
+    "photographer"
+  ){
 
     location.href =
       "dashboard.html";
 
-  }else{
+  }
+
+  else{
 
     location.href =
       "memories.html";
@@ -749,41 +1050,60 @@ function goToDashboard(accountType){
 
 function err(message){
 
-  const e =
-    document.getElementById("error");
+  const element =
+    document.getElementById(
+      "error"
+    );
 
-  e.textContent =
+
+  element.textContent =
     message;
 
-  e.style.display =
+
+  element.style.display =
     "block";
 
 }
 
+
+/* =====================================================
+   SUCCESS MESSAGE
+===================================================== */
 
 function success(message){
 
-  const e =
-    document.getElementById("success");
+  const element =
+    document.getElementById(
+      "success"
+    );
 
-  e.textContent =
+
+  element.textContent =
     message;
 
-  e.style.display =
+
+  element.style.display =
     "block";
 
 }
 
+
+/* =====================================================
+   CLEAR MESSAGE
+===================================================== */
 
 function clearMessages(){
 
   document.getElementById(
     "error"
-  ).style.display = "none";
+  ).style.display =
+    "none";
+
 
   document.getElementById(
     "success"
-  ).style.display = "none";
+  ).style.display =
+    "none";
 
 }
 
@@ -792,7 +1112,9 @@ function clearMessages(){
    SUPABASE ERROR TRANSLATION
 ===================================================== */
 
-function translateError(message){
+function translateError(
+  message
+){
 
   if(!message){
 
@@ -805,35 +1127,55 @@ function translateError(message){
     message.toLowerCase();
 
 
-  if(text.includes("invalid login credentials")){
+  if(
+    text.includes(
+      "invalid login credentials"
+    )
+  ){
 
     return "Email atau password salah.";
 
   }
 
 
-  if(text.includes("email not confirmed")){
+  if(
+    text.includes(
+      "email not confirmed"
+    )
+  ){
 
     return "Email kamu belum diverifikasi. Cek inbox email.";
 
   }
 
 
-  if(text.includes("user already registered")){
+  if(
+    text.includes(
+      "user already registered"
+    )
+  ){
 
     return "Email ini sudah terdaftar. Silakan masuk.";
 
   }
 
 
-  if(text.includes("password should be at least")){
+  if(
+    text.includes(
+      "password should be at least"
+    )
+  ){
 
     return "Password terlalu pendek.";
 
   }
 
 
-  if(text.includes("invalid email")){
+  if(
+    text.includes(
+      "invalid email"
+    )
+  ){
 
     return "Format email tidak valid.";
 
@@ -846,10 +1188,13 @@ function translateError(message){
 
 
 /* =====================================================
-   START
+   START APPLICATION
 ===================================================== */
 
-mode(current);
+mode(
+  current
+);
+
 
 checkSession();
 
