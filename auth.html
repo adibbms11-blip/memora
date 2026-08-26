@@ -1,11 +1,859 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Memora — Akun</title>
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Memora — Akun</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;background:#fafaf8;color:#181818;font-family:Arial,sans-serif}.page{width:min(440px,calc(100% - 32px));margin:auto;padding:95px 0}.brand{text-align:center;font:600 40px Georgia}.intro{text-align:center;color:#777;margin:8px 0 30px}.box{background:#fff;border:1px solid #e2e2de;border-radius:24px;padding:30px;box-shadow:0 20px 50px #0000000b}.label{text-align:center;background:#f0f0ee;border-radius:30px;padding:7px 12px;font-size:12px;font-weight:bold;width:max-content;margin:0 auto 20px}.tabs{display:grid;grid-template-columns:1fr 1fr;background:#f2f2f0;padding:4px;border-radius:12px;margin-bottom:23px}.tabs button{border:0;background:transparent;padding:10px;border-radius:9px;font-weight:bold;color:#777}.tabs .active{background:#181818;color:#fff}.field{margin-bottom:16px}.field label{display:block;font-size:13px;font-weight:bold;margin-bottom:7px}.field input{width:100%;padding:13px;border:1px solid #d8d8d3;border-radius:11px;font:inherit}.submit,.google{width:100%;padding:14px;border-radius:11px;font-weight:bold;cursor:pointer}.submit{border:0;background:#181818;color:#fff}.google{margin-top:10px;background:#fff;border:1px solid #d8d8d3}.or{display:flex;align-items:center;gap:10px;color:#aaa;font-size:12px;margin:18px 0}.or:before,.or:after{content:"";height:1px;background:#e5e5e1;flex:1}.foot{text-align:center;color:#777;font-size:13px;margin-top:20px}.foot a,.back a{color:#181818;font-weight:bold}.back{text-align:center;margin-top:20px;font-size:13px}.error{display:none;background:#fff1f1;border:1px solid #f0cccc;color:#a33;padding:10px;border-radius:10px;font-size:12px;margin-bottom:15px}
-</style></head><body><main class="page"><div class="brand">memora</div><div class="intro" id="intro">Buat akun untuk mulai membuat galeri.</div><div class="box"><div class="label" id="label">memora</div><div class="tabs"><button id="reg" onclick="mode('register')">Daftar</button><button id="sign" onclick="mode('signin')">Masuk</button></div><div class="error" id="error"></div><form onsubmit="submitForm(event)"><div class="field" id="nameWrap"><label>Nama</label><input id="name" placeholder="Nama kamu"></div><div class="field"><label>Email</label><input id="email" type="email" placeholder="nama@email.com" required></div><div class="field"><label>Password</label><input id="pass" type="password" placeholder="Minimal 6 karakter" minlength="6" required></div><div class="field" id="confirmWrap"><label>Ulangi Password</label><input id="confirm" type="password" placeholder="Ketik ulang password"></div><button class="submit" id="submit">Buat akun</button></form><div class="or"><span>atau</span></div><button class="google" onclick="google()">Masuk dengan Google</button></div><div class="foot" id="foot"></div><div class="back"><a href="choose.html">← Kembali</a></div></main>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:#fafaf8;
+  color:#181818;
+  font-family:Arial,sans-serif
+}
+
+.page{
+  width:min(440px,calc(100% - 32px));
+  margin:auto;
+  padding:95px 0
+}
+
+.brand{
+  text-align:center;
+  font:600 40px Georgia
+}
+
+.intro{
+  text-align:center;
+  color:#777;
+  margin:8px 0 30px
+}
+
+.box{
+  background:#fff;
+  border:1px solid #e2e2de;
+  border-radius:24px;
+  padding:30px;
+  box-shadow:0 20px 50px #0000000b
+}
+
+.label{
+  text-align:center;
+  background:#f0f0ee;
+  border-radius:30px;
+  padding:7px 12px;
+  font-size:12px;
+  font-weight:bold;
+  width:max-content;
+  margin:0 auto 20px
+}
+
+.tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:#f2f2f0;
+  padding:4px;
+  border-radius:12px;
+  margin-bottom:23px
+}
+
+.tabs button{
+  border:0;
+  background:transparent;
+  padding:10px;
+  border-radius:9px;
+  font-weight:bold;
+  color:#777;
+  cursor:pointer
+}
+
+.tabs .active{
+  background:#181818;
+  color:#fff
+}
+
+.field{
+  margin-bottom:16px
+}
+
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:7px
+}
+
+.field input{
+  width:100%;
+  padding:13px;
+  border:1px solid #d8d8d3;
+  border-radius:11px;
+  font:inherit;
+  outline:none
+}
+
+.field input:focus{
+  border-color:#181818
+}
+
+.submit,
+.google{
+  width:100%;
+  padding:14px;
+  border-radius:11px;
+  font-weight:bold;
+  cursor:pointer
+}
+
+.submit{
+  border:0;
+  background:#181818;
+  color:#fff
+}
+
+.submit:disabled,
+.google:disabled{
+  opacity:.55;
+  cursor:not-allowed
+}
+
+.google{
+  margin-top:10px;
+  background:#fff;
+  border:1px solid #d8d8d3
+}
+
+.or{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#aaa;
+  font-size:12px;
+  margin:18px 0
+}
+
+.or:before,
+.or:after{
+  content:"";
+  height:1px;
+  background:#e5e5e1;
+  flex:1
+}
+
+.foot{
+  text-align:center;
+  color:#777;
+  font-size:13px;
+  margin-top:20px
+}
+
+.foot a,
+.back a{
+  color:#181818;
+  font-weight:bold
+}
+
+.back{
+  text-align:center;
+  margin-top:20px;
+  font-size:13px
+}
+
+.error{
+  display:none;
+  background:#fff1f1;
+  border:1px solid #f0cccc;
+  color:#a33;
+  padding:10px;
+  border-radius:10px;
+  font-size:12px;
+  margin-bottom:15px
+}
+
+.success{
+  display:none;
+  background:#f1faf3;
+  border:1px solid #cce8d1;
+  color:#28733a;
+  padding:10px;
+  border-radius:10px;
+  font-size:12px;
+  margin-bottom:15px
+}
+</style>
+</head>
+
+<body>
+
+<main class="page">
+
+  <div class="brand">memora</div>
+
+  <div class="intro" id="intro">
+    Buat akun untuk mulai membuat galeri.
+  </div>
+
+  <div class="box">
+
+    <div class="label" id="label">
+      memora
+    </div>
+
+    <div class="tabs">
+      <button id="reg" onclick="mode('register')">
+        Daftar
+      </button>
+
+      <button id="sign" onclick="mode('signin')">
+        Masuk
+      </button>
+    </div>
+
+    <div class="error" id="error"></div>
+
+    <div class="success" id="success"></div>
+
+    <form onsubmit="submitForm(event)">
+
+      <div class="field" id="nameWrap">
+        <label>Nama</label>
+
+        <input
+          id="name"
+          placeholder="Nama kamu"
+        >
+      </div>
+
+      <div class="field">
+
+        <label>Email</label>
+
+        <input
+          id="email"
+          type="email"
+          placeholder="nama@email.com"
+          required
+        >
+
+      </div>
+
+      <div class="field">
+
+        <label>Password</label>
+
+        <input
+          id="pass"
+          type="password"
+          placeholder="Minimal 6 karakter"
+          minlength="6"
+          required
+        >
+
+      </div>
+
+      <div class="field" id="confirmWrap">
+
+        <label>Ulangi Password</label>
+
+        <input
+          id="confirm"
+          type="password"
+          placeholder="Ketik ulang password"
+        >
+
+      </div>
+
+      <button
+        class="submit"
+        id="submit"
+        type="submit"
+      >
+        Buat akun
+      </button>
+
+    </form>
+
+    <div class="or">
+      <span>atau</span>
+    </div>
+
+    <button
+      class="google"
+      id="googleBtn"
+      onclick="googleLogin()"
+    >
+      Masuk dengan Google
+    </button>
+
+  </div>
+
+  <div class="foot" id="foot"></div>
+
+  <div class="back">
+    <a href="choose.html">← Kembali</a>
+  </div>
+
+</main>
+
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const q=new URLSearchParams(location.search);let current=q.get('mode')||'register';let type=q.get('type')||localStorage.getItem('memora_account_type')||'photographer';
-document.getElementById('label').textContent=type==='photographer'?'memora · for photographers':'memora · for memories';
-function mode(m){current=m;document.getElementById('reg').className=m==='register'?'active':'';document.getElementById('sign').className=m==='signin'?'active':'';document.getElementById('nameWrap').style.display=m==='register'?'block':'none';document.getElementById('confirmWrap').style.display=m==='register'?'block':'none';document.getElementById('submit').textContent=m==='register'?'Buat akun':'Masuk';document.getElementById('intro').textContent=m==='register'?'Buat akun untuk mulai membuat galeri.':'Masuk untuk melanjutkan ke Memora.';document.getElementById('foot').innerHTML=m==='register'?'Sudah punya akun? <a href="#" onclick="mode(\'signin\');return false">Masuk di sini</a>':'Belum punya akun? <a href="#" onclick="mode(\'register\');return false">Buat akun</a>'}
-function submitForm(e){e.preventDefault();let email=document.getElementById('email').value.trim(),pass=document.getElementById('pass').value;if(current==='register'){let name=document.getElementById('name').value.trim(),c=document.getElementById('confirm').value;if(!name)return err('Isi nama kamu dulu.');if(pass.length<6)return err('Password minimal 6 karakter.');if(pass!==c)return err('Password belum sama.')}localStorage.setItem('memora_logged_in','true');localStorage.setItem('memora_user',JSON.stringify({email,type}));location.href=type==='photographer'?'dashboard.html':'memories.html'}
-function err(t){let e=document.getElementById('error');e.textContent=t;e.style.display='block'}function google(){alert('Google Sign In akan kita hubungkan ke backend/Supabase pada tahap berikutnya.')}mode(current);
-</script></body></html>
+
+/* =====================================================
+   SUPABASE CONFIG
+===================================================== */
+
+const SUPABASE_URL =
+  "https://kluuablkxxanpkdsfckp.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_MWrUTn7S0cX1Ff50ebZvFQ_GxtiwiTy";
+
+const { createClient } = supabase;
+
+const sb = createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* =====================================================
+   ACCOUNT TYPE
+===================================================== */
+
+const q = new URLSearchParams(location.search);
+
+let current =
+  q.get("mode") || "register";
+
+let type =
+  q.get("type") ||
+  localStorage.getItem("memora_account_type") ||
+  "photographer";
+
+
+/* =====================================================
+   LABEL
+===================================================== */
+
+document.getElementById("label").textContent =
+  type === "photographer"
+    ? "memora · for photographers"
+    : "memora · for memories";
+
+
+/* =====================================================
+   MODE REGISTER / SIGN IN
+===================================================== */
+
+function mode(m){
+
+  current = m;
+
+  document.getElementById("reg").className =
+    m === "register" ? "active" : "";
+
+  document.getElementById("sign").className =
+    m === "signin" ? "active" : "";
+
+  document.getElementById("nameWrap").style.display =
+    m === "register" ? "block" : "none";
+
+  document.getElementById("confirmWrap").style.display =
+    m === "register" ? "block" : "none";
+
+  document.getElementById("submit").textContent =
+    m === "register"
+      ? "Buat akun"
+      : "Masuk";
+
+  document.getElementById("intro").textContent =
+    m === "register"
+      ? "Buat akun untuk mulai membuat galeri."
+      : "Masuk untuk melanjutkan ke Memora.";
+
+  document.getElementById("foot").innerHTML =
+    m === "register"
+
+      ? 'Sudah punya akun? <a href="#" onclick="mode(\'signin\');return false">Masuk di sini</a>'
+
+      : 'Belum punya akun? <a href="#" onclick="mode(\'register\');return false">Buat akun</a>';
+
+  clearMessages();
+}
+
+
+/* =====================================================
+   REGISTER / LOGIN
+===================================================== */
+
+async function submitForm(e){
+
+  e.preventDefault();
+
+  clearMessages();
+
+  const email =
+    document.getElementById("email")
+      .value
+      .trim();
+
+  const pass =
+    document.getElementById("pass")
+      .value;
+
+  const submit =
+    document.getElementById("submit");
+
+  submit.disabled = true;
+
+  submit.textContent =
+    current === "register"
+      ? "Membuat akun..."
+      : "Memproses...";
+
+
+  try{
+
+    /* ================================================
+       REGISTER
+    ================================================ */
+
+    if(current === "register"){
+
+      const name =
+        document.getElementById("name")
+          .value
+          .trim();
+
+      const confirm =
+        document.getElementById("confirm")
+          .value;
+
+      if(!name){
+
+        err("Isi nama kamu dulu.");
+
+        return;
+      }
+
+      if(pass.length < 6){
+
+        err("Password minimal 6 karakter.");
+
+        return;
+      }
+
+      if(pass !== confirm){
+
+        err("Password belum sama.");
+
+        return;
+      }
+
+
+      const { data, error } =
+        await sb.auth.signUp({
+
+          email: email,
+
+          password: pass,
+
+          options: {
+
+            data: {
+
+              full_name: name,
+
+              account_type: type
+
+            }
+
+          }
+
+        });
+
+
+      if(error){
+
+        throw error;
+
+      }
+
+
+      /*
+       * Supabase bisa memakai email confirmation.
+       * Kalau confirmation aktif, session belum langsung tersedia.
+       */
+
+      if(data.session){
+
+        localStorage.setItem(
+          "memora_account_type",
+          type
+        );
+
+        success(
+          "Akun berhasil dibuat. Mengarahkan..."
+        );
+
+        setTimeout(() => {
+
+          goToDashboard();
+
+        }, 700);
+
+      }else{
+
+        success(
+          "Akun berhasil dibuat. Cek email kamu untuk verifikasi, lalu masuk."
+        );
+
+        mode("signin");
+
+      }
+
+      return;
+    }
+
+
+    /* ================================================
+       SIGN IN
+    ================================================ */
+
+    const { data, error } =
+      await sb.auth.signInWithPassword({
+
+        email: email,
+
+        password: pass
+
+      });
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+    /* Ambil tipe akun dari metadata */
+
+    const accountType =
+      data.user?.user_metadata?.account_type ||
+      type ||
+      "photographer";
+
+
+    localStorage.setItem(
+      "memora_account_type",
+      accountType
+    );
+
+
+    success(
+      "Berhasil masuk. Mengarahkan..."
+    );
+
+
+    setTimeout(() => {
+
+      goToDashboard(accountType);
+
+    }, 500);
+
+
+  }catch(error){
+
+    console.error(error);
+
+    err(
+      translateError(
+        error.message
+      )
+    );
+
+  }finally{
+
+    submit.disabled = false;
+
+    submit.textContent =
+      current === "register"
+        ? "Buat akun"
+        : "Masuk";
+
+  }
+
+}
+
+
+/* =====================================================
+   GOOGLE LOGIN
+===================================================== */
+
+async function googleLogin(){
+
+  clearMessages();
+
+  const button =
+    document.getElementById("googleBtn");
+
+  button.disabled = true;
+
+  button.textContent =
+    "Menghubungkan...";
+
+
+  try{
+
+    /*
+     * Simpan tipe akun sementara.
+     * Nanti setelah Google login kita bisa
+     * mengambilnya kembali.
+     */
+
+    localStorage.setItem(
+      "memora_account_type",
+      type
+    );
+
+
+    const redirectUrl =
+      window.location.origin +
+      window.location.pathname +
+      "?mode=signin&type=" +
+      encodeURIComponent(type);
+
+
+    const { error } =
+      await sb.auth.signInWithOAuth({
+
+        provider: "google",
+
+        options: {
+
+          redirectTo: redirectUrl
+
+        }
+
+      });
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+  }catch(error){
+
+    console.error(error);
+
+    err(
+      translateError(
+        error.message
+      )
+    );
+
+    button.disabled = false;
+
+    button.textContent =
+      "Masuk dengan Google";
+
+  }
+
+}
+
+
+/* =====================================================
+   CHECK EXISTING SESSION
+===================================================== */
+
+async function checkSession(){
+
+  const { data } =
+    await sb.auth.getSession();
+
+  if(!data.session){
+
+    return;
+
+  }
+
+
+  const user =
+    data.session.user;
+
+
+  const accountType =
+    user?.user_metadata?.account_type ||
+    localStorage.getItem(
+      "memora_account_type"
+    ) ||
+    "photographer";
+
+
+  localStorage.setItem(
+    "memora_account_type",
+    accountType
+  );
+
+
+  /*
+   * Kalau sudah login dan membuka auth.html,
+   * langsung arahkan ke dashboard.
+   */
+
+  goToDashboard(accountType);
+
+}
+
+
+/* =====================================================
+   REDIRECT
+===================================================== */
+
+function goToDashboard(accountType){
+
+  const selectedType =
+    accountType ||
+    type ||
+    "photographer";
+
+
+  if(selectedType === "photographer"){
+
+    location.href =
+      "dashboard.html";
+
+  }else{
+
+    location.href =
+      "memories.html";
+
+  }
+
+}
+
+
+/* =====================================================
+   ERROR MESSAGE
+===================================================== */
+
+function err(message){
+
+  const e =
+    document.getElementById("error");
+
+  e.textContent =
+    message;
+
+  e.style.display =
+    "block";
+
+}
+
+
+function success(message){
+
+  const e =
+    document.getElementById("success");
+
+  e.textContent =
+    message;
+
+  e.style.display =
+    "block";
+
+}
+
+
+function clearMessages(){
+
+  document.getElementById(
+    "error"
+  ).style.display = "none";
+
+  document.getElementById(
+    "success"
+  ).style.display = "none";
+
+}
+
+
+/* =====================================================
+   SUPABASE ERROR TRANSLATION
+===================================================== */
+
+function translateError(message){
+
+  if(!message){
+
+    return "Terjadi kesalahan. Coba lagi.";
+
+  }
+
+
+  const text =
+    message.toLowerCase();
+
+
+  if(text.includes("invalid login credentials")){
+
+    return "Email atau password salah.";
+
+  }
+
+
+  if(text.includes("email not confirmed")){
+
+    return "Email kamu belum diverifikasi. Cek inbox email.";
+
+  }
+
+
+  if(text.includes("user already registered")){
+
+    return "Email ini sudah terdaftar. Silakan masuk.";
+
+  }
+
+
+  if(text.includes("password should be at least")){
+
+    return "Password terlalu pendek.";
+
+  }
+
+
+  if(text.includes("invalid email")){
+
+    return "Format email tidak valid.";
+
+  }
+
+
+  return message;
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+mode(current);
+
+checkSession();
+
+</script>
+
+</body>
+</html>
