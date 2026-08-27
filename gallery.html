@@ -237,26 +237,6 @@ body.dark .save{
   font-size:13px;
 }
 
-.photo-actions{
-  display:flex;
-  gap:8px;
-  margin-bottom:18px;
-}
-
-.small-btn{
-  border:1px solid var(--border);
-  background:var(--card);
-  color:var(--text);
-  padding:9px 13px;
-  border-radius:9px;
-  font-size:12px;
-  font-weight:bold;
-}
-
-.small-btn:hover{
-  background:var(--soft);
-}
-
 .photos-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -269,12 +249,6 @@ body.dark .save{
   border:1px solid var(--border);
   border-radius:14px;
   overflow:hidden;
-  transition:.15s ease;
-}
-
-.photo.selected{
-  border-color:var(--accent);
-  box-shadow:0 0 0 2px rgba(184,149,88,.18);
 }
 
 .photo img{
@@ -293,7 +267,6 @@ body.dark .save{
   height:25px;
   margin:0;
   accent-color:#181818;
-  z-index:2;
 }
 
 .photo-name{
@@ -314,18 +287,6 @@ body.dark .save{
   border:1px solid var(--border);
   border-radius:16px;
 }
-
-.loading-photos{
-  grid-column:1/-1;
-  padding:45px 20px;
-  text-align:center;
-  color:var(--muted);
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-}
-
-/* RESPONSIVE */
 
 @media(max-width:700px){
 
@@ -378,21 +339,9 @@ body.dark .save{
 
     <div class="email" id="email"></div>
 
-    <button
-      class="icon"
-      onclick="toggleTheme()"
-      title="Tema"
-    >
-      ◐
-    </button>
+    <button class="icon" onclick="toggleTheme()">◐</button>
 
-    <button
-      class="icon"
-      onclick="logout()"
-      title="Keluar"
-    >
-      ↪
-    </button>
+    <button class="icon" onclick="logout()">↪</button>
 
   </div>
 
@@ -401,13 +350,9 @@ body.dark .save{
 
 <main class="page">
 
-<button
-  class="back"
-  onclick="location.href='dashboard.html'"
->
+<button class="back" onclick="location.href='dashboard.html'">
   ← Kembali ke Dashboard
 </button>
-
 
 <h1 class="title">
   Buat Galeri
@@ -477,7 +422,6 @@ body.dark .save{
 
       <div class="hint">
         Gunakan link folder Google Drive yang berisi foto.
-        Pastikan folder dapat diakses dengan link.
       </div>
 
     </div>
@@ -513,26 +457,6 @@ body.dark .save{
 
   </div>
 
-
-  <div class="photo-actions">
-
-    <button
-      class="small-btn"
-      onclick="selectAllPhotos()"
-    >
-      Pilih Semua
-    </button>
-
-    <button
-      class="small-btn"
-      onclick="unselectAllPhotos()"
-    >
-      Batalkan Semua
-    </button>
-
-  </div>
-
-
   <div
     id="photosGrid"
     class="photos-grid"
@@ -545,9 +469,9 @@ body.dark .save{
 
 <script>
 
-/* =====================================================
+/* =========================================
    SUPABASE
-===================================================== */
+========================================= */
 
 const SUPABASE_URL =
 "https://kluuablkxxanpkdsfckp.supabase.co";
@@ -562,27 +486,26 @@ supabase.createClient(
 );
 
 
-/* =====================================================
-   GOOGLE DRIVE API KEY
-===================================================== */
+/* =========================================
+   GOOGLE DRIVE API
+========================================= */
 
 /*
-  API KEY Google Drive kamu.
+  MASUKKAN API KEY GOOGLE DRIVE KAMU DI SINI.
 
-  PENTING:
-  Karena ini frontend, API key memang terlihat di source.
-  Nanti sebaiknya dibatasi di Google Cloud:
-  - API restrictions → Google Drive API
-  - Website restrictions → domain website Memora
+  Jangan menggunakan service-account private key.
+  Yang dibutuhkan halaman ini adalah API key
+  Google Cloud yang sudah mengaktifkan
+  Google Drive API.
 */
 
 const GOOGLE_DRIVE_API_KEY =
 "AIzaSyCNjhG4YaftIllJoRciPB9b7158WAtT3nA";
 
 
-/* =====================================================
+/* =========================================
    ELEMENTS
-===================================================== */
+========================================= */
 
 const email =
 document.getElementById("email");
@@ -619,19 +542,18 @@ document.getElementById("photoCount");
 
 
 let currentUser = null;
-let currentGallery = null;
 
 
-/* =====================================================
+/* =========================================
    THEME
-===================================================== */
+========================================= */
 
 function loadTheme(){
 
-  const saved =
-  localStorage.getItem("memora_theme");
-
-  if(saved === "dark"){
+  if(
+    localStorage.getItem("memora_theme")
+    === "dark"
+  ){
     document.body.classList.add("dark");
   }
 
@@ -653,50 +575,30 @@ function toggleTheme(){
 loadTheme();
 
 
-/* =====================================================
+/* =========================================
    MESSAGE
-===================================================== */
+========================================= */
 
 function showError(message){
 
-  errorBox.textContent =
-  message;
-
-  errorBox.style.display =
-  "block";
-
-  successBox.style.display =
-  "none";
+  errorBox.textContent = message;
+  errorBox.style.display = "block";
+  successBox.style.display = "none";
 
 }
 
 function showSuccess(message){
 
-  successBox.textContent =
-  message;
-
-  successBox.style.display =
-  "block";
-
-  errorBox.style.display =
-  "none";
-
-}
-
-function clearMessage(){
-
-  errorBox.style.display =
-  "none";
-
-  successBox.style.display =
-  "none";
+  successBox.textContent = message;
+  successBox.style.display = "block";
+  errorBox.style.display = "none";
 
 }
 
 
-/* =====================================================
-   AUTH CHECK
-===================================================== */
+/* =========================================
+   AUTH
+========================================= */
 
 async function checkAuth(){
 
@@ -709,12 +611,7 @@ async function checkAuth(){
     await supabaseClient.auth.getUser();
 
 
-    if(error){
-      throw error;
-    }
-
-
-    if(!data.user){
+    if(error || !data.user){
 
       location.href =
       "auth.html?type=photographer";
@@ -727,17 +624,13 @@ async function checkAuth(){
     currentUser =
     data.user;
 
-
     email.textContent =
     currentUser.email || "";
 
   }
   catch(error){
 
-    console.error(
-      "Auth error:",
-      error
-    );
+    console.error(error);
 
     location.href =
     "auth.html?type=photographer";
@@ -746,47 +639,52 @@ async function checkAuth(){
 
 }
 
+checkAuth();
 
-/* =====================================================
+
+/* =========================================
    GOOGLE DRIVE FOLDER ID
-===================================================== */
+========================================= */
 
 function getDriveFolderId(url){
 
-  if(!url){
+  try{
+
+    const parsed =
+    new URL(url);
+
+    /*
+      Format:
+      drive.google.com/drive/folders/FOLDER_ID
+    */
+
+    const pathMatch =
+    parsed.pathname.match(
+      /\/folders\/([a-zA-Z0-9_-]+)/
+    );
+
+    if(pathMatch){
+      return pathMatch[1];
+    }
+
+
+    /*
+      Format:
+      drive.google.com/open?id=FOLDER_ID
+    */
+
+    const id =
+    parsed.searchParams.get("id");
+
+    if(id){
+      return id;
+    }
+
+  }
+  catch(error){
+
     return null;
-  }
 
-
-  /*
-    Format:
-    https://drive.google.com/drive/folders/FOLDER_ID
-  */
-
-  const folderMatch =
-  url.match(
-    /\/folders\/([a-zA-Z0-9_-]+)/
-  );
-
-
-  if(folderMatch){
-    return folderMatch[1];
-  }
-
-
-  /*
-    Format:
-    https://drive.google.com/open?id=FOLDER_ID
-  */
-
-  const idMatch =
-  url.match(
-    /[?&]id=([a-zA-Z0-9_-]+)/
-  );
-
-
-  if(idMatch){
-    return idMatch[1];
   }
 
 
@@ -795,11 +693,19 @@ function getDriveFolderId(url){
 }
 
 
-/* =====================================================
-   GET GOOGLE DRIVE PHOTOS
-===================================================== */
+/* =========================================
+   GOOGLE DRIVE PHOTOS
+========================================= */
 
 async function getDrivePhotos(folderId){
+
+  const query =
+    `'${folderId}' in parents and trashed = false and mimeType contains 'image/'`;
+
+
+  const fields =
+    "nextPageToken,files(id,name,mimeType,thumbnailLink,webViewLink)";
+
 
   let allFiles = [];
   let pageToken = null;
@@ -807,33 +713,30 @@ async function getDrivePhotos(folderId){
 
   do{
 
-    const query =
-      `'${folderId}' in parents and trashed = false and mimeType contains 'image/'`;
-
-
     let endpoint =
       "https://www.googleapis.com/drive/v3/files" +
       "?q=" +
       encodeURIComponent(query) +
       "&fields=" +
-      encodeURIComponent(
-        "nextPageToken,files(id,name,mimeType,thumbnailLink,webViewLink)"
-      ) +
+      encodeURIComponent(fields) +
       "&pageSize=1000" +
-      "&orderBy=name" +
-      "&key=" +
-      encodeURIComponent(
-        GOOGLE_DRIVE_API_KEY
-      );
+      "&orderBy=name";
 
 
     if(pageToken){
 
       endpoint +=
-        "&pageToken=" +
-        encodeURIComponent(pageToken);
+      "&pageToken=" +
+      encodeURIComponent(pageToken);
 
     }
+
+
+    endpoint +=
+    "&key=" +
+    encodeURIComponent(
+      GOOGLE_DRIVE_API_KEY
+    );
 
 
     const response =
@@ -847,7 +750,7 @@ async function getDrivePhotos(folderId){
     if(!response.ok){
 
       console.error(
-        "Google Drive response:",
+        "Google Drive error:",
         result
       );
 
@@ -861,16 +764,17 @@ async function getDrivePhotos(folderId){
 
 
     allFiles =
-      allFiles.concat(
-        result.files || []
-      );
+    allFiles.concat(
+      result.files || []
+    );
 
 
     pageToken =
-      result.nextPageToken || null;
+    result.nextPageToken || null;
 
 
-  }while(pageToken);
+  }
+  while(pageToken);
 
 
   return allFiles;
@@ -878,30 +782,19 @@ async function getDrivePhotos(folderId){
 }
 
 
-/* =====================================================
-   THUMBNAIL URL
-===================================================== */
+/* =========================================
+   THUMBNAIL
+========================================= */
 
-function getThumbnailUrl(file){
-
-  /*
-    Prioritas thumbnailLink dari Google Drive.
-  */
+function thumbnail(file){
 
   if(file.thumbnailLink){
 
     return file.thumbnailLink
-      .replace(
-        /=s\d+/,
-        "=s1200"
-      );
+      .replace(/=s\d+/,"=s1200");
 
   }
 
-
-  /*
-    Fallback.
-  */
 
   return (
     "https://drive.google.com/thumbnail" +
@@ -913,9 +806,9 @@ function getThumbnailUrl(file){
 }
 
 
-/* =====================================================
+/* =========================================
    SAVE PHOTOS TO SUPABASE
-===================================================== */
+========================================= */
 
 async function savePhotos(
   galleryId,
@@ -923,31 +816,7 @@ async function savePhotos(
 ){
 
   if(!files.length){
-    return [];
-  }
-
-
-  /*
-    Hapus foto lama jika gallery
-    sudah pernah dibuat.
-  */
-
-  const {
-    error:deleteError
-  } =
-  await supabaseClient
-    .from("photos")
-    .delete()
-    .eq(
-      "gallery_id",
-      galleryId
-    );
-
-
-  if(deleteError){
-
-    throw deleteError;
-
+    return;
   }
 
 
@@ -964,7 +833,7 @@ async function savePhotos(
     file.name,
 
     thumbnail_url:
-    getThumbnailUrl(file),
+    thumbnail(file),
 
     selected:
     false
@@ -973,8 +842,8 @@ async function savePhotos(
 
 
   /*
-    Insert bertahap supaya aman
-    jika foto sangat banyak.
+    Insert bertahap supaya tidak terlalu besar
+    jika folder memiliki banyak foto.
   */
 
   const chunkSize = 500;
@@ -1009,61 +878,16 @@ async function savePhotos(
 
   }
 
-
-  return rows;
-
 }
 
 
-/* =====================================================
-   LOAD PHOTOS FROM SUPABASE
-===================================================== */
-
-async function loadPhotos(
-  galleryId
-){
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-    .from("photos")
-    .select("*")
-    .eq(
-      "gallery_id",
-      galleryId
-    )
-    .order(
-      "created_at",
-      {
-        ascending:true
-      }
-    );
-
-
-  if(error){
-
-    throw error;
-
-  }
-
-
-  return data || [];
-
-}
-
-
-/* =====================================================
+/* =========================================
    RENDER PHOTOS
-===================================================== */
+========================================= */
 
-function renderPhotos(
-  photos
-){
+function renderPhotos(photos){
 
   photosGrid.innerHTML = "";
-
 
   photoCount.textContent =
     `${photos.length} foto`;
@@ -1073,8 +897,7 @@ function renderPhotos(
 
     photosGrid.innerHTML = `
       <div class="empty">
-        Tidak ada foto yang ditemukan
-        di folder Google Drive tersebut.
+        Tidak ada foto yang ditemukan di folder tersebut.
       </div>
     `;
 
@@ -1088,27 +911,18 @@ function renderPhotos(
     const item =
     document.createElement("div");
 
-
     item.className =
     "photo";
-
-
-    if(photo.selected){
-      item.classList.add("selected");
-    }
 
 
     const image =
     document.createElement("img");
 
-
     image.src =
     photo.thumbnail_url;
 
-
     image.alt =
-    photo.file_name || "Foto";
-
+    photo.file_name || "";
 
     image.loading =
     "lazy";
@@ -1116,17 +930,28 @@ function renderPhotos(
 
     /*
       Jika thumbnail gagal,
-      tampilkan placeholder sederhana.
+      coba URL thumbnail Drive langsung.
     */
 
     image.onerror =
     function(){
 
-      this.style.display =
-      "none";
+      if(
+        !this.dataset.fallback
+      ){
 
-      item.style.minHeight =
-      "180px";
+        this.dataset.fallback =
+        "true";
+
+        this.src =
+        "https://drive.google.com/thumbnail" +
+        "?id=" +
+        encodeURIComponent(
+          photo.drive_file_id
+        ) +
+        "&sz=w1200";
+
+      }
 
     };
 
@@ -1134,14 +959,11 @@ function renderPhotos(
     const checkbox =
     document.createElement("input");
 
-
     checkbox.type =
     "checkbox";
 
-
     checkbox.className =
     "photo-check";
-
 
     checkbox.checked =
     !!photo.selected;
@@ -1149,30 +971,19 @@ function renderPhotos(
 
     checkbox.addEventListener(
       "change",
-      async function(){
-
-        item.classList.toggle(
-          "selected",
-          this.checked
-        );
-
-
-        await updateSelection(
+      () =>
+        updateSelection(
           photo.id,
-          this.checked
-        );
-
-      }
+          checkbox.checked
+        )
     );
 
 
     const name =
     document.createElement("div");
 
-
     name.className =
     "photo-name";
-
 
     name.textContent =
     photo.file_name || "Foto";
@@ -1191,9 +1002,9 @@ function renderPhotos(
 }
 
 
-/* =====================================================
+/* =========================================
    UPDATE PHOTO SELECTION
-===================================================== */
+========================================= */
 
 async function updateSelection(
   photoId,
@@ -1208,19 +1019,12 @@ async function updateSelection(
     .update({
       selected:selected
     })
-    .eq(
-      "id",
-      photoId
-    );
+    .eq("id",photoId);
 
 
   if(error){
 
-    console.error(
-      "Selection error:",
-      error
-    );
-
+    console.error(error);
 
     alert(
       "Pilihan foto gagal disimpan."
@@ -1231,116 +1035,22 @@ async function updateSelection(
 }
 
 
-/* =====================================================
-   SELECT ALL
-===================================================== */
-
-async function selectAllPhotos(){
-
-  if(!currentGallery){
-    return;
-  }
-
-
-  const {
-    error
-  } =
-  await supabaseClient
-    .from("photos")
-    .update({
-      selected:true
-    })
-    .eq(
-      "gallery_id",
-      currentGallery.id
-    );
-
-
-  if(error){
-
-    alert(
-      "Gagal memilih semua foto."
-    );
-
-    console.error(error);
-
-    return;
-
-  }
-
-
-  const photos =
-  await loadPhotos(
-    currentGallery.id
-  );
-
-
-  renderPhotos(photos);
-
-}
-
-
-/* =====================================================
-   UNSELECT ALL
-===================================================== */
-
-async function unselectAllPhotos(){
-
-  if(!currentGallery){
-    return;
-  }
-
-
-  const {
-    error
-  } =
-  await supabaseClient
-    .from("photos")
-    .update({
-      selected:false
-    })
-    .eq(
-      "gallery_id",
-      currentGallery.id
-    );
-
-
-  if(error){
-
-    alert(
-      "Gagal membatalkan pilihan."
-    );
-
-    console.error(error);
-
-    return;
-
-  }
-
-
-  const photos =
-  await loadPhotos(
-    currentGallery.id
-  );
-
-
-  renderPhotos(photos);
-
-}
-
-
-/* =====================================================
+/* =========================================
    CREATE GALLERY
-===================================================== */
+========================================= */
 
 galleryForm.addEventListener(
   "submit",
-  async function(event){
+  async event => {
 
     event.preventDefault();
 
 
-    clearMessage();
+    errorBox.style.display =
+    "none";
+
+    successBox.style.display =
+    "none";
 
 
     if(!currentUser){
@@ -1354,13 +1064,30 @@ galleryForm.addEventListener(
     }
 
 
+    /*
+      CEK API KEY
+    */
+
+    if(
+      !GOOGLE_DRIVE_API_KEY ||
+      GOOGLE_DRIVE_API_KEY ===
+      "MASUKKAN_API_KEY_GOOGLE_DRIVE_DI_SINI"
+    ){
+
+      showError(
+        "API Key Google Drive belum dimasukkan."
+      );
+
+      return;
+
+    }
+
+
     const client =
     clientName.value.trim();
 
-
     const name =
     galleryName.value.trim();
-
 
     const drive =
     driveUrl.value.trim();
@@ -1388,17 +1115,6 @@ galleryForm.addEventListener(
     }
 
 
-    if(!drive){
-
-      showError(
-        "Link Google Drive wajib diisi."
-      );
-
-      return;
-
-    }
-
-
     const folderId =
     getDriveFolderId(drive);
 
@@ -1406,21 +1122,7 @@ galleryForm.addEventListener(
     if(!folderId){
 
       showError(
-        "Link Google Drive tidak valid. Gunakan link folder seperti https://drive.google.com/drive/folders/..."
-      );
-
-      return;
-
-    }
-
-
-    if(
-      !GOOGLE_DRIVE_API_KEY ||
-      GOOGLE_DRIVE_API_KEY.length < 20
-    ){
-
-      showError(
-        "Google Drive API Key belum dimasukkan."
+        "Link Google Drive tidak valid. Pastikan menggunakan link folder Google Drive."
       );
 
       return;
@@ -1431,7 +1133,6 @@ galleryForm.addEventListener(
     saveBtn.disabled =
     true;
 
-
     saveBtn.textContent =
     "Membaca Google Drive...";
 
@@ -1439,7 +1140,7 @@ galleryForm.addEventListener(
     try{
 
       /*
-        1. Ambil foto dari Google Drive
+        1. AMBIL FOTO DARI GOOGLE DRIVE
       */
 
       const drivePhotos =
@@ -1449,11 +1150,11 @@ galleryForm.addEventListener(
 
 
       /*
-        2. Simpan galeri ke Supabase
+        2. SIMPAN GALERI
       */
 
       saveBtn.textContent =
-      "Menyimpan galeri...";
+      "Menyimpan Galeri...";
 
 
       const {
@@ -1488,16 +1189,12 @@ galleryForm.addEventListener(
       }
 
 
-      currentGallery =
-      gallery;
-
-
       /*
-        3. Simpan foto
+        3. SIMPAN FOTO
       */
 
       saveBtn.textContent =
-      `Menyimpan ${drivePhotos.length} foto...`;
+      "Menyimpan Foto...";
 
 
       await savePhotos(
@@ -1507,21 +1204,11 @@ galleryForm.addEventListener(
 
 
       /*
-        4. Ambil lagi dari Supabase
-      */
-
-      const photos =
-      await loadPhotos(
-        gallery.id
-      );
-
-
-      /*
-        5. Tampilkan
+        4. TAMPILKAN HASIL
       */
 
       showSuccess(
-        `Galeri berhasil dibuat. ${photos.length} foto ditemukan.`
+        `Galeri berhasil dibuat. ${drivePhotos.length} foto ditemukan.`
       );
 
 
@@ -1533,10 +1220,40 @@ galleryForm.addEventListener(
       "block";
 
 
-      renderPhotos(
-        photos
-      );
+      /*
+        5. AMBIL FOTO YANG SUDAH
+           TERSIMPAN DI SUPABASE
+      */
 
+      const {
+        data:photos,
+        error:photosError
+      } =
+      await supabaseClient
+        .from("photos")
+        .select("*")
+        .eq(
+          "gallery_id",
+          gallery.id
+        )
+        .order(
+          "created_at",
+          {
+            ascending:true
+          }
+        );
+
+
+      if(photosError){
+
+        throw photosError;
+
+      }
+
+
+      renderPhotos(
+        photos || []
+      );
 
     }
     catch(error){
@@ -1547,15 +1264,45 @@ galleryForm.addEventListener(
       );
 
 
-      showError(
-        error.message ||
-        "Gagal membuat galeri."
-      );
+      /*
+        Pesan error dibuat lebih
+        mudah dibaca.
+      */
+
+      let message =
+      error.message ||
+      "Gagal membuat galeri.";
+
+
+      if(
+        message
+          .toLowerCase()
+          .includes("api key")
+      ){
+
+        message =
+        "Google Drive API Key bermasalah. Cek API Key dan Google Drive API di Google Cloud.";
+
+      }
+
+
+      if(
+        message
+          .toLowerCase()
+          .includes("permission")
+      ){
+
+        message =
+        "Folder Google Drive tidak bisa diakses. Pastikan folder dapat diakses oleh siapa saja yang memiliki link.";
+
+      }
+
+
+      showError(message);
 
 
       saveBtn.disabled =
       false;
-
 
       saveBtn.textContent =
       "Simpan & Ambil Foto";
@@ -1566,27 +1313,29 @@ galleryForm.addEventListener(
 );
 
 
-/* =====================================================
+/* =========================================
    LOGOUT
-===================================================== */
+========================================= */
 
 async function logout(){
 
-  const confirmed =
-  confirm(
-    "Yakin ingin keluar dari akun Memora?"
-  );
+  if(
+    !confirm(
+      "Yakin ingin keluar dari akun Memora?"
+    )
+  ){
 
-
-  if(!confirmed){
     return;
+
   }
 
 
   const {
     error
   } =
-  await supabaseClient.auth.signOut();
+  await supabaseClient
+    .auth
+    .signOut();
 
 
   if(error){
@@ -1605,13 +1354,6 @@ async function logout(){
   "auth.html?type=photographer";
 
 }
-
-
-/* =====================================================
-   START
-===================================================== */
-
-checkAuth();
 
 </script>
 
