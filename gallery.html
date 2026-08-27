@@ -1,0 +1,1034 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Memora — Buat Galeri</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#fafaf8;
+  color:#181818;
+  font-family:Arial,sans-serif;
+}
+
+button,
+input,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.header{
+  height:68px;
+  border-bottom:1px solid #e4e4df;
+  background:#fafaf8;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 30px;
+}
+
+.brand{
+  font:600 30px Georgia,serif;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.email{
+  color:#666;
+  font-size:13px;
+}
+
+.back-btn{
+  border:1px solid #ddd;
+  background:#fff;
+  border-radius:10px;
+  padding:9px 14px;
+  color:#181818;
+}
+
+.page{
+  width:min(900px,calc(100% - 32px));
+  margin:auto;
+  padding:55px 0 80px;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  margin-bottom:30px;
+}
+
+.eyebrow{
+  color:#a8792d;
+  font-size:12px;
+  font-weight:bold;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:8px;
+}
+
+h1{
+  margin:0;
+  font-size:34px;
+  letter-spacing:-1px;
+}
+
+.subtitle{
+  margin:8px 0 0;
+  color:#777;
+  font-size:14px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid #e0e0db;
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 15px 40px rgba(0,0,0,.04);
+}
+
+.section-title{
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:24px;
+}
+
+.field{
+  margin-bottom:20px;
+}
+
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.field input,
+.field textarea{
+  width:100%;
+  border:1px solid #d8d8d3;
+  border-radius:11px;
+  padding:13px 14px;
+  background:#fff;
+  color:#181818;
+  outline:none;
+}
+
+.field input:focus,
+.field textarea:focus{
+  border-color:#181818;
+}
+
+.field textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.slug-wrap{
+  position:relative;
+}
+
+.slug-prefix{
+  position:absolute;
+  left:14px;
+  top:13px;
+  color:#999;
+  pointer-events:none;
+}
+
+.slug-input{
+  padding-left:100px !important;
+}
+
+.help{
+  color:#888;
+  font-size:12px;
+  margin-top:7px;
+}
+
+.status{
+  display:none;
+  padding:12px 14px;
+  border-radius:10px;
+  font-size:13px;
+  margin-bottom:20px;
+}
+
+.status.error{
+  display:block;
+  background:#fff1f1;
+  border:1px solid #efcccc;
+  color:#a33;
+}
+
+.status.success{
+  display:block;
+  background:#effaf3;
+  border:1px solid #c8e8d2;
+  color:#287a45;
+}
+
+.actions{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:30px;
+  padding-top:24px;
+  border-top:1px solid #eee;
+}
+
+.cancel{
+  color:#777;
+  text-decoration:none;
+  font-size:14px;
+}
+
+.save{
+  border:0;
+  background:#181818;
+  color:#fff;
+  padding:13px 22px;
+  border-radius:11px;
+  font-weight:bold;
+}
+
+.save:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.gallery-list{
+  margin-top:35px;
+}
+
+.list-title{
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.gallery-item{
+  background:#fff;
+  border:1px solid #e0e0db;
+  border-radius:15px;
+  padding:18px;
+  margin-bottom:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.gallery-info strong{
+  display:block;
+  font-size:15px;
+  margin-bottom:5px;
+}
+
+.gallery-info span{
+  color:#888;
+  font-size:12px;
+}
+
+.badge{
+  font-size:11px;
+  padding:6px 9px;
+  border-radius:20px;
+  background:#f0f0ee;
+}
+
+.empty{
+  color:#888;
+  font-size:14px;
+  padding:20px 0;
+}
+
+.loading{
+  color:#888;
+  font-size:13px;
+}
+
+@media(max-width:650px){
+
+  .header{
+    padding:0 18px;
+  }
+
+  .brand{
+    font-size:25px;
+  }
+
+  .email{
+    display:none;
+  }
+
+  .page{
+    padding-top:35px;
+  }
+
+  .top{
+    display:block;
+  }
+
+  h1{
+    font-size:28px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+    gap:0;
+  }
+
+  .card{
+    padding:22px;
+  }
+
+  .actions{
+    gap:15px;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="brand">
+    memora
+  </div>
+
+  <div class="header-right">
+
+    <div class="email" id="userEmail">
+      Memuat...
+    </div>
+
+    <button
+      class="back-btn"
+      onclick="goDashboard()"
+    >
+      ← Dashboard
+    </button>
+
+  </div>
+
+</header>
+
+
+<main class="page">
+
+  <div class="top">
+
+    <div>
+      <div class="eyebrow">
+        Galeri Baru
+      </div>
+
+      <h1>
+        Buat Galeri
+      </h1>
+
+      <p class="subtitle">
+        Buat ruang galeri foto untuk client kamu.
+      </p>
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="section-title">
+      Informasi Galeri
+    </div>
+
+    <div
+      id="status"
+      class="status"
+    ></div>
+
+
+    <form id="galleryForm">
+
+      <div class="field">
+
+        <label for="title">
+          Nama Galeri
+        </label>
+
+        <input
+          id="title"
+          type="text"
+          placeholder="Contoh: Wedding Dimas & Sinta"
+          required
+        >
+
+        <div class="help">
+          Nama yang akan tampil sebagai judul galeri client.
+        </div>
+
+      </div>
+
+
+      <div class="grid">
+
+        <div class="field">
+
+          <label for="clientName">
+            Nama Client
+          </label>
+
+          <input
+            id="clientName"
+            type="text"
+            placeholder="Contoh: Dimas & Sinta"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="eventDate">
+            Tanggal Acara
+          </label>
+
+          <input
+            id="eventDate"
+            type="date"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="slug">
+          Nama Link Galeri
+        </label>
+
+        <div class="slug-wrap">
+
+          <span class="slug-prefix">
+            memora.app/
+          </span>
+
+          <input
+            id="slug"
+            class="slug-input"
+            type="text"
+            placeholder="dimas-sinta"
+            required
+          >
+
+        </div>
+
+        <div class="help">
+          Gunakan huruf kecil, angka, dan tanda strip (-).
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="description">
+          Deskripsi
+        </label>
+
+        <textarea
+          id="description"
+          placeholder="Contoh: Dokumentasi pernikahan Dimas & Sinta."
+        ></textarea>
+
+      </div>
+
+
+      <div class="actions">
+
+        <a
+          href="dashboard.html"
+          class="cancel"
+        >
+          Batal
+        </a>
+
+        <button
+          type="submit"
+          class="save"
+          id="saveBtn"
+        >
+          Simpan Galeri
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+
+  <section class="gallery-list">
+
+    <div class="list-title">
+      Galeri Kamu
+    </div>
+
+    <div id="galleryList">
+      <div class="loading">
+        Memuat galeri...
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+  "https://kluuablkxxanpkdsfckp.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_MWrUTn7S0cX1Ff50ebZvFQ_GxtiwiTy";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+/* =====================================================
+   ELEMENT
+===================================================== */
+
+const form =
+  document.getElementById("galleryForm");
+
+const titleInput =
+  document.getElementById("title");
+
+const clientInput =
+  document.getElementById("clientName");
+
+const dateInput =
+  document.getElementById("eventDate");
+
+const slugInput =
+  document.getElementById("slug");
+
+const descriptionInput =
+  document.getElementById("description");
+
+const saveBtn =
+  document.getElementById("saveBtn");
+
+const statusBox =
+  document.getElementById("status");
+
+const galleryList =
+  document.getElementById("galleryList");
+
+const userEmail =
+  document.getElementById("userEmail");
+
+
+/* =====================================================
+   AUTH CHECK
+===================================================== */
+
+async function checkAuth(){
+
+  const {
+    data,
+    error
+  } = await supabaseClient.auth.getSession();
+
+  if(error){
+
+    showStatus(
+      "Gagal mengecek login: " + error.message,
+      "error"
+    );
+
+    return null;
+  }
+
+  const session = data.session;
+
+  if(!session){
+
+    window.location.href =
+      "auth.html?mode=signin&type=photographer";
+
+    return null;
+  }
+
+  userEmail.textContent =
+    session.user.email || "";
+
+  return session.user;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function showStatus(message,type){
+
+  statusBox.textContent =
+    message;
+
+  statusBox.className =
+    "status " + type;
+
+}
+
+
+/* =====================================================
+   SLUG OTOMATIS
+===================================================== */
+
+titleInput.addEventListener(
+  "input",
+  function(){
+
+    if(slugInput.dataset.edited === "true"){
+      return;
+    }
+
+    const slug =
+      titleInput.value
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g,"")
+      .replace(/\s+/g,"-")
+      .replace(/-+/g,"-");
+
+    slugInput.value =
+      slug;
+
+  }
+);
+
+
+slugInput.addEventListener(
+  "input",
+  function(){
+
+    slugInput.dataset.edited =
+      "true";
+
+    slugInput.value =
+      slugInput.value
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g,"")
+      .replace(/-+/g,"-");
+
+  }
+);
+
+
+/* =====================================================
+   CEK SLUG
+===================================================== */
+
+async function slugExists(slug){
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("galleries")
+    .select("id")
+    .eq("slug",slug)
+    .maybeSingle();
+
+  if(error){
+    throw error;
+  }
+
+  return !!data;
+
+}
+
+
+/* =====================================================
+   CREATE GALLERY
+===================================================== */
+
+form.addEventListener(
+  "submit",
+  async function(event){
+
+    event.preventDefault();
+
+    showStatus(
+      "",
+      ""
+    );
+
+    const user =
+      await checkAuth();
+
+    if(!user){
+      return;
+    }
+
+
+    const title =
+      titleInput.value.trim();
+
+    const clientName =
+      clientInput.value.trim();
+
+    const eventDate =
+      dateInput.value || null;
+
+    const slug =
+      slugInput.value.trim();
+
+    const description =
+      descriptionInput.value.trim();
+
+
+    if(!title){
+
+      showStatus(
+        "Nama galeri wajib diisi.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    if(!clientName){
+
+      showStatus(
+        "Nama client wajib diisi.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    if(!slug){
+
+      showStatus(
+        "Nama link galeri wajib diisi.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    if(!/^[a-z0-9-]+$/.test(slug)){
+
+      showStatus(
+        "Link hanya boleh berisi huruf kecil, angka, dan tanda strip (-).",
+        "error"
+      );
+
+      return;
+    }
+
+
+    saveBtn.disabled =
+      true;
+
+    saveBtn.textContent =
+      "Menyimpan...";
+
+
+    try{
+
+      const exists =
+        await slugExists(slug);
+
+      if(exists){
+
+        showStatus(
+          "Nama link tersebut sudah digunakan. Coba nama lain.",
+          "error"
+        );
+
+        saveBtn.disabled =
+          false;
+
+        saveBtn.textContent =
+          "Simpan Galeri";
+
+        return;
+      }
+
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from("galleries")
+        .insert({
+
+          user_id:
+            user.id,
+
+          title:
+            title,
+
+          client_name:
+            clientName,
+
+          slug:
+            slug,
+
+          event_date:
+            eventDate,
+
+          description:
+            description,
+
+          status:
+            "draft"
+
+        })
+        .select()
+        .single();
+
+
+      if(error){
+        throw error;
+      }
+
+
+      showStatus(
+        "Galeri berhasil dibuat.",
+        "success"
+      );
+
+
+      form.reset();
+
+      slugInput.dataset.edited =
+        "false";
+
+
+      await loadGalleries();
+
+
+      setTimeout(
+        function(){
+
+          window.location.href =
+            "gallery.html";
+
+        },
+        800
+      );
+
+
+    }catch(error){
+
+      console.error(error);
+
+      showStatus(
+        "Gagal membuat galeri: " +
+        error.message,
+        "error"
+      );
+
+    }
+
+
+    saveBtn.disabled =
+      false;
+
+    saveBtn.textContent =
+      "Simpan Galeri";
+
+  }
+);
+
+
+/* =====================================================
+   LOAD GALLERIES
+===================================================== */
+
+async function loadGalleries(){
+
+  const user =
+    await checkAuth();
+
+  if(!user){
+    return;
+  }
+
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("galleries")
+    .select("*")
+    .eq("user_id",user.id)
+    .order("created_at",{
+      ascending:false
+    });
+
+
+  if(error){
+
+    galleryList.innerHTML =
+      `<div class="empty">
+        Gagal memuat galeri.
+      </div>`;
+
+    console.error(error);
+
+    return;
+  }
+
+
+  if(!data || data.length === 0){
+
+    galleryList.innerHTML =
+      `<div class="empty">
+        Belum ada galeri. Buat galeri pertama kamu di atas.
+      </div>`;
+
+    return;
+  }
+
+
+  galleryList.innerHTML =
+    data.map(function(gallery){
+
+      const date =
+        gallery.event_date
+          ? new Date(
+              gallery.event_date
+            ).toLocaleDateString(
+              "id-ID",
+              {
+                day:"numeric",
+                month:"long",
+                year:"numeric"
+              }
+            )
+          : "Tanggal belum diatur";
+
+
+      return `
+
+        <div class="gallery-item">
+
+          <div class="gallery-info">
+
+            <strong>
+              ${escapeHtml(gallery.title)}
+            </strong>
+
+            <span>
+              ${escapeHtml(gallery.client_name)}
+              ·
+              ${date}
+            </span>
+
+          </div>
+
+          <div class="badge">
+            ${escapeHtml(gallery.status)}
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+function goDashboard(){
+
+  window.location.href =
+    "dashboard.html";
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+checkAuth()
+  .then(function(user){
+
+    if(user){
+      loadGalleries();
+    }
+
+  });
+
+</script>
+
+</body>
+</html>
