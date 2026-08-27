@@ -1,1275 +1,1164 @@
 <!doctype html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Memora — Dashboard</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-*{box-sizing:border-box}
-
-:root{
-  --bg:#fafaf8;
-  --card:#fff;
-  --text:#181818;
-  --muted:#77736c;
-  --border:#e4e1db;
-  --soft:#f2f1ee;
-  --accent:#b89558;
-  --danger:#a33;
-}
-
-body.dark{
-  --bg:#181817;
-  --card:#222220;
-  --text:#f5f3ee;
-  --muted:#aaa69d;
-  --border:#3a3935;
-  --soft:#2b2a27;
-}
-
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
-}
-
-button,input{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-/* LOADING */
-
-#loading{
-  position:fixed;
-  inset:0;
-  z-index:999;
-  background:var(--bg);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.loading-logo{
-  font:700 34px Georgia,serif;
-  text-align:center;
-}
-
-.loading-text{
-  margin-top:10px;
-  text-align:center;
-  color:var(--muted);
-  font-size:13px;
-}
-
-/* HEADER */
-
-header{
-  height:70px;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 28px;
-  position:sticky;
-  top:0;
-  z-index:50;
-  background:var(--bg);
-}
-
-.brand{
-  font:700 25px Georgia,serif;
-  letter-spacing:-1px;
-}
-
-.photographer{
-  display:inline-block;
-  margin-left:8px;
-  padding:5px 8px;
-  border-radius:6px;
-  background:var(--soft);
-  border:1px solid var(--border);
-  color:var(--muted);
-  font-size:10px;
-  font-weight:bold;
-}
-
-.header-right{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.email{
-  color:var(--muted);
-  font-size:13px;
-}
-
-.credit{
-  height:38px;
-  border:1px solid var(--accent);
-  background:transparent;
-  color:var(--text);
-  border-radius:20px;
-  padding:0 13px;
-  font-weight:bold;
-}
-
-.icon{
-  width:38px;
-  height:38px;
-  border:1px solid var(--border);
-  background:transparent;
-  color:var(--text);
-  border-radius:10px;
-  font-size:16px;
-}
-
-/* PAGE */
-
-.page{
-  width:min(1050px,calc(100% - 32px));
-  margin:auto;
-  padding:65px 0 100px;
-}
-
-/* ONBOARDING */
-
-#onboarding{
-  width:min(480px,100%);
-  margin:auto;
-}
-
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:32px;
-  box-shadow:0 20px 60px rgba(0,0,0,.06);
-}
-
-.studio-icon{
-  width:62px;
-  height:62px;
-  border-radius:50%;
-  background:#f7f0e4;
-  border:1px solid #d4b777;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:0 auto 22px;
-  font-size:25px;
-}
-
-body.dark .studio-icon{
-  background:#302a20;
-}
-
-h1{
-  margin:0;
-}
-
-.onboarding-title{
-  text-align:center;
-  font-size:24px;
-  letter-spacing:-.5px;
-}
-
-.onboarding-text{
-  text-align:center;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.5;
-  margin:10px 0 30px;
-}
-
-/* FORM */
-
-.field{
-  margin-bottom:20px;
-}
-
-label{
-  display:block;
-  font-size:13px;
-  font-weight:bold;
-  margin-bottom:8px;
-}
-
-.required{
-  color:var(--accent);
-  font-size:10px;
-  margin-left:5px;
-}
-
-input{
-  width:100%;
-  height:48px;
-  padding:0 14px;
-  border:1px solid var(--border);
-  border-radius:11px;
-  background:var(--card);
-  color:var(--text);
-  outline:none;
-}
-
-input:focus{
-  border-color:var(--accent);
-  box-shadow:0 0 0 3px rgba(184,149,88,.12);
-}
-
-.hint{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.5;
-  margin-top:7px;
-}
-
-.slug-preview{
-  margin-top:7px;
-  color:#39835a;
-  font-size:12px;
-  font-weight:bold;
-}
-
-.error,
-.success{
-  display:none;
-  padding:11px 13px;
-  border-radius:10px;
-  font-size:13px;
-  margin-bottom:17px;
-}
-
-.error{
-  background:#fff1f1;
-  border:1px solid #efcccc;
-  color:var(--danger);
-}
-
-.success{
-  background:#eef8f1;
-  border:1px solid #c8e4d0;
-  color:#337c4d;
-}
-
-.save{
-  width:100%;
-  height:48px;
-  border:0;
-  border-radius:11px;
-  background:#181818;
-  color:#fff;
-  font-weight:bold;
-}
-
-body.dark .save{
-  background:#f3f1eb;
-  color:#181818;
-}
-
-.save:disabled{
-  opacity:.6;
-}
-
-.logout{
-  display:block;
-  margin:22px auto 0;
-  border:0;
-  background:transparent;
-  color:var(--muted);
-  text-decoration:underline;
-  font-size:13px;
-}
-
-/* DASHBOARD */
-
-#dashboard{
-  display:none;
-}
-
-.dashboard-top{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:20px;
-  margin-bottom:30px;
-}
-
-.dashboard-title{
-  font-size:34px;
-  letter-spacing:-1.2px;
-}
-
-.dashboard-subtitle{
-  margin:8px 0 0;
-  color:var(--muted);
-  font-size:14px;
-}
-
-.new-gallery{
-  border:0;
-  background:var(--text);
-  color:var(--bg);
-  padding:13px 18px;
-  border-radius:11px;
-  font-weight:bold;
-}
-
-.studio{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:22px;
-  margin-bottom:18px;
-}
-
-.studio-label{
-  color:var(--muted);
-  font-size:12px;
-}
-
-.studio-name{
-  margin-top:5px;
-  font-size:20px;
-  font-weight:bold;
-}
-
-.studio-link{
-  margin-top:5px;
-  color:var(--accent);
-  font-size:13px;
-}
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-}
-
-.dashboard-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:24px;
-  min-height:150px;
-}
-
-.card-icon{
-  width:42px;
-  height:42px;
-  border-radius:11px;
-  background:var(--soft);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin-bottom:18px;
-  font-size:19px;
-}
-
-.card-title{
-  font-weight:bold;
-  margin-bottom:6px;
-}
-
-.card-text{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.5;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:750px){
-
-  header{
-    padding:0 15px;
-  }
-
-  .email{
-    display:none;
-  }
-
-  .page{
-    padding:40px 0 70px;
-  }
-
-  .card{
-    padding:25px 20px;
-  }
-
-  .dashboard-top{
-    align-items:stretch;
-    flex-direction:column;
-  }
-
-  .new-gallery{
-    width:100%;
-  }
-
-  .cards{
-    grid-template-columns:1fr;
-  }
-}
-
-@media(max-width:430px){
-
-  .photographer{
-    display:none;
-  }
-
-  .credit{
-    padding:0 9px;
-  }
-
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Memora — Dashboard</title>
+
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: #fafaf8;
+      color: #181818;
+      font-family: Arial, Helvetica, sans-serif;
+      transition: background .25s ease, color .25s ease;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+      height: 68px;
+      border-bottom: 1px solid #e3e1dc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: rgba(250,250,248,.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand {
+      font-family: Georgia, serif;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -1.5px;
+    }
+
+    .badge {
+      background: #f0efeb;
+      border: 1px solid #dfddd7;
+      color: #77736c;
+      border-radius: 7px;
+      padding: 5px 9px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .credit {
+      border: 1px solid #b48b3c;
+      border-radius: 30px;
+      padding: 9px 16px;
+      font-weight: 700;
+      font-size: 14px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .credit-icon {
+      font-size: 13px;
+    }
+
+    .email {
+      color: #68645e;
+      font-size: 13px;
+      margin: 0 8px;
+      max-width: 230px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border: 1px solid #dfddd7;
+      background: #fafaf8;
+      border-radius: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: .2s;
+    }
+
+    .icon-btn:hover {
+      background: #efeee9;
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .container {
+      width: min(1050px, calc(100% - 40px));
+      margin: auto;
+      padding: 66px 0 90px;
+    }
+
+    .welcome-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 28px;
+    }
+
+    .welcome h1 {
+      margin: 0;
+      font-size: 35px;
+      letter-spacing: -1.4px;
+    }
+
+    .welcome p {
+      margin: 10px 0 0;
+      color: #77736c;
+      font-size: 14px;
+    }
+
+    .primary-btn {
+      border: 0;
+      background: #181818;
+      color: #fff;
+      padding: 14px 19px;
+      border-radius: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+      transition: .2s;
+    }
+
+    .primary-btn:hover {
+      background: #333;
+      transform: translateY(-1px);
+    }
+
+    /* =========================
+       STUDIO CARD
+    ========================= */
+
+    .studio-card {
+      background: #fff;
+      border: 1px solid #dfddd7;
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .studio-label {
+      font-size: 12px;
+      color: #77736c;
+      margin-bottom: 7px;
+    }
+
+    .studio-name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .studio-link {
+      color: #b2873e;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .studio-empty {
+      color: #77736c;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .studio-empty strong {
+      color: #181818;
+    }
+
+    /* =========================
+       MENU CARDS
+    ========================= */
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #dfddd7;
+      border-radius: 18px;
+      padding: 24px;
+      min-height: 153px;
+      cursor: pointer;
+      transition: .2s;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0,0,0,.07);
+      border-color: #ccc8bf;
+    }
+
+    .card-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: #f0efeb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 17px;
+      font-size: 19px;
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .card p {
+      margin: 0;
+      color: #77736c;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    .loading {
+      position: fixed;
+      inset: 0;
+      background: #fafaf8;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .3s ease;
+    }
+
+    .loading.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-inner {
+      text-align: center;
+    }
+
+    .loading-logo {
+      font-family: Georgia, serif;
+      font-size: 34px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .loading-text {
+      color: #77736c;
+      font-size: 13px;
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 25px;
+      transform: translate(-50%, 20px);
+      background: #181818;
+      color: #fff;
+      padding: 12px 17px;
+      border-radius: 10px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s;
+      z-index: 200;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    /* =========================
+       DARK MODE
+    ========================= */
+
+    body.dark {
+      background: #121212;
+      color: #f5f5f2;
+    }
+
+    body.dark .header {
+      background: rgba(18,18,18,.94);
+      border-color: #2c2c2a;
+    }
+
+    body.dark .badge,
+    body.dark .card-icon {
+      background: #222;
+      border-color: #333;
+    }
+
+    body.dark .badge {
+      color: #aaa;
+    }
+
+    body.dark .credit,
+    body.dark .studio-card,
+    body.dark .card,
+    body.dark .icon-btn {
+      background: #191919;
+      border-color: #333;
+      color: #f5f5f2;
+    }
+
+    body.dark .icon-btn:hover {
+      background: #252525;
+    }
+
+    body.dark .studio-label,
+    body.dark .studio-empty,
+    body.dark .welcome p,
+    body.dark .card p,
+    body.dark .email {
+      color: #aaa;
+    }
+
+    body.dark .loading {
+      background: #121212;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 800px) {
+
+      .header {
+        padding: 0 18px;
+      }
+
+      .email {
+        display: none;
+      }
+
+      .brand {
+        font-size: 27px;
+      }
+
+      .container {
+        width: min(100% - 28px, 650px);
+        padding-top: 45px;
+      }
+
+      .welcome-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .primary-btn {
+        width: 100%;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+
+      .header {
+        height: 62px;
+      }
+
+      .credit {
+        padding: 8px 11px;
+        font-size: 12px;
+      }
+
+      .welcome h1 {
+        font-size: 29px;
+      }
+
+      .container {
+        padding-bottom: 50px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- LOADING -->
+  <!-- =========================
+       LOADING
+  ========================== -->
 
-<div id="loading">
-  <div>
-    <div class="loading-logo">memora</div>
-    <div class="loading-text">Memuat akun...</div>
-  </div>
-</div>
-
-
-<!-- HEADER -->
-
-<header>
-
-  <div>
-    <span class="brand">memora</span>
-    <span class="photographer">for photographers</span>
+  <div class="loading" id="loading">
+    <div class="loading-inner">
+      <div class="loading-logo">memora</div>
+      <div class="loading-text">Memuat dashboard...</div>
+    </div>
   </div>
 
-  <div class="header-right">
 
-    <button class="credit" onclick="creditInfo()">
-      ◈ 0 kredit
-    </button>
+  <!-- =========================
+       HEADER
+  ========================== -->
 
-    <div class="email" id="email"></div>
+  <header class="header">
 
-    <button
-      class="icon"
-      onclick="toggleTheme()"
-      title="Tema"
-    >
-      ◐
-    </button>
+    <div class="brand-area">
+      <div class="brand">memora</div>
 
-    <button
-      class="icon"
-      onclick="logout()"
-      title="Keluar"
-    >
-      ↪
-    </button>
-
-  </div>
-
-</header>
-
-
-<main class="page">
-
-<!-- =========================================
-     ONBOARDING
-========================================= -->
-
-<section id="onboarding">
-
-  <div class="card">
-
-    <div class="studio-icon">
-      ◇
+      <div class="badge">
+        for photographers
+      </div>
     </div>
 
-    <h1 class="onboarding-title">
-      Lengkapi Studio Kamu
-    </h1>
+    <div class="header-right">
 
-    <p class="onboarding-text">
-      Isi identitas studio kamu dulu sebelum bikin
-      galeri pertama.
-    </p>
-
-
-    <div id="error" class="error"></div>
-    <div id="success" class="success"></div>
-
-
-    <form id="studioForm">
-
-      <div class="field">
-
-        <label>
-          Nama Studio
-          <span class="required">WAJIB</span>
-        </label>
-
-        <input
-          id="studioName"
-          type="text"
-          placeholder="Contoh: Memora Studio"
-          maxlength="80"
-          required
-        >
-
-        <div class="hint">
-          Tampil di atas nama klien di galeri.
-        </div>
-
+      <div class="credit">
+        <span class="credit-icon">◇</span>
+        <span id="creditValue">0 kredit</span>
       </div>
 
-
-      <div class="field">
-
-        <label>
-          Nama Studio di Link
-          <span class="required">WAJIB</span>
-        </label>
-
-        <input
-          id="slug"
-          type="text"
-          placeholder="nama-studio"
-          maxlength="40"
-          required
-        >
-
-        <div
-          class="slug-preview"
-          id="slugPreview"
-        >
-          memora.app/
-        </div>
-
-        <div class="hint">
-          Gunakan huruf kecil, angka, dan tanda hubung.
-        </div>
-
+      <div class="email" id="userEmail">
+        Memuat...
       </div>
-
-
-      <div class="field">
-
-        <label>
-          WhatsApp Studio
-          <span class="required">WAJIB</span>
-        </label>
-
-        <input
-          id="whatsapp"
-          type="tel"
-          placeholder="08xxxxxxxxxx"
-          maxlength="20"
-          required
-        >
-
-        <div class="hint">
-          Nomor yang bisa digunakan klien untuk
-          menghubungi studio.
-        </div>
-
-      </div>
-
 
       <button
-        id="saveBtn"
-        class="save"
-        type="submit"
-      >
-        Simpan &amp; Mulai
+        class="icon-btn"
+        id="themeBtn"
+        title="Ganti tema"
+        onclick="toggleTheme()">
+        ◐
       </button>
 
-    </form>
+      <button
+        class="icon-btn"
+        title="Keluar"
+        onclick="logout()">
+        ↪
+      </button>
 
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+       MAIN
+  ========================== -->
+
+  <main class="container">
+
+    <!-- WELCOME -->
+
+    <section class="welcome-row">
+
+      <div class="welcome">
+
+        <h1>
+          Halo, <span id="userName">...</span> 👋
+        </h1>
+
+        <p>
+          Kelola galeri foto dan client kamu di sini.
+        </p>
+
+      </div>
+
+      <button
+        class="primary-btn"
+        onclick="createGallery()">
+        + Buat Galeri
+      </button>
+
+    </section>
+
+
+    <!-- STUDIO -->
+
+    <section class="studio-card">
+
+      <div class="studio-label">
+        Studio kamu
+      </div>
+
+      <div
+        class="studio-name"
+        id="studioName">
+        Memuat...
+      </div>
+
+      <div
+        class="studio-link"
+        id="studioLink">
+        -
+      </div>
+
+      <div
+        class="studio-empty"
+        id="studioEmpty"
+        style="display:none;">
+        Kamu belum mengatur informasi studio.
+        <strong>
+          Lengkapi profil studio terlebih dahulu.
+        </strong>
+      </div>
+
+    </section>
+
+
+    <!-- MENU -->
+
+    <section class="cards">
+
+      <!-- GALERI -->
+
+      <div
+        class="card"
+        onclick="openGallery()">
+
+        <div class="card-icon">
+          ▧
+        </div>
+
+        <h2>
+          Galeri
+        </h2>
+
+        <p>
+          Buat dan kelola galeri foto untuk client kamu.
+        </p>
+
+      </div>
+
+
+      <!-- CLIENT -->
+
+      <div
+        class="card"
+        onclick="openClients()">
+
+        <div class="card-icon">
+          ♙
+        </div>
+
+        <h2>
+          Client
+        </h2>
+
+        <p>
+          Kelola client dan galeri yang pernah kamu buat.
+        </p>
+
+      </div>
+
+
+      <!-- STATISTIK -->
+
+      <div
+        class="card"
+        onclick="openStatistics()">
+
+        <div class="card-icon">
+          ↗
+        </div>
+
+        <h2>
+          Statistik
+        </h2>
+
+        <p>
+          Pantau aktivitas dan performa galeri kamu.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- TOAST -->
+
+  <div
+    class="toast"
+    id="toast">
   </div>
 
 
-  <button
-    class="logout"
-    onclick="logout()"
-  >
-    Keluar dari akun ini
-  </button>
+  <script>
 
-</section>
+    /* =====================================================
+       SUPABASE CONFIG
+    ===================================================== */
 
+    const SUPABASE_URL =
+      "https://kluuablkxxanpkdsfckp.supabase.co";
 
-<!-- =========================================
-     DASHBOARD UTAMA
-========================================= -->
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_MWrUTn7S0cX1Ff50ebZvFQ_GxtiwiTy";
 
-<section id="dashboard">
+    const { createClient } =
+      supabase;
 
-  <div class="dashboard-top">
-
-    <div>
-
-      <h1
-        class="dashboard-title"
-        id="hello"
-      >
-        Halo 👋
-      </h1>
-
-      <p class="dashboard-subtitle">
-        Kelola galeri foto dan client kamu di sini.
-      </p>
-
-    </div>
-
-    <button
-      class="new-gallery"
-      onclick="newGallery()"
-    >
-      + Buat Galeri
-    </button>
-
-  </div>
-
-
-  <div class="studio">
-
-    <div class="studio-label">
-      Studio kamu
-    </div>
-
-    <div
-      class="studio-name"
-      id="studioDisplay"
-    ></div>
-
-    <div
-      class="studio-link"
-      id="linkDisplay"
-    ></div>
-
-  </div>
-
-
-  <div class="cards">
-
-    <div class="dashboard-card">
-
-      <div class="card-icon">
-        ▧
-      </div>
-
-      <div class="card-title">
-        Galeri
-      </div>
-
-      <div class="card-text">
-        Buat dan kelola galeri foto untuk client kamu.
-      </div>
-
-    </div>
-
-
-    <div class="dashboard-card">
-
-      <div class="card-icon">
-        ♙
-      </div>
-
-      <div class="card-title">
-        Client
-      </div>
-
-      <div class="card-text">
-        Kelola client dan galeri yang pernah kamu buat.
-      </div>
-
-    </div>
-
-
-    <div class="dashboard-card">
-
-      <div class="card-icon">
-        ↗
-      </div>
-
-      <div class="card-title">
-        Statistik
-      </div>
-
-      <div class="card-text">
-        Pantau aktivitas dan performa galeri kamu.
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-</main>
-
-
-<script>
-
-/* =========================================
-   SUPABASE
-========================================= */
-
-const SUPABASE_URL =
-"https://kluuablkxxanpkdsfckp.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-"sb_publishable_MWrUTn7S0cX1Ff50ebZvFQ_GxtiwiTy";
-
-const supabaseClient =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
-
-
-/* =========================================
-   ELEMENT
-========================================= */
-
-const loading =
-document.getElementById("loading");
-
-const onboarding =
-document.getElementById("onboarding");
-
-const dashboard =
-document.getElementById("dashboard");
-
-const email =
-document.getElementById("email");
-
-const studioForm =
-document.getElementById("studioForm");
-
-const studioName =
-document.getElementById("studioName");
-
-const slug =
-document.getElementById("slug");
-
-const whatsapp =
-document.getElementById("whatsapp");
-
-const slugPreview =
-document.getElementById("slugPreview");
-
-const errorBox =
-document.getElementById("error");
-
-const successBox =
-document.getElementById("success");
-
-const saveBtn =
-document.getElementById("saveBtn");
-
-
-let currentUser = null;
-
-
-/* =========================================
-   THEME
-========================================= */
-
-function loadTheme(){
-
-  const saved =
-  localStorage.getItem("memora_theme");
-
-  if(saved === "dark"){
-    document.body.classList.add("dark");
-  }
-
-}
-
-function toggleTheme(){
-
-  document.body.classList.toggle("dark");
-
-  localStorage.setItem(
-    "memora_theme",
-    document.body.classList.contains("dark")
-      ? "dark"
-      : "light"
-  );
-
-}
-
-loadTheme();
-
-
-/* =========================================
-   MESSAGE
-========================================= */
-
-function showError(message){
-
-  errorBox.textContent = message;
-  errorBox.style.display = "block";
-  successBox.style.display = "none";
-
-}
-
-function showSuccess(message){
-
-  successBox.textContent = message;
-  successBox.style.display = "block";
-  errorBox.style.display = "none";
-
-}
-
-function clearMessage(){
-
-  errorBox.style.display = "none";
-  successBox.style.display = "none";
-
-}
-
-
-/* =========================================
-   SLUG
-========================================= */
-
-function makeSlug(value){
-
-  return value
-    .toLowerCase()
-    .trim()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"")
-    .replace(/[^a-z0-9\s-]/g,"")
-    .replace(/\s+/g,"-")
-    .replace(/-+/g,"-")
-    .replace(/^-|-$/g,"")
-    .substring(0,40);
-
-}
-
-studioName.addEventListener(
-  "input",
-  function(){
-
-    if(!slug.dataset.edited){
-
-      slug.value =
-      makeSlug(studioName.value);
-
-    }
-
-    updateSlug();
-
-  }
-);
-
-slug.addEventListener(
-  "input",
-  function(){
-
-    slug.dataset.edited = "true";
-
-    slug.value =
-    makeSlug(slug.value);
-
-    updateSlug();
-
-  }
-);
-
-function updateSlug(){
-
-  slugPreview.textContent =
-  "memora.app/" +
-  slug.value;
-
-}
-
-
-/* =========================================
-   AUTH CHECK
-========================================= */
-
-async function checkAuth(){
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient.auth.getUser();
-
-    if(error){
-      throw error;
-    }
-
-    if(!data.user){
-
-      window.location.href =
-      "auth.html?type=photographer";
-
-      return;
-
-    }
-
-    currentUser =
-    data.user;
-
-    email.textContent =
-    currentUser.email || "";
-
-    await loadStudio();
-
-  }
-  catch(err){
-
-    console.error(err);
-
-    window.location.href =
-    "auth.html?type=photographer";
-
-  }
-
-}
-
-
-/* =========================================
-   LOAD STUDIO
-========================================= */
-
-async function loadStudio(){
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-    .from("studios")
-    .select("*")
-    .eq("id",currentUser.id)
-    .maybeSingle();
-
-  if(error){
-
-    console.error(error);
-
-    showError(
-      "Gagal mengambil data studio: " +
-      error.message
-    );
-
-    loading.style.display =
-    "none";
-
-    return;
-
-  }
-
-
-  if(!data){
-
-    onboarding.style.display =
-    "block";
-
-    dashboard.style.display =
-    "none";
-
-  }
-  else{
-
-    showDashboard(data);
-
-  }
-
-
-  loading.style.display =
-  "none";
-
-}
-
-
-/* =========================================
-   SAVE STUDIO
-========================================= */
-
-studioForm.addEventListener(
-  "submit",
-  async function(event){
-
-    event.preventDefault();
-
-    clearMessage();
-
-    const name =
-    studioName.value.trim();
-
-    const cleanSlug =
-    makeSlug(slug.value);
-
-    const phone =
-    whatsapp.value.trim();
-
-
-    if(!name){
-
-      showError(
-        "Nama studio wajib diisi."
+    const db =
+      createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
       );
 
-      return;
 
-    }
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
 
-    if(!cleanSlug){
+    const loading =
+      document.getElementById("loading");
 
-      showError(
-        "Nama studio di link wajib diisi."
-      );
+    const userName =
+      document.getElementById("userName");
 
-      return;
+    const userEmail =
+      document.getElementById("userEmail");
 
-    }
+    const studioName =
+      document.getElementById("studioName");
 
-    if(cleanSlug.length < 2){
+    const studioLink =
+      document.getElementById("studioLink");
 
-      showError(
-        "Nama studio di link terlalu pendek."
-      );
+    const studioEmpty =
+      document.getElementById("studioEmpty");
 
-      return;
-
-    }
-
-    if(!phone){
-
-      showError(
-        "Nomor WhatsApp wajib diisi."
-      );
-
-      return;
-
-    }
+    const creditValue =
+      document.getElementById("creditValue");
 
 
-    saveBtn.disabled = true;
-    saveBtn.textContent =
-    "Menyimpan...";
+    /* =====================================================
+       START DASHBOARD
+    ===================================================== */
 
+    async function initDashboard() {
 
-    try{
+      try {
 
-      const {
-        data,
-        error
-      } =
-      await supabaseClient
-        .from("studios")
-        .upsert(
-          {
-            id:currentUser.id,
-            studio_name:name,
-            slug:cleanSlug,
-            whatsapp:phone
+        /*
+         * Ambil session user dari Supabase.
+         */
+
+        const {
+          data: {
+            session
           },
-          {
-            onConflict:"id"
-          }
-        )
-        .select()
-        .single();
+          error
+        } = await db.auth.getSession();
 
 
-      if(error){
+        /*
+         * Kalau tidak ada session,
+         * jangan boleh masuk dashboard.
+         */
 
-        if(
-          error.code === "23505" &&
-          error.message
-            .toLowerCase()
-            .includes("slug")
-        ){
+        if (error || !session) {
 
-          throw new Error(
-            "Nama studio di link tersebut sudah dipakai."
-          );
+          window.location.href =
+            "auth.html?mode=signin";
 
+          return;
         }
 
-        throw error;
+
+        /*
+         * User yang sedang login.
+         */
+
+        const user =
+          session.user;
+
+
+        /*
+         * Email.
+         */
+
+        userEmail.textContent =
+          user.email || "-";
+
+
+        /*
+         * Nama dari metadata Supabase.
+         *
+         * Saat register nanti auth.html
+         * akan mengirim nama ke user_metadata.
+         */
+
+        let name =
+          user.user_metadata?.name ||
+          user.user_metadata?.full_name ||
+          user.email?.split("@")[0] ||
+          "Fotografer";
+
+
+        /*
+         * Bersihkan nama.
+         */
+
+        name =
+          name.trim();
+
+
+        userName.textContent =
+          name;
+
+
+        /*
+         * Ambil profile dari tabel profiles.
+         */
+
+        await loadProfile(user);
+
+
+        /*
+         * Hilangkan loading.
+         */
+
+        loading.classList.add("hidden");
+
+      } catch (error) {
+
+        console.error(
+          "Dashboard error:",
+          error
+        );
+
+        /*
+         * Kalau ada error besar,
+         * tetap sembunyikan loading supaya
+         * kita bisa melihat dashboard.
+         */
+
+        loading.classList.add("hidden");
 
       }
 
-
-      showSuccess(
-        "Studio berhasil disimpan."
-      );
-
-
-      setTimeout(
-        function(){
-
-          showDashboard(data);
-
-        },
-        500
-      );
-
-
-    }
-    catch(err){
-
-      console.error(err);
-
-      showError(
-        err.message ||
-        "Gagal menyimpan studio."
-      );
-
-      saveBtn.disabled =
-      false;
-
-      saveBtn.textContent =
-      "Simpan & Mulai";
-
     }
 
-  }
-);
+
+    /* =====================================================
+       LOAD PROFILE
+    ===================================================== */
+
+    async function loadProfile(user) {
+
+      try {
+
+        const {
+          data,
+          error
+        } = await db
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
+          .maybeSingle();
 
 
-/* =========================================
-   SHOW DASHBOARD
-========================================= */
+        /*
+         * Kalau tabel/profile belum ada,
+         * dashboard tetap bisa berjalan.
+         */
 
-function showDashboard(data){
+        if (error) {
 
-  onboarding.style.display =
-  "none";
+          console.warn(
+            "Profile belum bisa diambil:",
+            error.message
+          );
 
-  dashboard.style.display =
-  "block";
+          studioName.textContent =
+            "Studio kamu";
 
+          studioLink.textContent =
+            "Belum diatur";
 
-  document.getElementById(
-    "studioDisplay"
-  ).textContent =
-  data.studio_name;
-
-
-  document.getElementById(
-    "linkDisplay"
-  ).textContent =
-  "memora.app/" +
-  data.slug;
+          return;
+        }
 
 
-  const username =
-  (currentUser.email || "")
-    .split("@")[0];
+        /*
+         * Tidak ada profile.
+         */
+
+        if (!data) {
+
+          studioName.textContent =
+            "Belum diatur";
+
+          studioLink.textContent =
+            "Lengkapi profil studio";
+
+          studioEmpty.style.display =
+            "block";
+
+          creditValue.textContent =
+            "0 kredit";
+
+          return;
+        }
 
 
-  document.getElementById(
-    "hello"
-  ).textContent =
-  "Halo, " +
-  username +
-  " 👋";
+        /*
+         * Nama studio.
+         *
+         * Kita cek beberapa kemungkinan
+         * nama kolom supaya lebih fleksibel.
+         */
 
-}
-
-
-/* =========================================
-   LOGOUT
-========================================= */
-
-async function logout(){
-
-  const confirmed =
-  confirm(
-    "Yakin ingin keluar dari akun Memora?"
-  );
-
-  if(!confirmed){
-    return;
-  }
+        const studio =
+          data.studio_name ||
+          data.studio ||
+          data.name ||
+          "Belum diatur";
 
 
-  const {
-    error
-  } =
-  await supabaseClient.auth.signOut();
+        studioName.textContent =
+          studio;
 
 
-  if(error){
+        /*
+         * Slug studio.
+         */
 
-    alert(
-      "Gagal keluar: " +
-      error.message
+        const slug =
+          data.studio_slug ||
+          data.slug ||
+          "";
+
+
+        if (slug) {
+
+          studioLink.textContent =
+            "memora.app/" + slug;
+
+        } else {
+
+          studioLink.textContent =
+            "Slug belum diatur";
+
+        }
+
+
+        /*
+         * Kredit.
+         */
+
+        const credits =
+          data.credits ??
+          data.credit ??
+          0;
+
+
+        creditValue.textContent =
+          credits + " kredit";
+
+
+      } catch (error) {
+
+        console.error(
+          "Load profile error:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    async function logout() {
+
+      try {
+
+        const {
+          error
+        } = await db.auth.signOut();
+
+
+        if (error) {
+
+          console.error(error);
+
+          showToast(
+            "Gagal keluar dari akun."
+          );
+
+          return;
+        }
+
+
+        /*
+         * Bersihkan data lama yang sebelumnya
+         * dibuat oleh versi localStorage.
+         */
+
+        localStorage.removeItem(
+          "memora_logged_in"
+        );
+
+        localStorage.removeItem(
+          "memora_user"
+        );
+
+        localStorage.removeItem(
+          "memora_account_type"
+        );
+
+
+        /*
+         * Kembali ke auth.
+         */
+
+        window.location.href =
+          "auth.html?mode=signin";
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "Terjadi kesalahan saat logout."
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       BUAT GALERI
+    ===================================================== */
+
+    function createGallery() {
+
+      /*
+       * Untuk sekarang menuju halaman
+       * create-gallery.html.
+       *
+       * File tersebut kita buat setelah
+       * dashboard ini selesai.
+       */
+
+      window.location.href =
+        "create-gallery.html";
+
+    }
+
+
+    /* =====================================================
+       GALERI
+    ===================================================== */
+
+    function openGallery() {
+
+      window.location.href =
+        "galleries.html";
+
+    }
+
+
+    /* =====================================================
+       CLIENT
+    ===================================================== */
+
+    function openClients() {
+
+      window.location.href =
+        "clients.html";
+
+    }
+
+
+    /* =====================================================
+       STATISTIK
+    ===================================================== */
+
+    function openStatistics() {
+
+      window.location.href =
+        "statistics.html";
+
+    }
+
+
+    /* =====================================================
+       DARK MODE
+    ===================================================== */
+
+    function toggleTheme() {
+
+      document.body.classList.toggle(
+        "dark"
+      );
+
+
+      const dark =
+        document.body.classList.contains(
+          "dark"
+        );
+
+
+      localStorage.setItem(
+        "memora_theme",
+        dark ? "dark" : "light"
+      );
+
+    }
+
+
+    /* =====================================================
+       LOAD THEME
+    ===================================================== */
+
+    function loadTheme() {
+
+      const theme =
+        localStorage.getItem(
+          "memora_theme"
+        );
+
+
+      if (theme === "dark") {
+
+        document.body.classList.add(
+          "dark"
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       TOAST
+    ===================================================== */
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById(
+          "toast"
+        );
+
+
+      toast.textContent =
+        message;
+
+
+      toast.classList.add(
+        "show"
+      );
+
+
+      setTimeout(() => {
+
+        toast.classList.remove(
+          "show"
+        );
+
+      }, 2500);
+
+    }
+
+
+    /* =====================================================
+       AUTH STATE LISTENER
+    ===================================================== */
+
+    db.auth.onAuthStateChange(
+      (event, session) => {
+
+        /*
+         * Kalau user logout dari tab lain,
+         * dashboard ikut mengarah ke login.
+         */
+
+        if (
+          event === "SIGNED_OUT" &&
+          !session
+        ) {
+
+          window.location.href =
+            "auth.html?mode=signin";
+
+        }
+
+      }
     );
 
-    return;
 
-  }
+    /* =====================================================
+       RUN
+    ===================================================== */
 
+    loadTheme();
 
-  localStorage.removeItem(
-    "memora_logged_in"
-  );
+    initDashboard();
 
-  localStorage.removeItem(
-    "memora_user"
-  );
-
-
-  window.location.href =
-  "auth.html?type=photographer";
-
-}
-
-
-/* =========================================
-   TEMPORARY BUTTONS
-========================================= */
-
-function creditInfo(){
-
-  alert(
-    "Sistem kredit Memora akan kita bangun nanti."
-  );
-
-}
-
-function newGallery(){
-
-  alert(
-    "Fitur Buat Galeri akan kita bangun berikutnya."
-  );
-
-}
-
-
-/* =========================================
-   START
-========================================= */
-
-checkAuth();
-
-</script>
+  </script>
 
 </body>
 </html>
