@@ -1,10 +1,8 @@
 <!doctype html>
-
 <html lang="id">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>Memora — Buat Galeri</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -172,6 +170,17 @@ h1{
   margin-top:7px;
 }
 
+.drive-box{
+  background:#f8f7f3;
+  border:1px solid #e5e1d8;
+  border-radius:12px;
+  padding:13px 14px;
+  margin-top:8px;
+  color:#777;
+  font-size:12px;
+  line-height:1.5;
+}
+
 .status{
   display:none;
   padding:12px 14px;
@@ -242,6 +251,11 @@ h1{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:20px;
+}
+
+.gallery-info{
+  min-width:0;
 }
 
 .gallery-info strong{
@@ -255,7 +269,22 @@ h1{
   font-size:12px;
 }
 
+.gallery-drive{
+  margin-top:8px;
+}
+
+.gallery-drive a{
+  color:#a8792d;
+  font-size:12px;
+  text-decoration:none;
+}
+
+.gallery-drive a:hover{
+  text-decoration:underline;
+}
+
 .badge{
+  flex-shrink:0;
   font-size:11px;
   padding:6px 9px;
   border-radius:20px;
@@ -312,9 +341,12 @@ h1{
     gap:15px;
   }
 
+  .gallery-item{
+    align-items:flex-start;
+  }
+
 }
 </style>
-
 </head>
 
 <body>
@@ -327,190 +359,237 @@ h1{
 
   <div class="header-right">
 
-<div class="email" id="userEmail">
-  Memuat...
-</div>
+    <div class="email" id="userEmail">
+      Memuat...
+    </div>
 
-<button
-  class="back-btn"
-  onclick="goDashboard()"
->
-  ← Dashboard
-</button>
+    <button
+      class="back-btn"
+      onclick="goDashboard()"
+    >
+      ← Dashboard
+    </button>
 
   </div>
 
 </header>
 
+
 <main class="page">
 
   <div class="top">
 
-<div>
-  <div class="eyebrow">
-    Galeri Baru
+    <div>
+
+      <div class="eyebrow">
+        Galeri Baru
+      </div>
+
+      <h1>
+        Buat Galeri
+      </h1>
+
+      <p class="subtitle">
+        Buat ruang galeri foto untuk client kamu.
+      </p>
+
+    </div>
+
   </div>
 
-  <h1>
-    Buat Galeri
-  </h1>
-
-  <p class="subtitle">
-    Buat ruang galeri foto untuk client kamu.
-  </p>
-</div>
-
-  </div>
 
   <div class="card">
 
-<div class="section-title">
-  Informasi Galeri
-</div>
-
-<div
-  id="status"
-  class="status"
-></div>
-
-
-<form id="galleryForm">
-
-  <div class="field">
-
-    <label for="title">
-      Nama Galeri
-    </label>
-
-    <input
-      id="title"
-      type="text"
-      placeholder="Contoh: Wedding Dimas & Sinta"
-      required
-    >
-
-    <div class="help">
-      Nama yang akan tampil sebagai judul galeri client.
+    <div class="section-title">
+      Informasi Galeri
     </div>
 
+    <div
+      id="status"
+      class="status"
+    ></div>
+
+
+    <form id="galleryForm">
+
+
+      <!-- NAMA GALERI -->
+
+      <div class="field">
+
+        <label for="title">
+          Nama Galeri
+        </label>
+
+        <input
+          id="title"
+          type="text"
+          placeholder="Contoh: Wedding Dimas & Sinta"
+          maxlength="150"
+          required
+        >
+
+        <div class="help">
+          Nama yang akan tampil sebagai judul galeri client.
+        </div>
+
+      </div>
+
+
+      <!-- CLIENT + TANGGAL -->
+
+      <div class="grid">
+
+        <div class="field">
+
+          <label for="clientName">
+            Nama Client
+          </label>
+
+          <input
+            id="clientName"
+            type="text"
+            placeholder="Contoh: Dimas & Sinta"
+            maxlength="100"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="eventDate">
+            Tanggal Acara
+          </label>
+
+          <input
+            id="eventDate"
+            type="date"
+          >
+
+        </div>
+
+      </div>
+
+
+      <!-- SLUG -->
+
+      <div class="field">
+
+        <label for="slug">
+          Nama Link Galeri
+        </label>
+
+        <div class="slug-wrap">
+
+          <span class="slug-prefix">
+            memora.app/
+          </span>
+
+          <input
+            id="slug"
+            class="slug-input"
+            type="text"
+            placeholder="dimas-sinta"
+            maxlength="80"
+            required
+          >
+
+        </div>
+
+        <div class="help">
+          Gunakan huruf kecil, angka, dan tanda strip (-).
+        </div>
+
+      </div>
+
+
+      <!-- GOOGLE DRIVE -->
+
+      <div class="field">
+
+        <label for="driveUrl">
+          Link Google Drive
+        </label>
+
+        <input
+          id="driveUrl"
+          type="url"
+          placeholder="https://drive.google.com/drive/folders/..."
+          required
+        >
+
+        <div class="drive-box">
+          Masukkan link folder Google Drive yang berisi foto
+          untuk galeri ini.
+        </div>
+
+      </div>
+
+
+      <!-- DESKRIPSI -->
+
+      <div class="field">
+
+        <label for="description">
+          Deskripsi
+        </label>
+
+        <textarea
+          id="description"
+          placeholder="Contoh: Dokumentasi pernikahan Dimas & Sinta."
+        ></textarea>
+
+      </div>
+
+
+      <!-- ACTION -->
+
+      <div class="actions">
+
+        <a
+          href="dashboard.html"
+          class="cancel"
+        >
+          Batal
+        </a>
+
+        <button
+          type="submit"
+          class="save"
+          id="saveBtn"
+        >
+          Simpan Galeri
+        </button>
+
+      </div>
+
+    </form>
+
   </div>
 
 
-  <div class="grid">
-
-    <div class="field">
-
-      <label for="clientName">
-        Nama Client
-      </label>
-
-      <input
-        id="clientName"
-        type="text"
-        placeholder="Contoh: Dimas & Sinta"
-        required
-      >
-
-    </div>
-
-
-    <div class="field">
-
-      <label for="eventDate">
-        Tanggal Acara
-      </label>
-
-      <input
-        id="eventDate"
-        type="date"
-      >
-
-    </div>
-
-  </div>
-
-
-  <div class="field">
-
-    <label for="slug">
-      Nama Link Galeri
-    </label>
-
-    <div class="slug-wrap">
-
-      <span class="slug-prefix">
-        memora.app/
-      </span>
-
-      <input
-        id="slug"
-        class="slug-input"
-        type="text"
-        placeholder="dimas-sinta"
-        required
-      >
-
-    </div>
-
-    <div class="help">
-      Gunakan huruf kecil, angka, dan tanda strip (-).
-    </div>
-
-  </div>
-
-
-  <div class="field">
-
-    <label for="description">
-      Deskripsi
-    </label>
-
-    <textarea
-      id="description"
-      placeholder="Contoh: Dokumentasi pernikahan Dimas & Sinta."
-    ></textarea>
-
-  </div>
-
-
-  <div class="actions">
-
-    <a
-      href="dashboard.html"
-      class="cancel"
-    >
-      Batal
-    </a>
-
-    <button
-      type="submit"
-      class="save"
-      id="saveBtn"
-    >
-      Simpan Galeri
-    </button>
-
-  </div>
-
-</form>
-
-  </div>
+  <!-- LIST GALLERY -->
 
   <section class="gallery-list">
 
-<div class="list-title">
-  Galeri Kamu
-</div>
+    <div class="list-title">
+      Galeri Kamu
+    </div>
 
-<div id="galleryList">
-  <div class="loading">
-    Memuat galeri...
-  </div>
-</div>
+    <div id="galleryList">
+
+      <div class="loading">
+        Memuat galeri...
+      </div>
+
+    </div>
 
   </section>
 
 </main>
+
 
 <script>
 
@@ -550,6 +629,9 @@ const dateInput =
 const slugInput =
   document.getElementById("slug");
 
+const driveInput =
+  document.getElementById("driveUrl");
+
 const descriptionInput =
   document.getElementById("description");
 
@@ -566,6 +648,9 @@ const userEmail =
   document.getElementById("userEmail");
 
 
+let currentUser = null;
+
+
 /* =====================================================
    AUTH CHECK
 ===================================================== */
@@ -575,19 +660,22 @@ async function checkAuth(){
   const {
     data,
     error
-  } = await supabaseClient.auth.getSession();
+  } =
+  await supabaseClient.auth.getSession();
 
   if(error){
 
     showStatus(
-      "Gagal mengecek login: " + error.message,
+      "Gagal mengecek login: " +
+      error.message,
       "error"
     );
 
     return null;
   }
 
-  const session = data.session;
+  const session =
+    data.session;
 
   if(!session){
 
@@ -597,10 +685,14 @@ async function checkAuth(){
     return null;
   }
 
-  userEmail.textContent =
-    session.user.email || "";
+  currentUser =
+    session.user;
 
-  return session.user;
+  userEmail.textContent =
+    currentUser.email || "";
+
+  return currentUser;
+
 }
 
 
@@ -609,6 +701,15 @@ async function checkAuth(){
 ===================================================== */
 
 function showStatus(message,type){
+
+  if(!message){
+
+    statusBox.textContent = "";
+    statusBox.className = "status";
+
+    return;
+
+  }
 
   statusBox.textContent =
     message;
@@ -627,17 +728,21 @@ titleInput.addEventListener(
   "input",
   function(){
 
-    if(slugInput.dataset.edited === "true"){
+    if(
+      slugInput.dataset.edited === "true"
+    ){
       return;
     }
 
     const slug =
       titleInput.value
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9\s-]/g,"")
-      .replace(/\s+/g,"-")
-      .replace(/-+/g,"-");
+        .toLowerCase()
+        .trim()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"")
+        .replace(/[^a-z0-9\s-]/g,"")
+        .replace(/\s+/g,"-")
+        .replace(/-+/g,"-");
 
     slugInput.value =
       slug;
@@ -655,12 +760,42 @@ slugInput.addEventListener(
 
     slugInput.value =
       slugInput.value
-      .toLowerCase()
-      .replace(/[^a-z0-9-]/g,"")
-      .replace(/-+/g,"-");
+        .toLowerCase()
+        .replace(/[^a-z0-9-]/g,"")
+        .replace(/-+/g,"-");
 
   }
 );
+
+
+/* =====================================================
+   VALIDATE GOOGLE DRIVE URL
+===================================================== */
+
+function isValidDriveUrl(url){
+
+  try{
+
+    const parsed =
+      new URL(url);
+
+    return (
+      parsed.hostname ===
+        "drive.google.com"
+      ||
+      parsed.hostname.endsWith(
+        ".drive.google.com"
+      )
+    );
+
+  }
+  catch(error){
+
+    return false;
+
+  }
+
+}
 
 
 /* =====================================================
@@ -672,14 +807,17 @@ async function slugExists(slug){
   const {
     data,
     error
-  } = await supabaseClient
+  } =
+  await supabaseClient
     .from("galleries")
     .select("id")
     .eq("slug",slug)
     .maybeSingle();
 
   if(error){
+
     throw error;
+
   }
 
   return !!data;
@@ -697,16 +835,20 @@ form.addEventListener(
 
     event.preventDefault();
 
-    showStatus(
-      "",
-      ""
-    );
+    showStatus("","");
+
+
+    /*
+      Pastikan user masih login
+    */
 
     const user =
       await checkAuth();
 
     if(!user){
+
       return;
+
     }
 
 
@@ -722,9 +864,14 @@ form.addEventListener(
     const slug =
       slugInput.value.trim();
 
+    const driveUrl =
+      driveInput.value.trim();
+
     const description =
       descriptionInput.value.trim();
 
+
+    /* VALIDASI */
 
     if(!title){
 
@@ -734,6 +881,7 @@ form.addEventListener(
       );
 
       return;
+
     }
 
 
@@ -745,6 +893,7 @@ form.addEventListener(
       );
 
       return;
+
     }
 
 
@@ -756,6 +905,7 @@ form.addEventListener(
       );
 
       return;
+
     }
 
 
@@ -767,6 +917,31 @@ form.addEventListener(
       );
 
       return;
+
+    }
+
+
+    if(!driveUrl){
+
+      showStatus(
+        "Link Google Drive wajib diisi.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if(!isValidDriveUrl(driveUrl)){
+
+      showStatus(
+        "Link Google Drive tidak valid. Gunakan link dari drive.google.com.",
+        "error"
+      );
+
+      return;
+
     }
 
 
@@ -779,8 +954,12 @@ form.addEventListener(
 
     try{
 
+
+      /* CEK SLUG */
+
       const exists =
         await slugExists(slug);
+
 
       if(exists){
 
@@ -796,13 +975,17 @@ form.addEventListener(
           "Simpan Galeri";
 
         return;
+
       }
 
+
+      /* SIMPAN KE SUPABASE */
 
       const {
         data,
         error
-      } = await supabaseClient
+      } =
+      await supabaseClient
         .from("galleries")
         .insert({
 
@@ -824,6 +1007,9 @@ form.addEventListener(
           description:
             description,
 
+          drive_url:
+            driveUrl,
+
           status:
             "draft"
 
@@ -833,9 +1019,13 @@ form.addEventListener(
 
 
       if(error){
+
         throw error;
+
       }
 
+
+      /* BERHASIL */
 
       showStatus(
         "Galeri berhasil dibuat.",
@@ -852,24 +1042,20 @@ form.addEventListener(
       await loadGalleries();
 
 
-      setTimeout(
-        function(){
+    }
+    catch(error){
 
-          window.location.href =
-            "gallery.html";
-
-        },
-        800
+      console.error(
+        "CREATE GALLERY ERROR:",
+        error
       );
-
-
-    }catch(error){
-
-      console.error(error);
 
       showStatus(
         "Gagal membuat galeri: " +
-        error.message,
+        (
+          error.message ||
+          "Terjadi kesalahan."
+        ),
         "error"
       );
 
@@ -896,91 +1082,133 @@ async function loadGalleries(){
     await checkAuth();
 
   if(!user){
+
     return;
+
   }
 
 
   const {
     data,
     error
-  } = await supabaseClient
+  } =
+  await supabaseClient
     .from("galleries")
     .select("*")
     .eq("user_id",user.id)
-    .order("created_at",{
-      ascending:false
-    });
+    .order(
+      "created_at",
+      {
+        ascending:false
+      }
+    );
 
 
   if(error){
 
     galleryList.innerHTML =
-      `<div class="empty">
-        Gagal memuat galeri.
-      </div>`;
+      `
+        <div class="empty">
+          Gagal memuat galeri.
+        </div>
+      `;
 
-    console.error(error);
+    console.error(
+      "LOAD GALLERY ERROR:",
+      error
+    );
 
     return;
+
   }
 
 
-  if(!data || data.length === 0){
+  if(
+    !data ||
+    data.length === 0
+  ){
 
     galleryList.innerHTML =
-      `<div class="empty">
-        Belum ada galeri. Buat galeri pertama kamu di atas.
-      </div>`;
+      `
+        <div class="empty">
+          Belum ada galeri. Buat galeri pertama kamu di atas.
+        </div>
+      `;
 
     return;
+
   }
 
 
   galleryList.innerHTML =
-    data.map(function(gallery){
+    data.map(
+      function(gallery){
 
-      const date =
-        gallery.event_date
-          ? new Date(
-              gallery.event_date
-            ).toLocaleDateString(
-              "id-ID",
-              {
-                day:"numeric",
-                month:"long",
-                year:"numeric"
-              }
-            )
-          : "Tanggal belum diatur";
+        const date =
+          gallery.event_date
+            ?
+              new Date(
+                gallery.event_date
+              ).toLocaleDateString(
+                "id-ID",
+                {
+                  day:"numeric",
+                  month:"long",
+                  year:"numeric"
+                }
+              )
+            :
+              "Tanggal belum diatur";
 
 
-      return `
+        const driveLink =
+          gallery.drive_url
+            ?
+              `
+                <div class="gallery-drive">
+                  <a
+                    href="${escapeAttribute(gallery.drive_url)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    ↗ Buka Google Drive
+                  </a>
+                </div>
+              `
+            :
+              "";
 
-        <div class="gallery-item">
 
-          <div class="gallery-info">
+        return `
 
-            <strong>
-              ${escapeHtml(gallery.title)}
-            </strong>
+          <div class="gallery-item">
 
-            <span>
-              ${escapeHtml(gallery.client_name)}
-              ·
-              ${date}
-            </span>
+            <div class="gallery-info">
+
+              <strong>
+                ${escapeHtml(gallery.title)}
+              </strong>
+
+              <span>
+                ${escapeHtml(gallery.client_name)}
+                ·
+                ${date}
+              </span>
+
+              ${driveLink}
+
+            </div>
+
+            <div class="badge">
+              ${escapeHtml(gallery.status || "draft")}
+            </div>
 
           </div>
 
-          <div class="badge">
-            ${escapeHtml(gallery.status)}
-          </div>
+        `;
 
-        </div>
-
-      `;
-
-    }).join("");
+      }
+    ).join("");
 
 }
 
@@ -991,12 +1219,27 @@ async function loadGalleries(){
 
 function escapeHtml(value){
 
-  return String(value)
+  return String(value ?? "")
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   ESCAPE ATTRIBUTE
+===================================================== */
+
+function escapeAttribute(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/"/g,"&quot;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
 
 }
 
@@ -1018,13 +1261,17 @@ function goDashboard(){
 ===================================================== */
 
 checkAuth()
-  .then(function(user){
+  .then(
+    function(user){
 
-    if(user){
-      loadGalleries();
+      if(user){
+
+        loadGalleries();
+
+      }
+
     }
-
-  });
+  );
 
 </script>
 
