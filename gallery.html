@@ -3,11 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>Memora — Buat Galeri</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 *{
   box-sizing:border-box;
 }
@@ -28,6 +30,8 @@ textarea{
 button{
   cursor:pointer;
 }
+
+/* HEADER */
 
 .header{
   height:68px;
@@ -61,6 +65,8 @@ button{
   padding:9px 14px;
   color:#181818;
 }
+
+/* PAGE */
 
 .page{
   width:min(900px,calc(100% - 32px));
@@ -96,6 +102,8 @@ h1{
   font-size:14px;
 }
 
+/* CARD */
+
 .card{
   background:#fff;
   border:1px solid #e0e0db;
@@ -119,6 +127,12 @@ h1{
   font-size:13px;
   font-weight:bold;
   margin-bottom:8px;
+}
+
+.required{
+  color:#a8792d;
+  font-size:10px;
+  margin-left:5px;
 }
 
 .field input,
@@ -168,18 +182,32 @@ h1{
   color:#888;
   font-size:12px;
   margin-top:7px;
+  line-height:1.5;
 }
+
+/* DRIVE */
 
 .drive-box{
   background:#f8f7f3;
-  border:1px solid #e5e1d8;
-  border-radius:12px;
-  padding:13px 14px;
+  border:1px solid #e4e1d9;
+  border-radius:13px;
+  padding:15px;
   margin-top:8px;
+}
+
+.drive-title{
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
+.drive-help{
   color:#777;
   font-size:12px;
   line-height:1.5;
 }
+
+/* STATUS */
 
 .status{
   display:none;
@@ -202,6 +230,8 @@ h1{
   border:1px solid #c8e8d2;
   color:#287a45;
 }
+
+/* ACTION */
 
 .actions{
   display:flex;
@@ -231,6 +261,8 @@ h1{
   opacity:.6;
   cursor:not-allowed;
 }
+
+/* GALLERY LIST */
 
 .gallery-list{
   margin-top:35px;
@@ -271,15 +303,17 @@ h1{
 
 .gallery-drive{
   margin-top:8px;
-}
-
-.gallery-drive a{
-  color:#a8792d;
+  color:#8b682d;
   font-size:12px;
   text-decoration:none;
+  display:block;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:500px;
 }
 
-.gallery-drive a:hover{
+.gallery-drive:hover{
   text-decoration:underline;
 }
 
@@ -301,6 +335,8 @@ h1{
   color:#888;
   font-size:13px;
 }
+
+/* RESPONSIVE */
 
 @media(max-width:650px){
 
@@ -345,7 +381,12 @@ h1{
     align-items:flex-start;
   }
 
+  .gallery-drive{
+    max-width:100%;
+  }
+
 }
+
 </style>
 </head>
 
@@ -404,6 +445,7 @@ h1{
       Informasi Galeri
     </div>
 
+
     <div
       id="status"
       class="status"
@@ -419,13 +461,13 @@ h1{
 
         <label for="title">
           Nama Galeri
+          <span class="required">WAJIB</span>
         </label>
 
         <input
           id="title"
           type="text"
           placeholder="Contoh: Wedding Dimas & Sinta"
-          maxlength="150"
           required
         >
 
@@ -444,13 +486,13 @@ h1{
 
           <label for="clientName">
             Nama Client
+            <span class="required">WAJIB</span>
           </label>
 
           <input
             id="clientName"
             type="text"
             placeholder="Contoh: Dimas & Sinta"
-            maxlength="100"
             required
           >
 
@@ -479,6 +521,7 @@ h1{
 
         <label for="slug">
           Nama Link Galeri
+          <span class="required">WAJIB</span>
         </label>
 
         <div class="slug-wrap">
@@ -492,7 +535,6 @@ h1{
             class="slug-input"
             type="text"
             placeholder="dimas-sinta"
-            maxlength="80"
             required
           >
 
@@ -511,6 +553,7 @@ h1{
 
         <label for="driveUrl">
           Link Google Drive
+          <span class="required">WAJIB</span>
         </label>
 
         <input
@@ -521,8 +564,17 @@ h1{
         >
 
         <div class="drive-box">
-          Masukkan link folder Google Drive yang berisi foto
-          untuk galeri ini.
+
+          <div class="drive-title">
+            📁 Folder Google Drive
+          </div>
+
+          <div class="drive-help">
+            Tempel link folder Google Drive yang berisi
+            foto-foto client. Link ini akan disimpan
+            bersama data galeri.
+          </div>
+
         </div>
 
       </div>
@@ -648,54 +700,6 @@ const userEmail =
   document.getElementById("userEmail");
 
 
-let currentUser = null;
-
-
-/* =====================================================
-   AUTH CHECK
-===================================================== */
-
-async function checkAuth(){
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient.auth.getSession();
-
-  if(error){
-
-    showStatus(
-      "Gagal mengecek login: " +
-      error.message,
-      "error"
-    );
-
-    return null;
-  }
-
-  const session =
-    data.session;
-
-  if(!session){
-
-    window.location.href =
-      "auth.html?mode=signin&type=photographer";
-
-    return null;
-  }
-
-  currentUser =
-    session.user;
-
-  userEmail.textContent =
-    currentUser.email || "";
-
-  return currentUser;
-
-}
-
-
 /* =====================================================
    STATUS
 ===================================================== */
@@ -704,6 +708,7 @@ function showStatus(message,type){
 
   if(!message){
 
+    statusBox.style.display = "none";
     statusBox.textContent = "";
     statusBox.className = "status";
 
@@ -721,6 +726,55 @@ function showStatus(message,type){
 
 
 /* =====================================================
+   AUTH CHECK
+===================================================== */
+
+async function checkAuth(){
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient.auth.getSession();
+
+
+  if(error){
+
+    showStatus(
+      "Gagal mengecek login: " +
+      error.message,
+      "error"
+    );
+
+    return null;
+
+  }
+
+
+  const session =
+    data.session;
+
+
+  if(!session){
+
+    window.location.href =
+      "auth.html?mode=signin&type=photographer";
+
+    return null;
+
+  }
+
+
+  userEmail.textContent =
+    session.user.email || "";
+
+
+  return session.user;
+
+}
+
+
+/* =====================================================
    SLUG OTOMATIS
 ===================================================== */
 
@@ -731,8 +785,11 @@ titleInput.addEventListener(
     if(
       slugInput.dataset.edited === "true"
     ){
+
       return;
+
     }
+
 
     const slug =
       titleInput.value
@@ -743,6 +800,7 @@ titleInput.addEventListener(
         .replace(/[^a-z0-9\s-]/g,"")
         .replace(/\s+/g,"-")
         .replace(/-+/g,"-");
+
 
     slugInput.value =
       slug;
@@ -758,6 +816,7 @@ slugInput.addEventListener(
     slugInput.dataset.edited =
       "true";
 
+
     slugInput.value =
       slugInput.value
         .toLowerCase()
@@ -769,7 +828,7 @@ slugInput.addEventListener(
 
 
 /* =====================================================
-   VALIDATE GOOGLE DRIVE URL
+   VALIDASI GOOGLE DRIVE
 ===================================================== */
 
 function isValidDriveUrl(url){
@@ -780,12 +839,8 @@ function isValidDriveUrl(url){
       new URL(url);
 
     return (
-      parsed.hostname ===
-        "drive.google.com"
-      ||
-      parsed.hostname.endsWith(
-        ".drive.google.com"
-      )
+      parsed.hostname === "drive.google.com" ||
+      parsed.hostname === "www.drive.google.com"
     );
 
   }
@@ -814,11 +869,13 @@ async function slugExists(slug){
     .eq("slug",slug)
     .maybeSingle();
 
+
   if(error){
 
     throw error;
 
   }
+
 
   return !!data;
 
@@ -835,15 +892,16 @@ form.addEventListener(
 
     event.preventDefault();
 
-    showStatus("","");
 
+    showStatus(
+      "",
+      ""
+    );
 
-    /*
-      Pastikan user masih login
-    */
 
     const user =
       await checkAuth();
+
 
     if(!user){
 
@@ -979,7 +1037,7 @@ form.addEventListener(
       }
 
 
-      /* SIMPAN KE SUPABASE */
+      /* INSERT GALLERY */
 
       const {
         data,
@@ -989,7 +1047,7 @@ form.addEventListener(
         .from("galleries")
         .insert({
 
-          user_id:
+          photographer_id:
             user.id,
 
           title:
@@ -1050,12 +1108,10 @@ form.addEventListener(
         error
       );
 
+
       showStatus(
         "Gagal membuat galeri: " +
-        (
-          error.message ||
-          "Terjadi kesalahan."
-        ),
+        error.message,
         "error"
       );
 
@@ -1081,6 +1137,7 @@ async function loadGalleries(){
   const user =
     await checkAuth();
 
+
   if(!user){
 
     return;
@@ -1094,8 +1151,13 @@ async function loadGalleries(){
   } =
   await supabaseClient
     .from("galleries")
-    .select("*")
-    .eq("user_id",user.id)
+    .select(
+      "id,title,client_name,slug,event_date,description,drive_url,status,created_at"
+    )
+    .eq(
+      "photographer_id",
+      user.id
+    )
     .order(
       "created_at",
       {
@@ -1106,17 +1168,20 @@ async function loadGalleries(){
 
   if(error){
 
-    galleryList.innerHTML =
-      `
-        <div class="empty">
-          Gagal memuat galeri.
-        </div>
-      `;
-
     console.error(
       "LOAD GALLERY ERROR:",
       error
     );
+
+
+    galleryList.innerHTML =
+      `
+      <div class="empty">
+        Gagal memuat galeri.
+        <br><br>
+        ${escapeHtml(error.message)}
+      </div>
+      `;
 
     return;
 
@@ -1130,9 +1195,10 @@ async function loadGalleries(){
 
     galleryList.innerHTML =
       `
-        <div class="empty">
-          Belum ada galeri. Buat galeri pertama kamu di atas.
-        </div>
+      <div class="empty">
+        Belum ada galeri.
+        Buat galeri pertama kamu di atas.
+      </div>
       `;
 
     return;
@@ -1141,12 +1207,13 @@ async function loadGalleries(){
 
 
   galleryList.innerHTML =
-    data.map(
-      function(gallery){
+    data
+      .map(
+        function(gallery){
 
-        const date =
-          gallery.event_date
-            ?
+          const date =
+            gallery.event_date
+              ?
               new Date(
                 gallery.event_date
               ).toLocaleDateString(
@@ -1157,58 +1224,64 @@ async function loadGalleries(){
                   year:"numeric"
                 }
               )
-            :
+              :
               "Tanggal belum diatur";
 
 
-        const driveLink =
-          gallery.drive_url
-            ?
+          const drive =
+            gallery.drive_url
+              ?
               `
-                <div class="gallery-drive">
-                  <a
-                    href="${escapeAttribute(gallery.drive_url)}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    ↗ Buka Google Drive
-                  </a>
-                </div>
+              <a
+                class="gallery-drive"
+                href="${escapeAttribute(gallery.drive_url)}"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="${escapeAttribute(gallery.drive_url)}"
+              >
+                📁 Buka Google Drive
+              </a>
               `
-            :
+              :
               "";
 
 
-        return `
+          return `
 
-          <div class="gallery-item">
+            <div class="gallery-item">
 
-            <div class="gallery-info">
+              <div class="gallery-info">
 
-              <strong>
-                ${escapeHtml(gallery.title)}
-              </strong>
+                <strong>
+                  ${escapeHtml(gallery.title)}
+                </strong>
 
-              <span>
-                ${escapeHtml(gallery.client_name)}
-                ·
-                ${date}
-              </span>
+                <span>
+                  ${escapeHtml(gallery.client_name)}
+                  ·
+                  ${date}
+                </span>
 
-              ${driveLink}
+                ${drive}
+
+              </div>
+
+
+              <div class="badge">
+
+                ${escapeHtml(
+                  gallery.status || "draft"
+                )}
+
+              </div>
 
             </div>
 
-            <div class="badge">
-              ${escapeHtml(gallery.status || "draft")}
-            </div>
+          `;
 
-          </div>
-
-        `;
-
-      }
-    ).join("");
+        }
+      )
+      .join("");
 
 }
 
@@ -1228,10 +1301,6 @@ function escapeHtml(value){
 
 }
 
-
-/* =====================================================
-   ESCAPE ATTRIBUTE
-===================================================== */
 
 function escapeAttribute(value){
 
