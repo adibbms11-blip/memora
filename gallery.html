@@ -3,26 +3,41 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>Memora — Buat Galeri</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{
-  box-sizing:border-box;
+*{box-sizing:border-box}
+
+:root{
+  --bg:#fafaf8;
+  --card:#fff;
+  --text:#181818;
+  --muted:#77736c;
+  --border:#e4e1db;
+  --soft:#f2f1ee;
+  --accent:#b89558;
+  --danger:#a33;
+}
+
+body.dark{
+  --bg:#181817;
+  --card:#222220;
+  --text:#f5f3ee;
+  --muted:#aaa69d;
+  --border:#3a3935;
+  --soft:#2b2a27;
 }
 
 body{
   margin:0;
-  background:#fafaf8;
-  color:#181818;
-  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
 }
 
-button,
-input,
-textarea{
+button,input{
   font:inherit;
 }
 
@@ -30,256 +45,253 @@ button{
   cursor:pointer;
 }
 
-.header{
-  height:68px;
-  border-bottom:1px solid #e4e4df;
-  background:#fafaf8;
+/* HEADER */
+
+header{
+  height:70px;
+  border-bottom:1px solid var(--border);
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 30px;
+  padding:0 28px;
+  background:var(--bg);
 }
 
 .brand{
-  font:600 30px Georgia,serif;
+  font:700 25px Georgia,serif;
+  letter-spacing:-1px;
+}
+
+.photographer{
+  display:inline-block;
+  margin-left:8px;
+  padding:5px 8px;
+  border-radius:6px;
+  background:var(--soft);
+  border:1px solid var(--border);
+  color:var(--muted);
+  font-size:10px;
+  font-weight:bold;
 }
 
 .header-right{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:10px;
 }
 
 .email{
-  color:#666;
+  color:var(--muted);
   font-size:13px;
 }
 
-.back-btn{
-  border:1px solid #ddd;
-  background:#fff;
+.icon{
+  width:38px;
+  height:38px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text);
   border-radius:10px;
-  padding:9px 14px;
-  color:#181818;
+  font-size:16px;
 }
+
+/* PAGE */
 
 .page{
-  width:min(900px,calc(100% - 32px));
+  width:min(850px,calc(100% - 32px));
   margin:auto;
-  padding:55px 0 80px;
+  padding:55px 0 100px;
 }
 
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  margin-bottom:30px;
+.back{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:0;
+  margin-bottom:25px;
+  font-size:14px;
 }
 
-.eyebrow{
-  color:#a8792d;
-  font-size:12px;
-  font-weight:bold;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  margin-bottom:8px;
-}
-
-h1{
-  margin:0;
+.title{
   font-size:34px;
-  letter-spacing:-1px;
+  letter-spacing:-1.2px;
+  margin:0;
 }
 
 .subtitle{
-  margin:8px 0 0;
-  color:#777;
+  color:var(--muted);
   font-size:14px;
+  margin:8px 0 30px;
 }
+
+/* CARD */
 
 .card{
-  background:#fff;
-  border:1px solid #e0e0db;
+  background:var(--card);
+  border:1px solid var(--border);
   border-radius:20px;
-  padding:30px;
-  box-shadow:0 15px 40px rgba(0,0,0,.04);
-}
-
-.section-title{
-  font-size:18px;
-  font-weight:bold;
-  margin-bottom:24px;
+  padding:28px;
 }
 
 .field{
-  margin-bottom:20px;
+  margin-bottom:22px;
 }
 
-.field label{
+label{
   display:block;
   font-size:13px;
   font-weight:bold;
   margin-bottom:8px;
 }
 
-.field input,
-.field textarea{
+.required{
+  color:var(--accent);
+  font-size:10px;
+  margin-left:5px;
+}
+
+input{
   width:100%;
-  border:1px solid #d8d8d3;
+  height:48px;
+  padding:0 14px;
+  border:1px solid var(--border);
   border-radius:11px;
-  padding:13px 14px;
-  background:#fff;
-  color:#181818;
+  background:var(--card);
+  color:var(--text);
   outline:none;
 }
 
-.field input:focus,
-.field textarea:focus{
-  border-color:#181818;
+input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(184,149,88,.12);
 }
 
-.field textarea{
-  min-height:110px;
-  resize:vertical;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
-}
-
-.slug-wrap{
-  position:relative;
-}
-
-.slug-prefix{
-  position:absolute;
-  left:14px;
-  top:13px;
-  color:#999;
-  pointer-events:none;
-}
-
-.slug-input{
-  padding-left:100px !important;
-}
-
-.help{
-  color:#888;
+.hint{
+  color:var(--muted);
   font-size:12px;
+  line-height:1.5;
   margin-top:7px;
 }
 
-.status{
+.error,
+.success{
   display:none;
-  padding:12px 14px;
+  padding:11px 13px;
   border-radius:10px;
   font-size:13px;
-  margin-bottom:20px;
+  margin-bottom:18px;
 }
 
-.status.error{
-  display:block;
+.error{
   background:#fff1f1;
   border:1px solid #efcccc;
-  color:#a33;
+  color:var(--danger);
 }
 
-.status.success{
-  display:block;
-  background:#effaf3;
-  border:1px solid #c8e8d2;
-  color:#287a45;
-}
-
-.actions{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-top:30px;
-  padding-top:24px;
-  border-top:1px solid #eee;
-}
-
-.cancel{
-  color:#777;
-  text-decoration:none;
-  font-size:14px;
+.success{
+  background:#eef8f1;
+  border:1px solid #c8e4d0;
+  color:#337c4d;
 }
 
 .save{
+  width:100%;
+  height:48px;
   border:0;
+  border-radius:11px;
   background:#181818;
   color:#fff;
-  padding:13px 22px;
-  border-radius:11px;
   font-weight:bold;
+}
+
+body.dark .save{
+  background:#f3f1eb;
+  color:#181818;
 }
 
 .save:disabled{
   opacity:.6;
-  cursor:not-allowed;
 }
 
-.gallery-list{
+/* PHOTOS */
+
+#photosSection{
+  display:none;
   margin-top:35px;
 }
 
-.list-title{
-  font-size:18px;
-  font-weight:bold;
-  margin-bottom:15px;
-}
-
-.gallery-item{
-  background:#fff;
-  border:1px solid #e0e0db;
-  border-radius:15px;
-  padding:18px;
-  margin-bottom:10px;
+.photos-header{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  margin-bottom:18px;
 }
 
-.gallery-info strong{
-  display:block;
-  font-size:15px;
-  margin-bottom:5px;
+.photos-title{
+  margin:0;
+  font-size:22px;
 }
 
-.gallery-info span{
-  color:#888;
-  font-size:12px;
-}
-
-.badge{
-  font-size:11px;
-  padding:6px 9px;
-  border-radius:20px;
-  background:#f0f0ee;
-}
-
-.empty{
-  color:#888;
-  font-size:14px;
-  padding:20px 0;
-}
-
-.loading{
-  color:#888;
+.photo-count{
+  color:var(--muted);
   font-size:13px;
 }
 
-@media(max-width:650px){
+.photos-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
 
-  .header{
-    padding:0 18px;
-  }
+.photo{
+  position:relative;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+}
 
-  .brand{
-    font-size:25px;
+.photo img{
+  display:block;
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  background:var(--soft);
+}
+
+.photo-check{
+  position:absolute;
+  top:10px;
+  left:10px;
+  width:25px;
+  height:25px;
+  margin:0;
+  accent-color:#181818;
+}
+
+.photo-name{
+  padding:10px;
+  font-size:11px;
+  color:var(--muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.empty{
+  grid-column:1/-1;
+  padding:45px 20px;
+  text-align:center;
+  color:var(--muted);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+}
+
+@media(max-width:700px){
+
+  header{
+    padding:0 15px;
   }
 
   .email{
@@ -287,28 +299,27 @@ h1{
   }
 
   .page{
-    padding-top:35px;
-  }
-
-  .top{
-    display:block;
-  }
-
-  h1{
-    font-size:28px;
-  }
-
-  .grid{
-    grid-template-columns:1fr;
-    gap:0;
+    padding:40px 0 70px;
   }
 
   .card{
     padding:22px;
   }
 
-  .actions{
-    gap:15px;
+  .photos-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:430px){
+
+  .photographer{
+    display:none;
+  }
+
+  .photos-grid{
+    gap:8px;
   }
 
 }
@@ -317,24 +328,20 @@ h1{
 
 <body>
 
-<header class="header">
+<header>
 
-  <div class="brand">
-    memora
+  <div>
+    <span class="brand">memora</span>
+    <span class="photographer">for photographers</span>
   </div>
 
   <div class="header-right">
 
-    <div class="email" id="userEmail">
-      Memuat...
-    </div>
+    <div class="email" id="email"></div>
 
-    <button
-      class="back-btn"
-      onclick="goDashboard()"
-    >
-      ← Dashboard
-    </button>
+    <button class="icon" onclick="toggleTheme()">◐</button>
+
+    <button class="icon" onclick="logout()">↪</button>
 
   </div>
 
@@ -343,690 +350,777 @@ h1{
 
 <main class="page">
 
-  <div class="top">
+<button class="back" onclick="location.href='dashboard.html'">
+  ← Kembali ke Dashboard
+</button>
 
-    <div>
-      <div class="eyebrow">
-        Galeri Baru
+<h1 class="title">
+  Buat Galeri
+</h1>
+
+<p class="subtitle">
+  Buat galeri baru untuk client kamu.
+</p>
+
+
+<div class="card">
+
+  <div id="error" class="error"></div>
+  <div id="success" class="success"></div>
+
+  <form id="galleryForm">
+
+    <div class="field">
+
+      <label>
+        Nama Client
+        <span class="required">WAJIB</span>
+      </label>
+
+      <input
+        id="clientName"
+        type="text"
+        placeholder="Contoh: Adit & Shinta"
+        maxlength="100"
+        required
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Nama Galeri
+        <span class="required">WAJIB</span>
+      </label>
+
+      <input
+        id="galleryName"
+        type="text"
+        placeholder="Contoh: Wedding Adit & Shinta"
+        maxlength="150"
+        required
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Link Google Drive
+        <span class="required">WAJIB</span>
+      </label>
+
+      <input
+        id="driveUrl"
+        type="url"
+        placeholder="https://drive.google.com/drive/folders/..."
+        required
+      >
+
+      <div class="hint">
+        Gunakan link folder Google Drive yang berisi foto.
       </div>
 
-      <h1>
-        Buat Galeri
-      </h1>
-
-      <p class="subtitle">
-        Buat ruang galeri foto untuk client kamu.
-      </p>
     </div>
 
-  </div>
+
+    <button
+      id="saveBtn"
+      class="save"
+      type="submit"
+    >
+      Simpan & Ambil Foto
+    </button>
+
+  </form>
+
+</div>
 
 
-  <div class="card">
+<section id="photosSection">
 
-    <div class="section-title">
-      Informasi Galeri
-    </div>
+  <div class="photos-header">
+
+    <h2 class="photos-title">
+      Foto Galeri
+    </h2>
 
     <div
-      id="status"
-      class="status"
-    ></div>
-
-
-    <form id="galleryForm">
-
-      <div class="field">
-
-        <label for="title">
-          Nama Galeri
-        </label>
-
-        <input
-          id="title"
-          type="text"
-          placeholder="Contoh: Wedding Dimas & Sinta"
-          required
-        >
-
-        <div class="help">
-          Nama yang akan tampil sebagai judul galeri client.
-        </div>
-
-      </div>
-
-
-      <div class="grid">
-
-        <div class="field">
-
-          <label for="clientName">
-            Nama Client
-          </label>
-
-          <input
-            id="clientName"
-            type="text"
-            placeholder="Contoh: Dimas & Sinta"
-            required
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="eventDate">
-            Tanggal Acara
-          </label>
-
-          <input
-            id="eventDate"
-            type="date"
-          >
-
-        </div>
-
-      </div>
-
-
-      <div class="field">
-
-        <label for="slug">
-          Nama Link Galeri
-        </label>
-
-        <div class="slug-wrap">
-
-          <span class="slug-prefix">
-            memora.app/
-          </span>
-
-          <input
-            id="slug"
-            class="slug-input"
-            type="text"
-            placeholder="dimas-sinta"
-            required
-          >
-
-        </div>
-
-        <div class="help">
-          Gunakan huruf kecil, angka, dan tanda strip (-).
-        </div>
-
-      </div>
-
-
-      <div class="field">
-
-        <label for="description">
-          Deskripsi
-        </label>
-
-        <textarea
-          id="description"
-          placeholder="Contoh: Dokumentasi pernikahan Dimas & Sinta."
-        ></textarea>
-
-      </div>
-
-
-      <div class="actions">
-
-        <a
-          href="dashboard.html"
-          class="cancel"
-        >
-          Batal
-        </a>
-
-        <button
-          type="submit"
-          class="save"
-          id="saveBtn"
-        >
-          Simpan Galeri
-        </button>
-
-      </div>
-
-    </form>
+      class="photo-count"
+      id="photoCount"
+    >
+      0 foto
+    </div>
 
   </div>
 
+  <div
+    id="photosGrid"
+    class="photos-grid"
+  ></div>
 
-  <section class="gallery-list">
-
-    <div class="list-title">
-      Galeri Kamu
-    </div>
-
-    <div id="galleryList">
-      <div class="loading">
-        Memuat galeri...
-      </div>
-    </div>
-
-  </section>
+</section>
 
 </main>
 
 
 <script>
 
-/* =====================================================
+/* =========================================
    SUPABASE
-===================================================== */
+========================================= */
 
 const SUPABASE_URL =
-  "https://kluuablkxxanpkdsfckp.supabase.co";
+"https://kluuablkxxanpkdsfckp.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_MWrUTn7S0cX1Ff50ebZvFQ_GxtiwiTy";
+"sb_publishable_MWrUTn7S0cX1Ff50ebZvFQ_GxtiwiTy";
 
 const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
 
 
-/* =====================================================
-   ELEMENT
-===================================================== */
+/* =========================================
+   GOOGLE DRIVE API KEY
+========================================= */
 
-const form =
-  document.getElementById("galleryForm");
+const GOOGLE_DRIVE_API_KEY =
+"PASTE_API_KEY_GOOGLE_KAMU_DI_SINI";
 
-const titleInput =
-  document.getElementById("title");
 
-const clientInput =
-  document.getElementById("clientName");
+/* =========================================
+   ELEMENTS
+========================================= */
 
-const dateInput =
-  document.getElementById("eventDate");
+const email =
+document.getElementById("email");
 
-const slugInput =
-  document.getElementById("slug");
+const galleryForm =
+document.getElementById("galleryForm");
 
-const descriptionInput =
-  document.getElementById("description");
+const clientName =
+document.getElementById("clientName");
+
+const galleryName =
+document.getElementById("galleryName");
+
+const driveUrl =
+document.getElementById("driveUrl");
 
 const saveBtn =
-  document.getElementById("saveBtn");
+document.getElementById("saveBtn");
 
-const statusBox =
-  document.getElementById("status");
+const errorBox =
+document.getElementById("error");
 
-const galleryList =
-  document.getElementById("galleryList");
+const successBox =
+document.getElementById("success");
 
-const userEmail =
-  document.getElementById("userEmail");
+const photosSection =
+document.getElementById("photosSection");
+
+const photosGrid =
+document.getElementById("photosGrid");
+
+const photoCount =
+document.getElementById("photoCount");
 
 
-/* =====================================================
-   AUTH CHECK
-===================================================== */
+let currentUser = null;
+
+
+/* =========================================
+   THEME
+========================================= */
+
+function loadTheme(){
+
+  if(
+    localStorage.getItem("memora_theme")
+    === "dark"
+  ){
+    document.body.classList.add("dark");
+  }
+
+}
+
+function toggleTheme(){
+
+  document.body.classList.toggle("dark");
+
+  localStorage.setItem(
+    "memora_theme",
+    document.body.classList.contains("dark")
+      ? "dark"
+      : "light"
+  );
+
+}
+
+loadTheme();
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+function showError(message){
+
+  errorBox.textContent = message;
+  errorBox.style.display = "block";
+  successBox.style.display = "none";
+
+}
+
+function showSuccess(message){
+
+  successBox.textContent = message;
+  successBox.style.display = "block";
+  errorBox.style.display = "none";
+
+}
+
+
+/* =========================================
+   AUTH
+========================================= */
 
 async function checkAuth(){
 
   const {
     data,
     error
-  } = await supabaseClient.auth.getSession();
+  } =
+  await supabaseClient.auth.getUser();
 
-  if(error){
 
-    showStatus(
-      "Gagal mengecek login: " + error.message,
-      "error"
+  if(error || !data.user){
+
+    location.href =
+    "auth.html?type=photographer";
+
+    return;
+
+  }
+
+
+  currentUser =
+  data.user;
+
+  email.textContent =
+  currentUser.email || "";
+
+}
+
+checkAuth();
+
+
+/* =========================================
+   DRIVE FOLDER ID
+========================================= */
+
+function getDriveFolderId(url){
+
+  const match =
+  url.match(
+    /\/folders\/([a-zA-Z0-9_-]+)/
+  );
+
+  if(match){
+    return match[1];
+  }
+
+
+  const idMatch =
+  url.match(
+    /[?&]id=([a-zA-Z0-9_-]+)/
+  );
+
+  if(idMatch){
+    return idMatch[1];
+  }
+
+
+  return null;
+
+}
+
+
+/* =========================================
+   GET DRIVE PHOTOS
+========================================= */
+
+async function getDrivePhotos(folderId){
+
+  const query =
+    `'${folderId}' in parents and trashed = false and mimeType contains 'image/'`;
+
+
+  const endpoint =
+    "https://www.googleapis.com/drive/v3/files" +
+    "?q=" +
+    encodeURIComponent(query) +
+    "&fields=" +
+    encodeURIComponent(
+      "files(id,name,mimeType,thumbnailLink)"
+    ) +
+    "&pageSize=1000" +
+    "&key=" +
+    encodeURIComponent(
+      GOOGLE_DRIVE_API_KEY
     );
 
-    return null;
+
+  const response =
+  await fetch(endpoint);
+
+
+  const result =
+  await response.json();
+
+
+  if(!response.ok){
+
+    throw new Error(
+      result?.error?.message ||
+      "Google Drive gagal mengirim daftar foto."
+    );
+
   }
 
-  const session = data.session;
 
-  if(!session){
-
-    window.location.href =
-      "auth.html?mode=signin&type=photographer";
-
-    return null;
-  }
-
-  userEmail.textContent =
-    session.user.email || "";
-
-  return session.user;
-}
-
-
-/* =====================================================
-   STATUS
-===================================================== */
-
-function showStatus(message,type){
-
-  statusBox.textContent =
-    message;
-
-  statusBox.className =
-    "status " + type;
+  return result.files || [];
 
 }
 
 
-/* =====================================================
-   SLUG OTOMATIS
-===================================================== */
+/* =========================================
+   THUMBNAIL
+========================================= */
 
-titleInput.addEventListener(
-  "input",
-  function(){
+function thumbnail(file){
 
-    if(slugInput.dataset.edited === "true"){
-      return;
-    }
+  if(file.thumbnailLink){
 
-    const slug =
-      titleInput.value
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9\s-]/g,"")
-      .replace(/\s+/g,"-")
-      .replace(/-+/g,"-");
-
-    slugInput.value =
-      slug;
+    return file.thumbnailLink
+      .replace(/=s\d+/, "=s1200");
 
   }
-);
+
+  return (
+    "https://drive.google.com/thumbnail" +
+    "?id=" +
+    encodeURIComponent(file.id) +
+    "&sz=w1200"
+  );
+
+}
 
 
-slugInput.addEventListener(
-  "input",
-  function(){
+/* =========================================
+   SAVE PHOTOS
+========================================= */
 
-    slugInput.dataset.edited =
-      "true";
+async function savePhotos(
+  galleryId,
+  files
+){
 
-    slugInput.value =
-      slugInput.value
-      .toLowerCase()
-      .replace(/[^a-z0-9-]/g,"")
-      .replace(/-+/g,"-");
-
+  if(!files.length){
+    return;
   }
-);
 
 
-/* =====================================================
-   CEK SLUG
-===================================================== */
+  const rows =
+  files.map(file => ({
 
-async function slugExists(slug){
+    gallery_id:galleryId,
+
+    drive_file_id:file.id,
+
+    file_name:file.name,
+
+    thumbnail_url:thumbnail(file),
+
+    selected:false
+
+  }));
+
 
   const {
-    data,
     error
-  } = await supabaseClient
-    .from("galleries")
-    .select("id")
-    .eq("slug",slug)
-    .maybeSingle();
+  } =
+  await supabaseClient
+    .from("photos")
+    .insert(rows);
+
 
   if(error){
-    throw error;
-  }
 
-  return !!data;
+    throw error;
+
+  }
 
 }
 
 
-/* =====================================================
-   CREATE GALLERY
-===================================================== */
+/* =========================================
+   RENDER PHOTOS
+========================================= */
 
-form.addEventListener(
+function renderPhotos(photos){
+
+  photosGrid.innerHTML = "";
+
+  photoCount.textContent =
+    `${photos.length} foto`;
+
+
+  if(!photos.length){
+
+    photosGrid.innerHTML = `
+      <div class="empty">
+        Tidak ada foto yang ditemukan di folder tersebut.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  photos.forEach(photo => {
+
+    const item =
+    document.createElement("div");
+
+    item.className =
+    "photo";
+
+
+    const image =
+    document.createElement("img");
+
+    image.src =
+    photo.thumbnail_url;
+
+    image.alt =
+    photo.file_name;
+
+    image.loading =
+    "lazy";
+
+
+    const checkbox =
+    document.createElement("input");
+
+    checkbox.type =
+    "checkbox";
+
+    checkbox.className =
+    "photo-check";
+
+    checkbox.checked =
+    photo.selected;
+
+
+    checkbox.addEventListener(
+      "change",
+      () => updateSelection(
+        photo.id,
+        checkbox.checked
+      )
+    );
+
+
+    const name =
+    document.createElement("div");
+
+    name.className =
+    "photo-name";
+
+    name.textContent =
+    photo.file_name;
+
+
+    item.appendChild(image);
+    item.appendChild(checkbox);
+    item.appendChild(name);
+
+    photosGrid.appendChild(item);
+
+  });
+
+}
+
+
+/* =========================================
+   UPDATE SELECTION
+========================================= */
+
+async function updateSelection(
+  photoId,
+  selected
+){
+
+  const {
+    error
+  } =
+  await supabaseClient
+    .from("photos")
+    .update({
+      selected:selected
+    })
+    .eq("id",photoId);
+
+
+  if(error){
+
+    console.error(error);
+
+    alert(
+      "Pilihan foto gagal disimpan."
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   CREATE GALLERY
+========================================= */
+
+galleryForm.addEventListener(
   "submit",
-  async function(event){
+  async event => {
 
     event.preventDefault();
 
-    showStatus(
-      "",
-      ""
-    );
 
-    const user =
-      await checkAuth();
+    errorBox.style.display =
+    "none";
 
-    if(!user){
-      return;
-    }
+    successBox.style.display =
+    "none";
 
 
-    const title =
-      titleInput.value.trim();
+    if(!currentUser){
 
-    const clientName =
-      clientInput.value.trim();
-
-    const eventDate =
-      dateInput.value || null;
-
-    const slug =
-      slugInput.value.trim();
-
-    const description =
-      descriptionInput.value.trim();
-
-
-    if(!title){
-
-      showStatus(
-        "Nama galeri wajib diisi.",
-        "error"
+      showError(
+        "Akun belum siap. Coba refresh halaman."
       );
 
       return;
+
     }
 
 
-    if(!clientName){
+    const client =
+    clientName.value.trim();
 
-      showStatus(
-        "Nama client wajib diisi.",
-        "error"
+    const name =
+    galleryName.value.trim();
+
+    const drive =
+    driveUrl.value.trim();
+
+
+    if(!client){
+
+      showError(
+        "Nama client wajib diisi."
       );
 
       return;
+
     }
 
 
-    if(!slug){
+    if(!name){
 
-      showStatus(
-        "Nama link galeri wajib diisi.",
-        "error"
+      showError(
+        "Nama galeri wajib diisi."
       );
 
       return;
+
     }
 
 
-    if(!/^[a-z0-9-]+$/.test(slug)){
+    const folderId =
+    getDriveFolderId(drive);
 
-      showStatus(
-        "Link hanya boleh berisi huruf kecil, angka, dan tanda strip (-).",
-        "error"
+
+    if(!folderId){
+
+      showError(
+        "Link Google Drive tidak valid."
       );
 
       return;
+
+    }
+
+
+    if(
+      GOOGLE_DRIVE_API_KEY ===
+      "PASTE_API_KEY_GOOGLE_KAMU_DI_SINI"
+    ){
+
+      showError(
+        "API Key Google Drive belum dimasukkan."
+      );
+
+      return;
+
     }
 
 
     saveBtn.disabled =
-      true;
+    true;
 
     saveBtn.textContent =
-      "Menyimpan...";
+    "Membaca Google Drive...";
 
 
     try{
 
-      const exists =
-        await slugExists(slug);
+      /* 1. CEK GOOGLE DRIVE */
 
-      if(exists){
+      const drivePhotos =
+      await getDrivePhotos(
+        folderId
+      );
 
-        showStatus(
-          "Nama link tersebut sudah digunakan. Coba nama lain.",
-          "error"
-        );
 
-        saveBtn.disabled =
-          false;
-
-        saveBtn.textContent =
-          "Simpan Galeri";
-
-        return;
-      }
-
+      /* 2. SIMPAN GALERI */
 
       const {
-        data,
-        error
-      } = await supabaseClient
+        data:gallery,
+        error:galleryError
+      } =
+      await supabaseClient
         .from("galleries")
         .insert({
 
-          user_id:
-            user.id,
-
-          title:
-            title,
+          photographer_id:
+          currentUser.id,
 
           client_name:
-            clientName,
+          client,
 
-          slug:
-            slug,
+          gallery_name:
+          name,
 
-          event_date:
-            eventDate,
-
-          description:
-            description,
-
-          status:
-            "draft"
+          drive_url:
+          drive
 
         })
         .select()
         .single();
 
 
-      if(error){
-        throw error;
+      if(galleryError){
+
+        throw galleryError;
+
       }
 
 
-      showStatus(
-        "Galeri berhasil dibuat.",
-        "success"
+      /* 3. SIMPAN FOTO */
+
+      await savePhotos(
+        gallery.id,
+        drivePhotos
       );
 
 
-      form.reset();
+      /* 4. TAMPILKAN */
 
-      slugInput.dataset.edited =
-        "false";
-
-
-      await loadGalleries();
-
-
-      setTimeout(
-        function(){
-
-          window.location.href =
-            "gallery.html";
-
-        },
-        800
+      showSuccess(
+        `Galeri berhasil dibuat. ${drivePhotos.length} foto ditemukan.`
       );
 
 
-    }catch(error){
+      galleryForm.style.display =
+      "none";
 
-      console.error(error);
+      photosSection.style.display =
+      "block";
 
-      showStatus(
-        "Gagal membuat galeri: " +
-        error.message,
-        "error"
+
+      const {
+        data:photos,
+        error:photosError
+      } =
+      await supabaseClient
+        .from("photos")
+        .select("*")
+        .eq("gallery_id",gallery.id)
+        .order("created_at");
+
+
+      if(photosError){
+
+        throw photosError;
+
+      }
+
+
+      renderPhotos(
+        photos || []
       );
 
     }
+    catch(error){
 
+      console.error(error);
 
-    saveBtn.disabled =
+      showError(
+        error.message ||
+        "Gagal membuat galeri."
+      );
+
+      saveBtn.disabled =
       false;
 
-    saveBtn.textContent =
-      "Simpan Galeri";
+      saveBtn.textContent =
+      "Simpan & Ambil Foto";
+
+    }
 
   }
 );
 
 
-/* =====================================================
-   LOAD GALLERIES
-===================================================== */
+/* =========================================
+   LOGOUT
+========================================= */
 
-async function loadGalleries(){
+async function logout(){
 
-  const user =
-    await checkAuth();
-
-  if(!user){
+  if(
+    !confirm(
+      "Yakin ingin keluar dari akun Memora?"
+    )
+  ){
     return;
   }
 
 
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("galleries")
-    .select("*")
-    .eq("user_id",user.id)
-    .order("created_at",{
-      ascending:false
-    });
+  await supabaseClient.auth.signOut();
 
-
-  if(error){
-
-    galleryList.innerHTML =
-      `<div class="empty">
-        Gagal memuat galeri.
-      </div>`;
-
-    console.error(error);
-
-    return;
-  }
-
-
-  if(!data || data.length === 0){
-
-    galleryList.innerHTML =
-      `<div class="empty">
-        Belum ada galeri. Buat galeri pertama kamu di atas.
-      </div>`;
-
-    return;
-  }
-
-
-  galleryList.innerHTML =
-    data.map(function(gallery){
-
-      const date =
-        gallery.event_date
-          ? new Date(
-              gallery.event_date
-            ).toLocaleDateString(
-              "id-ID",
-              {
-                day:"numeric",
-                month:"long",
-                year:"numeric"
-              }
-            )
-          : "Tanggal belum diatur";
-
-
-      return `
-
-        <div class="gallery-item">
-
-          <div class="gallery-info">
-
-            <strong>
-              ${escapeHtml(gallery.title)}
-            </strong>
-
-            <span>
-              ${escapeHtml(gallery.client_name)}
-              ·
-              ${date}
-            </span>
-
-          </div>
-
-          <div class="badge">
-            ${escapeHtml(gallery.status)}
-          </div>
-
-        </div>
-
-      `;
-
-    }).join("");
+  location.href =
+  "auth.html?type=photographer";
 
 }
-
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
-
-function escapeHtml(value){
-
-  return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-/* =====================================================
-   DASHBOARD
-===================================================== */
-
-function goDashboard(){
-
-  window.location.href =
-    "dashboard.html";
-
-}
-
-
-/* =====================================================
-   START
-===================================================== */
-
-checkAuth()
-  .then(function(user){
-
-    if(user){
-      loadGalleries();
-    }
-
-  });
 
 </script>
 
