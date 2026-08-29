@@ -232,14 +232,16 @@ h1{
 }
 
 .gallery-item{
-  background:#fff;
-  border:1px solid #e0e0db;
-  border-radius:15px;
-  padding:18px;
-  margin-bottom:10px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  transition:
+    transform .15s ease,
+    border-color .15s ease,
+    box-shadow .15s ease;
+}
+
+.gallery-item:hover{
+  transform:translateY(-2px);
+  border-color:#cfcfc8;
+  box-shadow:0 8px 25px rgba(0,0,0,.06);
 }
 
 .gallery-info strong{
@@ -1436,8 +1438,30 @@ async function loadGalleries(){
     ).join("");
 
 }
+  
 
+/* =====================================================
+   OPEN GALLERY
+===================================================== */
 
+function openGallery(slug){
+
+  if(!slug){
+    showStatus(
+      "Link galeri tidak tersedia.",
+      "error"
+    );
+
+    return;
+  }
+
+  window.location.href =
+    "gallery-view.html?slug=" +
+    encodeURIComponent(slug);
+
+}
+
+  
 /* =====================================================
    ESCAPE HTML
 ===================================================== */
