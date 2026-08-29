@@ -41,9 +41,9 @@ body{
   font-family:Arial,Helvetica,sans-serif;
 }
 
-/* =========================================
+/* ================================
    HEADER
-========================================= */
+================================ */
 
 .header{
   height:68px;
@@ -58,11 +58,12 @@ body{
 
   position:sticky;
   top:0;
-  z-index:100;
+  z-index:50;
 }
 
 .brand{
   font:600 30px Georgia,serif;
+  letter-spacing:-1px;
 }
 
 .header-right{
@@ -79,38 +80,29 @@ body{
 .back-btn{
   border:1px solid var(--border);
   background:var(--card);
-  color:var(--text);
-
   border-radius:10px;
-
   padding:9px 14px;
-
+  color:var(--text);
   cursor:pointer;
-
-  transition:.2s;
 }
 
 .back-btn:hover{
-  border-color:var(--accent);
+  background:var(--soft);
 }
 
-
-/* =========================================
+/* ================================
    PAGE
-========================================= */
+================================ */
 
 .page{
   width:min(1100px,calc(100% - 32px));
-
   margin:auto;
-
   padding:55px 0 80px;
 }
 
-
-/* =========================================
+/* ================================
    HERO
-========================================= */
+================================ */
 
 .hero{
   margin-bottom:35px;
@@ -118,54 +110,30 @@ body{
 
 .eyebrow{
   color:var(--accent);
-
   font-size:12px;
   font-weight:bold;
-
   text-transform:uppercase;
-
   letter-spacing:.08em;
-
   margin-bottom:10px;
 }
 
 h1{
   margin:0;
-
   font-size:36px;
-
   letter-spacing:-1.2px;
 }
 
 .client{
   margin-top:9px;
-
   color:var(--muted);
-
   font-size:14px;
-}
-
-.description{
-  margin-top:12px;
-
-  color:var(--muted);
-
-  font-size:14px;
-
-  line-height:1.6;
-
-  max-width:700px;
 }
 
 .drive-link{
   display:inline-block;
-
   margin-top:14px;
-
-  color:var(--accent);
-
+  color:var(--muted);
   font-size:12px;
-
   text-decoration:none;
 }
 
@@ -173,100 +141,77 @@ h1{
   text-decoration:underline;
 }
 
-
-/* =========================================
+/* ================================
    STATUS
-========================================= */
+================================ */
 
 .status{
   padding:14px 16px;
-
   border-radius:11px;
-
   font-size:13px;
-
   margin-bottom:25px;
 }
 
 .status.loading{
   background:var(--soft);
-
   color:var(--muted);
-
   border:1px solid var(--border);
 }
 
 .status.error{
   background:#fff1f1;
-
   color:#a33;
-
   border:1px solid #efcccc;
 }
 
 .status.success{
   background:#effaf3;
-
   color:#287a45;
-
   border:1px solid #c8e8d2;
 }
 
-
-/* =========================================
+/* ================================
    PHOTO HEADER
-========================================= */
+================================ */
 
 .photo-header{
   display:flex;
-
   justify-content:space-between;
-
   align-items:center;
-
   margin-bottom:18px;
 }
 
 .photo-title{
   font-size:18px;
-
   font-weight:bold;
 }
 
 .photo-count{
   color:var(--muted);
-
   font-size:13px;
 }
 
-
-/* =========================================
+/* ================================
    PHOTO GRID
-========================================= */
+================================ */
 
 .photo-grid{
   display:grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
+  grid-template-columns:repeat(4,1fr);
   gap:14px;
 }
 
-
-/* =========================================
-   PHOTO CARD
-========================================= */
+/* ================================
+   PHOTO
+================================ */
 
 .photo{
   position:relative;
-
   aspect-ratio:1/1;
 
   background:#eee;
 
   border-radius:14px;
-
   overflow:hidden;
 
   cursor:pointer;
@@ -275,17 +220,15 @@ h1{
 
   transition:
     transform .2s ease,
-    box-shadow .2s ease,
-    border-color .2s ease;
+    box-shadow .2s ease;
 }
 
 .photo:hover{
-  transform:translateY(-3px);
-
-  border-color:var(--accent);
+  transform:translateY(-2px);
 
   box-shadow:
-    0 12px 25px rgba(0,0,0,.1);
+    0 12px 25px
+    rgba(0,0,0,.10);
 }
 
 .photo img{
@@ -297,18 +240,11 @@ h1{
   display:block;
 
   background:#f0f0ed;
-
-  transition:transform .3s ease;
 }
 
-.photo:hover img{
-  transform:scale(1.03);
-}
-
-
-/* =========================================
+/* ================================
    PHOTO NAME
-========================================= */
+================================ */
 
 .photo-name{
   position:absolute;
@@ -320,13 +256,10 @@ h1{
   padding:35px 10px 10px;
 
   color:#fff;
-
   font-size:11px;
 
   overflow:hidden;
-
   white-space:nowrap;
-
   text-overflow:ellipsis;
 
   background:
@@ -344,10 +277,9 @@ h1{
   opacity:1;
 }
 
-
-/* =========================================
+/* ================================
    EMPTY
-========================================= */
+================================ */
 
 .empty{
   grid-column:1/-1;
@@ -365,10 +297,9 @@ h1{
   background:var(--card);
 }
 
-
-/* =========================================
+/* ================================
    LIGHTBOX
-========================================= */
+================================ */
 
 .lightbox{
   display:none;
@@ -379,11 +310,9 @@ h1{
 
   z-index:9999;
 
-  background:
-    rgba(0,0,0,.94);
+  background:rgba(0,0,0,.94);
 
   align-items:center;
-
   justify-content:center;
 
   padding:30px;
@@ -393,29 +322,17 @@ h1{
   display:flex;
 }
 
-.lightbox-content{
-  position:relative;
-
-  max-width:95vw;
-  max-height:90vh;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-}
-
 .lightbox img{
   max-width:95vw;
-  max-height:88vh;
+  max-height:90vh;
 
   object-fit:contain;
 
   border-radius:6px;
 
   box-shadow:
-    0 20px 60px rgba(0,0,0,.5);
+    0 20px 60px
+    rgba(0,0,0,.5);
 }
 
 .close-lightbox{
@@ -427,11 +344,9 @@ h1{
   width:42px;
   height:42px;
 
-  border:1px solid
-    rgba(255,255,255,.25);
+  border:1px solid rgba(255,255,255,.25);
 
-  background:
-    rgba(255,255,255,.1);
+  background:rgba(255,255,255,.1);
 
   color:#fff;
 
@@ -440,100 +355,36 @@ h1{
   font-size:22px;
 
   cursor:pointer;
-
-  z-index:10;
 }
 
 .close-lightbox:hover{
-  background:
-    rgba(255,255,255,.2);
+  background:rgba(255,255,255,.2);
 }
 
+/* ================================
+   LOADING PHOTO
+================================ */
 
-/* =========================================
-   LIGHTBOX NAVIGATION
-========================================= */
+.photo-loading{
+  grid-column:1/-1;
 
-.lightbox-nav{
-  position:absolute;
+  text-align:center;
 
-  top:50%;
+  padding:50px;
 
-  transform:translateY(-50%);
+  color:var(--muted);
 
-  width:48px;
-  height:48px;
-
-  border-radius:50%;
-
-  border:1px solid
-    rgba(255,255,255,.2);
-
-  background:
-    rgba(255,255,255,.1);
-
-  color:#fff;
-
-  font-size:24px;
-
-  cursor:pointer;
-
-  z-index:10;
-
-  transition:.2s;
+  font-size:13px;
 }
 
-.lightbox-nav:hover{
-  background:
-    rgba(255,255,255,.2);
-}
-
-.lightbox-prev{
-  left:20px;
-}
-
-.lightbox-next{
-  right:20px;
-}
-
-.lightbox-name{
-  position:absolute;
-
-  bottom:15px;
-  left:50%;
-
-  transform:translateX(-50%);
-
-  color:#fff;
-
-  background:
-    rgba(0,0,0,.5);
-
-  padding:8px 14px;
-
-  border-radius:20px;
-
-  font-size:12px;
-
-  max-width:70vw;
-
-  overflow:hidden;
-
-  text-overflow:ellipsis;
-
-  white-space:nowrap;
-}
-
-
-/* =========================================
+/* ================================
    RESPONSIVE
-========================================= */
+================================ */
 
 @media(max-width:900px){
 
   .photo-grid{
-    grid-template-columns:
-      repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
   }
 
 }
@@ -561,9 +412,7 @@ h1{
   }
 
   .photo-grid{
-    grid-template-columns:
-      repeat(2,1fr);
-
+    grid-template-columns:repeat(2,1fr);
     gap:9px;
   }
 
@@ -575,19 +424,9 @@ h1{
     padding:15px;
   }
 
-  .lightbox-nav{
-    width:40px;
-    height:40px;
-
-    font-size:18px;
-  }
-
-  .lightbox-prev{
-    left:10px;
-  }
-
-  .lightbox-next{
-    right:10px;
+  .lightbox img{
+    max-width:100%;
+    max-height:85vh;
   }
 
 }
@@ -596,20 +435,17 @@ h1{
 
 </head>
 
-
 <body>
 
-
-<!-- =========================================
+<!-- =================================
      HEADER
-========================================= -->
+================================= -->
 
 <header class="header">
 
   <div class="brand">
     memora
   </div>
-
 
   <div class="header-right">
 
@@ -620,12 +456,11 @@ h1{
       Memuat...
     </div>
 
-
     <button
       class="back-btn"
       onclick="goBack()"
     >
-      ← Dashboard
+      ← Kembali
     </button>
 
   </div>
@@ -633,15 +468,11 @@ h1{
 </header>
 
 
-
-<!-- =========================================
+<!-- =================================
      MAIN
-========================================= -->
+================================= -->
 
 <main class="page">
-
-
-  <!-- HERO -->
 
   <section class="hero">
 
@@ -649,11 +480,9 @@ h1{
       Galeri Foto
     </div>
 
-
     <h1 id="galleryTitle">
       Memuat galeri...
     </h1>
-
 
     <div
       class="client"
@@ -661,13 +490,6 @@ h1{
     >
       Memuat...
     </div>
-
-
-    <div
-      class="description"
-      id="galleryDescription"
-    ></div>
-
 
     <a
       id="driveLink"
@@ -683,7 +505,6 @@ h1{
   </section>
 
 
-
   <!-- STATUS -->
 
   <div
@@ -692,7 +513,6 @@ h1{
   >
     Menghubungkan ke galeri...
   </div>
-
 
 
   <!-- FOTO -->
@@ -705,7 +525,6 @@ h1{
         Foto
       </div>
 
-
       <div
         class="photo-count"
         id="photoCount"
@@ -715,25 +534,30 @@ h1{
 
     </div>
 
-
     <div
       id="photoGrid"
       class="photo-grid"
-    ></div>
+    >
+
+      <div class="photo-loading">
+        Memuat foto...
+      </div>
+
+    </div>
 
   </section>
 
 </main>
 
 
-
-<!-- =========================================
+<!-- =================================
      LIGHTBOX
-========================================= -->
+================================= -->
 
 <div
   id="lightbox"
   class="lightbox"
+  onclick="closeLightbox(event)"
 >
 
   <button
@@ -744,160 +568,78 @@ h1{
     ×
   </button>
 
-
-  <button
-    class="lightbox-nav lightbox-prev"
-    onclick="previousPhoto()"
-    aria-label="Foto sebelumnya"
+  <img
+    id="lightboxImage"
+    src=""
+    alt="Preview foto"
+    onclick="event.stopPropagation()"
   >
-    ‹
-  </button>
-
-
-  <div class="lightbox-content">
-
-    <img
-      id="lightboxImage"
-      src=""
-      alt="Preview"
-    >
-
-  </div>
-
-
-  <button
-    class="lightbox-nav lightbox-next"
-    onclick="nextPhoto()"
-    aria-label="Foto berikutnya"
-  >
-    ›
-  </button>
-
-
-  <div
-    id="lightboxName"
-    class="lightbox-name"
-  ></div>
 
 </div>
 
 
-
 <script>
 
-/* =========================================
+/* =====================================================
    SUPABASE
-========================================= */
+===================================================== */
 
 const SUPABASE_URL =
-"https://kluuablkxxanpkdsfckp.supabase.co";
-
+  "https://kluuablkxxanpkdsfckp.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-"sb_publishable_MWrUTn7S0cX1Ff50ebZvFQ_GxtiwiTy";
-
+  "sb_publishable_MWrUTn7S0cX1Ff50ebZvFQ_GxtiwiTy";
 
 const supabaseClient =
-window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
 
 
-
-/* =========================================
+/* =====================================================
    GOOGLE DRIVE API KEY
-========================================= */
+===================================================== */
 
 const GOOGLE_DRIVE_API_KEY =
-"AIzaSyCNjhG4YaftIllJoRciPB9b7158WAtT3nA";
+  "AIzaSyCNjhG4YaftIllJoRciPB9b7158WAtT3nA";
 
 
-
-/* =========================================
+/* =====================================================
    ELEMENT
-========================================= */
+===================================================== */
 
 const galleryTitle =
-document.getElementById(
-  "galleryTitle"
-);
-
+  document.getElementById("galleryTitle");
 
 const clientName =
-document.getElementById(
-  "clientName"
-);
-
-
-const galleryDescription =
-document.getElementById(
-  "galleryDescription"
-);
-
+  document.getElementById("clientName");
 
 const userEmail =
-document.getElementById(
-  "userEmail"
-);
-
+  document.getElementById("userEmail");
 
 const driveLink =
-document.getElementById(
-  "driveLink"
-);
-
+  document.getElementById("driveLink");
 
 const statusBox =
-document.getElementById(
-  "status"
-);
-
+  document.getElementById("status");
 
 const photoGrid =
-document.getElementById(
-  "photoGrid"
-);
-
+  document.getElementById("photoGrid");
 
 const photoCount =
-document.getElementById(
-  "photoCount"
-);
-
+  document.getElementById("photoCount");
 
 const lightbox =
-document.getElementById(
-  "lightbox"
-);
-
+  document.getElementById("lightbox");
 
 const lightboxImage =
-document.getElementById(
-  "lightboxImage"
-);
+  document.getElementById("lightboxImage");
 
 
-const lightboxName =
-document.getElementById(
-  "lightboxName"
-);
-
-
-
-/* =========================================
-   STATE
-========================================= */
-
-let photos = [];
-
-let currentPhotoIndex = 0;
-
-
-
-/* =========================================
+/* =====================================================
    GET GALLERY ID
-========================================= */
+===================================================== */
 
 function getGalleryId(){
 
@@ -911,15 +653,11 @@ function getGalleryId(){
 }
 
 
-
-/* =========================================
+/* =====================================================
    STATUS
-========================================= */
+===================================================== */
 
-function showStatus(
-  message,
-  type
-){
+function showStatus(message,type){
 
   statusBox.textContent =
     message;
@@ -930,10 +668,9 @@ function showStatus(
 }
 
 
-
-/* =========================================
+/* =====================================================
    AUTH
-========================================= */
+===================================================== */
 
 async function checkAuth(){
 
@@ -943,10 +680,9 @@ async function checkAuth(){
       data,
       error
     } =
-    await supabaseClient
-      .auth
-      .getSession();
-
+      await supabaseClient
+        .auth
+        .getSession();
 
     if(error){
 
@@ -954,10 +690,8 @@ async function checkAuth(){
 
     }
 
-
     const session =
       data.session;
-
 
     if(!session){
 
@@ -968,25 +702,24 @@ async function checkAuth(){
 
     }
 
-
     userEmail.textContent =
       session.user.email || "";
-
 
     return session.user;
 
   }
   catch(error){
 
-    console.error(error);
-
+    console.error(
+      "AUTH ERROR:",
+      error
+    );
 
     showStatus(
       "Gagal mengecek login: " +
       error.message,
       "error"
     );
-
 
     return null;
 
@@ -995,28 +728,27 @@ async function checkAuth(){
 }
 
 
-
-/* =========================================
+/* =====================================================
    LOAD GALLERY
-========================================= */
+===================================================== */
 
 async function loadGallery(){
 
   const galleryId =
     getGalleryId();
 
-
   if(!galleryId){
 
     galleryTitle.textContent =
       "Galeri tidak ditemukan";
 
+    clientName.textContent =
+      "";
 
     showStatus(
       "ID galeri tidak ditemukan.",
       "error"
     );
-
 
     return;
 
@@ -1025,7 +757,6 @@ async function loadGallery(){
 
   const user =
     await checkAuth();
-
 
   if(!user){
 
@@ -1040,44 +771,42 @@ async function loadGallery(){
   );
 
 
-
-  /* =======================================
+  /* ================================================
      AMBIL DATA GALERI
-  ======================================= */
+  ================================================= */
 
   const {
     data:gallery,
     error:galleryError
   } =
-  await supabaseClient
-    .from("galleries")
-    .select(
-      "id,photographer_id,client_name,gallery_name,drive_url,drive_folder_id,description"
-    )
-    .eq(
-      "id",
-      galleryId
-    )
-    .eq(
-      "photographer_id",
-      user.id
-    )
-    .maybeSingle();
+    await supabaseClient
+      .from("galleries")
+      .select(
+        "id,photographer_id,client_name,gallery_name,drive_url,drive_folder_id"
+      )
+      .eq(
+        "id",
+        galleryId
+      )
+      .eq(
+        "photographer_id",
+        user.id
+      )
+      .maybeSingle();
 
 
   if(galleryError){
 
     console.error(
+      "GALLERY ERROR:",
       galleryError
     );
-
 
     showStatus(
       "Gagal mengambil data galeri: " +
       galleryError.message,
       "error"
     );
-
 
     return;
 
@@ -1089,22 +818,22 @@ async function loadGallery(){
     galleryTitle.textContent =
       "Galeri tidak ditemukan";
 
+    clientName.textContent =
+      "";
 
     showStatus(
       "Galeri tidak ditemukan atau kamu tidak memiliki akses.",
       "error"
     );
 
-
     return;
 
   }
 
 
-
-  /* =======================================
-     TAMPILKAN DATA
-  ======================================= */
+  /* ================================================
+     TAMPILKAN INFO
+  ================================================= */
 
   galleryTitle.textContent =
     gallery.gallery_name ||
@@ -1114,12 +843,6 @@ async function loadGallery(){
   clientName.textContent =
     gallery.client_name ||
     "";
-
-
-  galleryDescription.textContent =
-    gallery.description ||
-    "";
-
 
 
   if(gallery.drive_url){
@@ -1133,10 +856,9 @@ async function loadGallery(){
   }
 
 
-
-  /* =======================================
-     DRIVE FOLDER ID
-  ======================================= */
+  /* ================================================
+     FOLDER ID
+  ================================================= */
 
   let folderId =
     gallery.drive_folder_id;
@@ -1155,20 +877,25 @@ async function loadGallery(){
   if(!folderId){
 
     showStatus(
-      "Folder Google Drive belum terhubung.",
+      "Folder Google Drive belum terhubung ke galeri.",
       "error"
     );
 
+    photoGrid.innerHTML =
+      `
+      <div class="empty">
+        Folder Google Drive belum terhubung.
+      </div>
+      `;
 
     return;
 
   }
 
 
-
-  /* =======================================
-     AMBIL FOTO DRIVE
-  ======================================= */
+  /* ================================================
+     AMBIL FOTO
+  ================================================= */
 
   showStatus(
     "Mengambil foto dari Google Drive...",
@@ -1178,7 +905,7 @@ async function loadGallery(){
 
   try{
 
-    photos =
+    const photos =
       await getDrivePhotos(
         folderId
       );
@@ -1202,26 +929,31 @@ async function loadGallery(){
       error
     );
 
-
     showStatus(
       "Google Drive gagal diakses: " +
       error.message,
       "error"
     );
 
+    photoGrid.innerHTML =
+      `
+      <div class="empty">
+        Tidak dapat mengambil foto dari Google Drive.
+        <br><br>
+        ${escapeHtml(error.message)}
+      </div>
+      `;
+
   }
 
 }
 
 
+/* =====================================================
+   DRIVE FOLDER ID
+===================================================== */
 
-/* =========================================
-   GET DRIVE FOLDER ID
-========================================= */
-
-function getDriveFolderId(
-  url
-){
+function getDriveFolderId(url){
 
   if(!url){
 
@@ -1261,14 +993,11 @@ function getDriveFolderId(
 }
 
 
+/* =====================================================
+   GET GOOGLE DRIVE PHOTOS
+===================================================== */
 
-/* =========================================
-   GET DRIVE PHOTOS
-========================================= */
-
-async function getDrivePhotos(
-  folderId
-){
+async function getDrivePhotos(folderId){
 
   const query =
     `'${folderId}' in parents and trashed = false and mimeType contains 'image/'`;
@@ -1353,21 +1082,18 @@ async function getDrivePhotos(
 }
 
 
+/* =====================================================
+   THUMBNAIL
+===================================================== */
 
-/* =========================================
-   GET THUMBNAIL
-========================================= */
-
-function getThumbnail(
-  file
-){
+function getThumbnail(file){
 
   if(file.thumbnailLink){
 
     return file.thumbnailLink
       .replace(
         /=s\d+/,
-        "=s1600"
+        "=s1200"
       );
 
   }
@@ -1379,71 +1105,46 @@ function getThumbnail(
     encodeURIComponent(
       file.id
     ) +
-    "&sz=w1600"
+    "&sz=w1200"
   );
 
 }
 
 
-
-/* =========================================
-   GET LARGE IMAGE
-========================================= */
-
-function getLargeImage(
-  file
-){
-
-  return (
-    "https://drive.google.com/thumbnail" +
-    "?id=" +
-    encodeURIComponent(
-      file.id
-    ) +
-    "&sz=w2400"
-  );
-
-}
-
-
-
-/* =========================================
+/* =====================================================
    RENDER PHOTOS
-========================================= */
+===================================================== */
 
-function renderPhotos(
-  photoFiles
-){
+function renderPhotos(photos){
 
   photoGrid.innerHTML =
     "";
 
 
   photoCount.textContent =
-    photoFiles.length +
+    photos.length +
     " foto";
 
 
-  if(!photoFiles.length){
+  if(!photos.length){
 
-    photoGrid.innerHTML = `
-
+    photoGrid.innerHTML =
+      `
       <div class="empty">
 
         Tidak ada foto ditemukan
         di folder Google Drive.
 
       </div>
-
-    `;
+      `;
 
     return;
 
   }
 
 
-  photoFiles.forEach(
-    function(file,index){
+  photos.forEach(
+    function(file){
 
       const item =
         document.createElement(
@@ -1453,11 +1154,6 @@ function renderPhotos(
 
       item.className =
         "photo";
-
-
-      item.dataset.index =
-        index;
-
 
 
       const image =
@@ -1484,17 +1180,18 @@ function renderPhotos(
         "lazy";
 
 
-
       image.onerror =
         function(){
 
           image.src =
-            getLargeImage(
-              file
-            );
+            "https://drive.google.com/thumbnail" +
+            "?id=" +
+            encodeURIComponent(
+              file.id
+            ) +
+            "&sz=w1600";
 
         };
-
 
 
       const name =
@@ -1511,7 +1208,6 @@ function renderPhotos(
         file.name;
 
 
-
       item.appendChild(
         image
       );
@@ -1522,13 +1218,12 @@ function renderPhotos(
       );
 
 
-
       item.addEventListener(
         "click",
         function(){
 
           openLightbox(
-            index
+            thumbnail
           );
 
         }
@@ -1545,46 +1240,14 @@ function renderPhotos(
 }
 
 
+/* =====================================================
+   LIGHTBOX
+===================================================== */
 
-/* =========================================
-   OPEN LIGHTBOX
-========================================= */
-
-function openLightbox(
-  index
-){
-
-  if(
-    !photos[index]
-  ){
-
-    return;
-
-  }
-
-
-  currentPhotoIndex =
-    index;
-
-
-  const file =
-    photos[
-      currentPhotoIndex
-    ];
-
+function openLightbox(imageUrl){
 
   lightboxImage.src =
-    getLargeImage(
-      file
-    );
-
-
-  lightboxImage.alt =
-    file.name;
-
-
-  lightboxName.textContent =
-    file.name;
+    imageUrl;
 
 
   lightbox.classList.add(
@@ -1598,12 +1261,18 @@ function openLightbox(
 }
 
 
+function closeLightbox(event){
 
-/* =========================================
-   CLOSE LIGHTBOX
-========================================= */
+  if(
+    event &&
+    event.target ===
+      lightboxImage
+  ){
 
-function closeLightbox(){
+    return;
+
+  }
+
 
   lightbox.classList.remove(
     "active"
@@ -1620,126 +1289,13 @@ function closeLightbox(){
 }
 
 
-
-/* =========================================
-   PREVIOUS PHOTO
-========================================= */
-
-function previousPhoto(){
-
-  if(!photos.length){
-
-    return;
-
-  }
-
-
-  currentPhotoIndex--;
-
-
-  if(
-    currentPhotoIndex < 0
-  ){
-
-    currentPhotoIndex =
-      photos.length - 1;
-
-  }
-
-
-  updateLightbox();
-
-}
-
-
-
-/* =========================================
-   NEXT PHOTO
-========================================= */
-
-function nextPhoto(){
-
-  if(!photos.length){
-
-    return;
-
-  }
-
-
-  currentPhotoIndex++;
-
-
-  if(
-    currentPhotoIndex >=
-    photos.length
-  ){
-
-    currentPhotoIndex =
-      0;
-
-  }
-
-
-  updateLightbox();
-
-}
-
-
-
-/* =========================================
-   UPDATE LIGHTBOX
-========================================= */
-
-function updateLightbox(){
-
-  const file =
-    photos[
-      currentPhotoIndex
-    ];
-
-
-  if(!file){
-
-    return;
-
-  }
-
-
-  lightboxImage.src =
-    getLargeImage(
-      file
-    );
-
-
-  lightboxImage.alt =
-    file.name;
-
-
-  lightboxName.textContent =
-    file.name;
-
-}
-
-
-
-/* =========================================
-   KEYBOARD
-========================================= */
+/* =====================================================
+   ESC KEY
+===================================================== */
 
 document.addEventListener(
   "keydown",
   function(event){
-
-    if(
-      !lightbox.classList.contains(
-        "active"
-      )
-    ){
-
-      return;
-
-    }
-
 
     if(
       event.key ===
@@ -1750,69 +1306,56 @@ document.addEventListener(
 
     }
 
-
-    if(
-      event.key ===
-      "ArrowLeft"
-    ){
-
-      previousPhoto();
-
-    }
-
-
-    if(
-      event.key ===
-      "ArrowRight"
-    ){
-
-      nextPhoto();
-
-    }
-
   }
 );
 
 
-
-/* =========================================
-   CLICK OUTSIDE IMAGE
-========================================= */
-
-lightbox.addEventListener(
-  "click",
-  function(event){
-
-    if(
-      event.target ===
-      lightbox
-    ){
-
-      closeLightbox();
-
-    }
-
-  }
-);
-
-
-
-/* =========================================
+/* =====================================================
    BACK
-========================================= */
+===================================================== */
 
 function goBack(){
 
   window.location.href =
-    "dashboard.html";
+    "gallery.html";
 
 }
 
 
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
 
-/* =========================================
+function escapeHtml(value){
+
+  return String(value)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =====================================================
    START
-========================================= */
+===================================================== */
 
 loadGallery();
 
