@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="id">
+
 <head>
 
 <meta charset="utf-8">
@@ -15,11 +16,23 @@
   box-sizing:border-box;
 }
 
+:root{
+  --bg:#fafaf8;
+  --card:#fff;
+  --text:#181818;
+  --muted:#817d76;
+  --border:#e3e0da;
+  --soft:#f1f0ed;
+  --accent:#b89558;
+  --danger:#a33;
+  --green:#13834b;
+}
+
 body{
   margin:0;
-  background:#fafaf8;
-  color:#181818;
-  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
 }
 
 button,
@@ -32,18 +45,30 @@ button{
   cursor:pointer;
 }
 
+
+/* =====================================================
+   HEADER
+===================================================== */
+
 .header{
   height:68px;
-  border-bottom:1px solid #e4e4df;
-  background:#fafaf8;
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
+
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   padding:0 30px;
+
+  position:sticky;
+  top:0;
+  z-index:50;
 }
 
 .brand{
   font:600 30px Georgia,serif;
+  letter-spacing:-1px;
 }
 
 .header-right{
@@ -53,17 +78,22 @@ button{
 }
 
 .email{
-  color:#666;
+  color:var(--muted);
   font-size:13px;
 }
 
 .back-btn{
-  border:1px solid #ddd;
-  background:#fff;
+  border:1px solid var(--border);
+  background:var(--card);
   border-radius:10px;
   padding:9px 14px;
-  color:#181818;
+  color:var(--text);
 }
+
+
+/* =====================================================
+   PAGE
+===================================================== */
 
 .page{
   width:min(900px,calc(100% - 32px));
@@ -95,15 +125,21 @@ h1{
 
 .subtitle{
   margin:8px 0 0;
-  color:#777;
+  color:var(--muted);
   font-size:14px;
 }
 
+
+/* =====================================================
+   FORM CARD
+===================================================== */
+
 .card{
-  background:#fff;
-  border:1px solid #e0e0db;
+  background:var(--card);
+  border:1px solid var(--border);
   border-radius:20px;
   padding:30px;
+
   box-shadow:0 15px 40px rgba(0,0,0,.04);
 }
 
@@ -127,17 +163,21 @@ h1{
 .field input,
 .field textarea{
   width:100%;
+
   border:1px solid #d8d8d3;
   border-radius:11px;
+
   padding:13px 14px;
-  background:#fff;
-  color:#181818;
+
+  background:var(--card);
+  color:var(--text);
+
   outline:none;
 }
 
 .field input:focus,
 .field textarea:focus{
-  border-color:#181818;
+  border-color:var(--text);
 }
 
 .field textarea{
@@ -175,9 +215,12 @@ h1{
 
 .status{
   display:none;
+
   padding:12px 14px;
+
   border-radius:10px;
   font-size:13px;
+
   margin-bottom:20px;
 }
 
@@ -199,8 +242,10 @@ h1{
   display:flex;
   justify-content:space-between;
   align-items:center;
+
   margin-top:30px;
   padding-top:24px;
+
   border-top:1px solid #eee;
 }
 
@@ -214,8 +259,11 @@ h1{
   border:0;
   background:#181818;
   color:#fff;
+
   padding:13px 22px;
+
   border-radius:11px;
+
   font-weight:bold;
 }
 
@@ -224,101 +272,427 @@ h1{
   cursor:not-allowed;
 }
 
+
+/* =====================================================
+   GALLERY LIST
+===================================================== */
+
 .gallery-list{
-  margin-top:35px;
+  margin-top:38px;
+}
+
+.list-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  margin-bottom:14px;
 }
 
 .list-title{
-  font-size:18px;
+  font-size:16px;
   font-weight:bold;
-  margin-bottom:15px;
+
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
 
-.gallery-item{
-  background:#fff;
-  border:1px solid #e0e0db;
-  border-radius:15px;
-  padding:18px;
-  margin-bottom:10px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.list-title::before{
+  content:"";
+  width:3px;
+  height:17px;
 
-  /* TAMBAHAN CLICKABLE */
+  background:var(--accent);
+
+  border-radius:3px;
+}
+
+.gallery-count{
+  color:#888;
+  font-size:12px;
+}
+
+
+/* =====================================================
+   GALLERY ITEM
+===================================================== */
+
+.gallery-item{
+  background:var(--card);
+
+  border:1px solid var(--border);
+  border-radius:14px;
+
+  min-height:106px;
+
+  padding:16px;
+
+  display:flex;
+  align-items:center;
+  gap:13px;
+
+  margin-bottom:10px;
+
   cursor:pointer;
+
   transition:
-    transform .18s ease,
-    box-shadow .18s ease,
-    border-color .18s ease;
+    transform .15s ease,
+    box-shadow .15s ease,
+    border-color .15s ease;
 }
 
 .gallery-item:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 25px rgba(0,0,0,.07);
-  border-color:#d2d0ca;
+  transform:translateY(-1px);
+
+  box-shadow:
+    0 8px 24px rgba(0,0,0,.055);
+
+  border-color:#d2cec5;
 }
 
 .gallery-item:active{
   transform:translateY(0);
 }
 
-.gallery-info{
+
+/* =====================================================
+   AVATAR
+===================================================== */
+
+.gallery-avatar{
+  width:40px;
+  height:40px;
+
+  min-width:40px;
+
+  border-radius:11px;
+
+  border:1px solid #cba55e;
+
+  background:#faf8f2;
+
+  color:#9b7537;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:14px;
+}
+
+
+/* =====================================================
+   INFO
+===================================================== */
+
+.gallery-main{
   min-width:0;
+  flex:1;
 }
 
-.gallery-info strong{
-  display:block;
-  font-size:15px;
+.gallery-name{
+  font-size:13px;
+  font-weight:bold;
+
   margin-bottom:5px;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
-.gallery-info span{
+.gallery-meta{
+  display:flex;
+  flex-wrap:wrap;
+
+  gap:5px;
+
+  color:#8a867f;
+
+  font-size:11px;
+}
+
+.gallery-meta span{
+  white-space:nowrap;
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+.gallery-progress{
+  width:100%;
+
+  display:flex;
+  align-items:center;
+
+  gap:8px;
+
+  margin-top:10px;
+}
+
+.progress-track{
+  width:140px;
+  height:4px;
+
+  background:#ddd9d1;
+
+  border-radius:10px;
+
+  overflow:hidden;
+}
+
+.progress-fill{
+  height:100%;
+
+  width:0%;
+
+  background:#777;
+
+  border-radius:10px;
+}
+
+.progress-count{
+  color:#8a867f;
+  font-size:11px;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.gallery-status{
+  margin-top:8px;
+
   color:#888;
+
+  font-size:11px;
+
+  display:flex;
+  align-items:center;
+
+  gap:5px;
+}
+
+.status-eye{
   font-size:12px;
 }
 
-.badge{
-  font-size:11px;
-  padding:6px 9px;
-  border-radius:20px;
-  background:#f0f0ee;
+
+/* =====================================================
+   RIGHT ACTIONS
+===================================================== */
+
+.gallery-actions{
+  display:flex;
+  align-items:center;
+
+  gap:5px;
+
   flex-shrink:0;
 }
 
-.drive-status{
-  display:none;
-  margin-top:10px;
-  padding:10px 12px;
-  border-radius:9px;
-  font-size:12px;
+.gallery-action{
+  width:33px;
+  height:33px;
+
+  border:1px solid var(--border);
+
+  background:var(--card);
+  color:#716d66;
+
+  border-radius:8px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:15px;
+
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    color .15s ease;
 }
 
-.drive-status.ok{
-  display:block;
-  background:#effaf3;
-  color:#287a45;
-  border:1px solid #c8e8d2;
+.gallery-action:hover{
+  background:var(--soft);
+  border-color:#ccc8c0;
+  color:var(--text);
 }
 
-.drive-status.bad{
-  display:block;
-  background:#fff1f1;
+
+/* WHATSAPP */
+
+.gallery-action.whatsapp{
+  background:#12834a;
+  border-color:#12834a;
+  color:#fff;
+}
+
+.gallery-action.whatsapp:hover{
+  background:#0e713f;
+  border-color:#0e713f;
+  color:#fff;
+}
+
+
+/* DELETE */
+
+.gallery-action.delete:hover{
   color:#a33;
-  border:1px solid #efcccc;
+  border-color:#e4bcbc;
+  background:#fff5f5;
 }
+
+
+/* =====================================================
+   EMPTY / LOADING
+===================================================== */
 
 .loading{
   color:#888;
   font-size:13px;
+
+  padding:20px 0;
 }
 
 .empty{
   color:#888;
   font-size:14px;
+
   padding:20px 0;
 }
 
-@media(max-width:650px){
+
+/* =====================================================
+   CONFIRM MODAL
+===================================================== */
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+
+  background:rgba(0,0,0,.38);
+
+  display:none;
+
+  align-items:center;
+  justify-content:center;
+
+  z-index:999;
+
+  padding:20px;
+}
+
+.modal-overlay.show{
+  display:flex;
+}
+
+.modal{
+  width:min(400px,100%);
+
+  background:var(--card);
+
+  border:1px solid var(--border);
+
+  border-radius:18px;
+
+  padding:24px;
+
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+
+.modal-title{
+  font-size:18px;
+  font-weight:bold;
+
+  margin-bottom:8px;
+}
+
+.modal-text{
+  color:var(--muted);
+
+  font-size:13px;
+
+  line-height:1.5;
+
+  margin-bottom:22px;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+
+  gap:8px;
+}
+
+.modal-btn{
+  border:1px solid var(--border);
+
+  background:var(--card);
+
+  color:var(--text);
+
+  border-radius:9px;
+
+  padding:10px 15px;
+}
+
+.modal-btn.danger{
+  background:#181818;
+  border-color:#181818;
+  color:#fff;
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast{
+  position:fixed;
+
+  left:50%;
+  bottom:25px;
+
+  transform:translate(-50%,20px);
+
+  background:#181818;
+  color:#fff;
+
+  padding:11px 16px;
+
+  border-radius:10px;
+
+  font-size:13px;
+
+  opacity:0;
+
+  pointer-events:none;
+
+  transition:
+    opacity .2s ease,
+    transform .2s ease;
+
+  z-index:1000;
+}
+
+.toast.show{
+  opacity:1;
+
+  transform:translate(-50%,0);
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:750px){
 
   .header{
     padding:0 18px;
@@ -353,12 +727,68 @@ h1{
     padding:22px;
   }
 
+  .gallery-item{
+    align-items:flex-start;
+
+    padding:14px;
+  }
+
+  .gallery-actions{
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+
+  .gallery-action{
+    width:32px;
+    height:32px;
+  }
+
+  .progress-track{
+    width:100px;
+  }
+
+}
+
+@media(max-width:560px){
+
+  .gallery-item{
+    display:grid;
+
+    grid-template-columns:40px 1fr;
+  }
+
+  .gallery-actions{
+    grid-column:1 / -1;
+
+    justify-content:flex-start;
+
+    padding-left:53px;
+
+    margin-top:-2px;
+  }
+
+  .gallery-main{
+    width:100%;
+  }
+
+}
+
+@media(max-width:430px){
+
   .actions{
+    align-items:stretch;
+    flex-direction:column;
+
     gap:15px;
   }
 
-  .gallery-item{
-    padding:15px;
+  .save{
+    width:100%;
+  }
+
+  .gallery-meta{
+    flex-direction:column;
+    gap:2px;
   }
 
 }
@@ -367,7 +797,13 @@ h1{
 
 </head>
 
+
 <body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header class="header">
 
@@ -395,224 +831,308 @@ h1{
 
 <main class="page">
 
-  <div class="top">
 
-    <div>
+<!-- =====================================================
+     TOP
+===================================================== -->
 
-      <div class="eyebrow">
-        Galeri Baru
-      </div>
+<div class="top">
 
-      <h1>
-        Buat Galeri
-      </h1>
+  <div>
 
-      <p class="subtitle">
-        Buat ruang galeri foto untuk client kamu.
-      </p>
-
+    <div class="eyebrow">
+      Galeri Baru
     </div>
+
+    <h1>
+      Buat Galeri
+    </h1>
+
+    <p class="subtitle">
+      Buat ruang galeri foto untuk client kamu.
+    </p>
 
   </div>
 
+</div>
 
-  <div class="card">
 
-    <div class="section-title">
-      Informasi Galeri
+<!-- =====================================================
+     FORM
+===================================================== -->
+
+<div class="card">
+
+  <div class="section-title">
+    Informasi Galeri
+  </div>
+
+
+  <div
+    id="status"
+    class="status"
+  ></div>
+
+
+  <form id="galleryForm">
+
+
+    <!-- NAMA GALERI -->
+
+    <div class="field">
+
+      <label for="galleryName">
+        Nama Galeri
+      </label>
+
+      <input
+        id="galleryName"
+        type="text"
+        placeholder="Contoh: Wedding Dimas & Sinta"
+        maxlength="150"
+        required
+      >
+
+      <div class="help">
+        Nama yang akan tampil sebagai judul galeri client.
+      </div>
+
+    </div>
+
+
+    <!-- CLIENT + TANGGAL -->
+
+    <div class="grid">
+
+      <div class="field">
+
+        <label for="clientName">
+          Nama Client
+        </label>
+
+        <input
+          id="clientName"
+          type="text"
+          placeholder="Contoh: Dimas & Sinta"
+          maxlength="100"
+          required
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="eventDate">
+          Tanggal Acara
+        </label>
+
+        <input
+          id="eventDate"
+          type="date"
+        >
+
+      </div>
+
+    </div>
+
+
+    <!-- SLUG -->
+
+    <div class="field">
+
+      <label for="slug">
+        Nama Link Galeri
+      </label>
+
+      <div class="slug-wrap">
+
+        <span class="slug-prefix">
+          memora.app/
+        </span>
+
+        <input
+          id="slug"
+          class="slug-input"
+          type="text"
+          placeholder="dimas-sinta"
+          maxlength="100"
+          required
+        >
+
+      </div>
+
+      <div class="help">
+        Gunakan huruf kecil, angka, dan tanda strip (-).
+      </div>
+
+    </div>
+
+
+    <!-- GOOGLE DRIVE -->
+
+    <div class="field">
+
+      <label for="driveUrl">
+        Link Google Drive
+      </label>
+
+      <input
+        id="driveUrl"
+        type="url"
+        placeholder="https://drive.google.com/drive/folders/..."
+        required
+      >
+
+      <div class="help">
+        Masukkan link folder Google Drive yang berisi foto.
+      </div>
+
+      <div
+        id="driveStatus"
+        class="drive-status"
+      ></div>
+
+    </div>
+
+
+    <!-- DESKRIPSI -->
+
+    <div class="field">
+
+      <label for="description">
+        Deskripsi
+      </label>
+
+      <textarea
+        id="description"
+        placeholder="Contoh: Dokumentasi pernikahan Dimas & Sinta."
+      ></textarea>
+
+    </div>
+
+
+    <!-- ACTION -->
+
+    <div class="actions">
+
+      <a
+        href="dashboard.html"
+        class="cancel"
+      >
+        Batal
+      </a>
+
+      <button
+        type="submit"
+        class="save"
+        id="saveBtn"
+      >
+        Simpan Galeri
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+
+<!-- =====================================================
+     LIST GALERI
+===================================================== -->
+
+<section class="gallery-list">
+
+
+  <div class="list-header">
+
+    <div class="list-title">
+      Semua Galeri
     </div>
 
     <div
-      id="status"
-      class="status"
-    ></div>
-
-
-    <form id="galleryForm">
-
-      <!-- NAMA GALERI -->
-
-      <div class="field">
-
-        <label for="galleryName">
-          Nama Galeri
-        </label>
-
-        <input
-          id="galleryName"
-          type="text"
-          placeholder="Contoh: Wedding Dimas & Sinta"
-          maxlength="150"
-          required
-        >
-
-        <div class="help">
-          Nama yang akan tampil sebagai judul galeri client.
-        </div>
-
-      </div>
-
-
-      <!-- CLIENT + TANGGAL -->
-
-      <div class="grid">
-
-        <div class="field">
-
-          <label for="clientName">
-            Nama Client
-          </label>
-
-          <input
-            id="clientName"
-            type="text"
-            placeholder="Contoh: Dimas & Sinta"
-            maxlength="100"
-            required
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="eventDate">
-            Tanggal Acara
-          </label>
-
-          <input
-            id="eventDate"
-            type="date"
-          >
-
-        </div>
-
-      </div>
-
-
-      <!-- SLUG -->
-
-      <div class="field">
-
-        <label for="slug">
-          Nama Link Galeri
-        </label>
-
-        <div class="slug-wrap">
-
-          <span class="slug-prefix">
-            memora.app/
-          </span>
-
-          <input
-            id="slug"
-            class="slug-input"
-            type="text"
-            placeholder="dimas-sinta"
-            maxlength="100"
-            required
-          >
-
-        </div>
-
-        <div class="help">
-          Gunakan huruf kecil, angka, dan tanda strip (-).
-        </div>
-
-      </div>
-
-
-      <!-- GOOGLE DRIVE -->
-
-      <div class="field">
-
-        <label for="driveUrl">
-          Link Google Drive
-        </label>
-
-        <input
-          id="driveUrl"
-          type="url"
-          placeholder="https://drive.google.com/drive/folders/..."
-          required
-        >
-
-        <div class="help">
-          Masukkan link folder Google Drive yang berisi foto.
-        </div>
-
-        <div
-          id="driveStatus"
-          class="drive-status"
-        ></div>
-
-      </div>
-
-
-      <!-- DESKRIPSI -->
-
-      <div class="field">
-
-        <label for="description">
-          Deskripsi
-        </label>
-
-        <textarea
-          id="description"
-          placeholder="Contoh: Dokumentasi pernikahan Dimas & Sinta."
-        ></textarea>
-
-      </div>
-
-
-      <!-- ACTION -->
-
-      <div class="actions">
-
-        <a
-          href="dashboard.html"
-          class="cancel"
-        >
-          Batal
-        </a>
-
-        <button
-          type="submit"
-          class="save"
-          id="saveBtn"
-        >
-          Simpan Galeri
-        </button>
-
-      </div>
-
-    </form>
+      class="gallery-count"
+      id="galleryCount"
+    >
+      0 galeri
+    </div>
 
   </div>
 
 
-  <!-- LIST GALERI -->
+  <div id="galleryList">
 
-  <section class="gallery-list">
-
-    <div class="list-title">
-      Galeri Kamu
+    <div class="loading">
+      Memuat galeri...
     </div>
 
-    <div id="galleryList">
+  </div>
 
-      <div class="loading">
-        Memuat galeri...
-      </div>
 
-    </div>
+</section>
 
-  </section>
 
 </main>
 
 
+<!-- =====================================================
+     DELETE MODAL
+===================================================== -->
+
+<div
+  class="modal-overlay"
+  id="deleteModal"
+>
+
+  <div class="modal">
+
+    <div class="modal-title">
+      Hapus galeri?
+    </div>
+
+    <div class="modal-text">
+      Galeri
+      <strong id="deleteGalleryName"></strong>
+      akan dihapus. Tindakan ini tidak bisa dibatalkan.
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="modal-btn"
+        onclick="closeDeleteModal()"
+      >
+        Batal
+      </button>
+
+      <button
+        class="modal-btn danger"
+        id="confirmDeleteBtn"
+        onclick="confirmDelete()"
+      >
+        Hapus Galeri
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
 <script>
+
 
 /* =====================================================
    SUPABASE
@@ -632,7 +1152,7 @@ const supabaseClient =
 
 
 /* =====================================================
-   GOOGLE DRIVE API KEY
+   GOOGLE DRIVE
 ===================================================== */
 
 const GOOGLE_DRIVE_API_KEY =
@@ -673,11 +1193,29 @@ const statusBox =
 const galleryList =
   document.getElementById("galleryList");
 
+const galleryCount =
+  document.getElementById("galleryCount");
+
 const userEmail =
   document.getElementById("userEmail");
 
 const driveStatus =
   document.getElementById("driveStatus");
+
+const toast =
+  document.getElementById("toast");
+
+const deleteModal =
+  document.getElementById("deleteModal");
+
+const deleteGalleryName =
+  document.getElementById("deleteGalleryName");
+
+const confirmDeleteBtn =
+  document.getElementById("confirmDeleteBtn");
+
+
+let deleteTargetId = null;
 
 
 /* =====================================================
@@ -705,6 +1243,34 @@ function showStatus(message,type){
 
 
 /* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer;
+
+function showToast(message){
+
+  clearTimeout(toastTimer);
+
+  toast.textContent =
+    message;
+
+  toast.classList.add("show");
+
+  toastTimer =
+    setTimeout(
+      function(){
+
+        toast.classList.remove("show");
+
+      },
+      2200
+    );
+
+}
+
+
+/* =====================================================
    AUTH
 ===================================================== */
 
@@ -714,7 +1280,8 @@ async function checkAuth(){
     data,
     error
   } =
-    await supabaseClient.auth.getSession();
+  await supabaseClient.auth.getSession();
+
 
   if(error){
 
@@ -725,10 +1292,13 @@ async function checkAuth(){
     );
 
     return null;
+
   }
+
 
   const session =
     data.session;
+
 
   if(!session){
 
@@ -736,12 +1306,16 @@ async function checkAuth(){
       "auth.html?mode=signin&type=photographer";
 
     return null;
+
   }
+
 
   userEmail.textContent =
     session.user.email || "";
 
+
   return session.user;
+
 }
 
 
@@ -756,19 +1330,27 @@ galleryNameInput.addEventListener(
     if(
       slugInput.dataset.edited === "true"
     ){
+
       return;
+
     }
 
-    const slug =
+
+    const generatedSlug =
       galleryNameInput.value
         .toLowerCase()
         .trim()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"")
         .replace(/[^a-z0-9\s-]/g,"")
         .replace(/\s+/g,"-")
-        .replace(/-+/g,"-");
+        .replace(/-+/g,"-")
+        .replace(/^-|-$/g,"")
+        .substring(0,100);
+
 
     slugInput.value =
-      slug;
+      generatedSlug;
 
   }
 );
@@ -780,6 +1362,7 @@ slugInput.addEventListener(
 
     slugInput.dataset.edited =
       "true";
+
 
     slugInput.value =
       slugInput.value
@@ -803,10 +1386,12 @@ function getDriveFolderId(url){
 
   }
 
+
   const folderMatch =
     url.match(
       /\/folders\/([a-zA-Z0-9_-]+)/
     );
+
 
   if(folderMatch){
 
@@ -814,10 +1399,12 @@ function getDriveFolderId(url){
 
   }
 
+
   const idMatch =
     url.match(
       /[?&]id=([a-zA-Z0-9_-]+)/
     );
+
 
   if(idMatch){
 
@@ -825,19 +1412,21 @@ function getDriveFolderId(url){
 
   }
 
+
   return null;
 
 }
 
 
 /* =====================================================
-   CEK LINK GOOGLE DRIVE
+   CHECK DRIVE
 ===================================================== */
 
 async function checkDriveFolder(folderId){
 
   const query =
     `'${folderId}' in parents and trashed = false`;
+
 
   const endpoint =
     "https://www.googleapis.com/drive/v3/files" +
@@ -853,11 +1442,14 @@ async function checkDriveFolder(folderId){
       GOOGLE_DRIVE_API_KEY
     );
 
+
   const response =
     await fetch(endpoint);
 
+
   const result =
     await response.json();
+
 
   if(!response.ok){
 
@@ -868,13 +1460,14 @@ async function checkDriveFolder(folderId){
 
   }
 
+
   return true;
 
 }
 
 
 /* =====================================================
-   CEK DRIVE SAAT INPUT SELESAI
+   DRIVE BLUR
 ===================================================== */
 
 driveInput.addEventListener(
@@ -883,6 +1476,7 @@ driveInput.addEventListener(
 
     const url =
       driveInput.value.trim();
+
 
     if(!url){
 
@@ -893,13 +1487,18 @@ driveInput.addEventListener(
 
     }
 
+
     const folderId =
       getDriveFolderId(url);
+
 
     if(!folderId){
 
       driveStatus.className =
         "drive-status bad";
+
+      driveStatus.style.display =
+        "block";
 
       driveStatus.textContent =
         "Link Google Drive tidak valid.";
@@ -907,6 +1506,7 @@ driveInput.addEventListener(
       return;
 
     }
+
 
     driveStatus.className =
       "drive-status";
@@ -917,11 +1517,13 @@ driveInput.addEventListener(
     driveStatus.textContent =
       "Memeriksa folder Google Drive...";
 
+
     try{
 
       await checkDriveFolder(
         folderId
       );
+
 
       driveStatus.className =
         "drive-status ok";
@@ -933,6 +1535,7 @@ driveInput.addEventListener(
     catch(error){
 
       console.error(error);
+
 
       driveStatus.className =
         "drive-status bad";
@@ -948,7 +1551,7 @@ driveInput.addEventListener(
 
 
 /* =====================================================
-   CEK SLUG
+   CHECK SLUG
 ===================================================== */
 
 async function slugExists(slug){
@@ -957,28 +1560,33 @@ async function slugExists(slug){
     data,
     error
   } =
-    await supabaseClient
-      .from("galleries")
-      .select("id")
-      .eq("slug",slug)
-      .maybeSingle();
+  await supabaseClient
+    .from("galleries")
+    .select("id")
+    .eq("slug",slug)
+    .maybeSingle();
+
 
   if(error){
 
     if(
       error.message &&
-      error.message.includes(
-        "column galleries.slug does not exist"
-      )
+      error.message
+        .toLowerCase()
+        .includes(
+          "column galleries.slug does not exist"
+        )
     ){
 
       return false;
 
     }
 
+
     throw error;
 
   }
+
 
   return !!data;
 
@@ -995,19 +1603,23 @@ form.addEventListener(
 
     event.preventDefault();
 
+
     showStatus(
       "",
       ""
     );
 
+
     const user =
       await checkAuth();
+
 
     if(!user){
 
       return;
 
     }
+
 
     const galleryName =
       galleryNameInput.value.trim();
@@ -1097,7 +1709,7 @@ form.addEventListener(
     if(!driveFolderId){
 
       showStatus(
-        "Link Google Drive tidak valid. Gunakan link folder Google Drive.",
+        "Link Google Drive tidak valid.",
         "error"
       );
 
@@ -1115,9 +1727,7 @@ form.addEventListener(
 
     try{
 
-      /* ================================================
-         1. CEK GOOGLE DRIVE
-      ================================================= */
+      /* CHECK DRIVE */
 
       await checkDriveFolder(
         driveFolderId
@@ -1125,14 +1735,14 @@ form.addEventListener(
 
 
       saveBtn.textContent =
-        "Menyimpan galeri...";
+        "Memeriksa link...";
 
 
-      /* ================================================
-         2. CEK SLUG
-      ================================================= */
+      /* CHECK SLUG */
 
-      let exists = false;
+      let exists =
+        false;
+
 
       try{
 
@@ -1145,9 +1755,11 @@ form.addEventListener(
       catch(slugError){
 
         if(
-          !slugError.message.includes(
-            "column galleries.slug does not exist"
-          )
+          !slugError.message
+            .toLowerCase()
+            .includes(
+              "column galleries.slug does not exist"
+            )
         ){
 
           throw slugError;
@@ -1164,62 +1776,98 @@ form.addEventListener(
           "error"
         );
 
-        saveBtn.disabled =
-          false;
-
-        saveBtn.textContent =
-          "Simpan Galeri";
-
         return;
 
       }
 
 
-      /* ================================================
-         3. INSERT GALLERY
-      ================================================= */
+      saveBtn.textContent =
+        "Menyimpan galeri...";
+
+
+      /* INSERT */
 
       const {
         data,
         error
       } =
-        await supabaseClient
-          .from("galleries")
-          .insert({
+      await supabaseClient
+        .from("galleries")
+        .insert({
 
-            photographer_id:
-              user.id,
+          photographer_id:
+            user.id,
 
-            client_name:
-              clientName,
+          client_name:
+            clientName,
 
-            gallery_name:
-              galleryName,
+          gallery_name:
+            galleryName,
 
-            drive_url:
-              driveUrl,
+          drive_url:
+            driveUrl,
 
-            drive_folder_id:
-              driveFolderId
+          drive_folder_id:
+            driveFolderId,
 
-          })
-          .select()
-          .single();
+          slug:
+            slug,
+
+          event_date:
+            eventDate,
+
+          description:
+            description
+
+        })
+        .select()
+        .single();
 
 
       if(error){
 
-        throw error;
+        /*
+          Kalau database kamu belum punya
+          event_date / description / slug,
+          kita fallback ke kolom lama.
+        */
+
+        const fallback =
+          await supabaseClient
+            .from("galleries")
+            .insert({
+
+              photographer_id:
+                user.id,
+
+              client_name:
+                clientName,
+
+              gallery_name:
+                galleryName,
+
+              drive_url:
+                driveUrl,
+
+              drive_folder_id:
+                driveFolderId
+
+            })
+            .select()
+            .single();
+
+
+        if(fallback.error){
+
+          throw error;
+
+        }
 
       }
 
 
-      /* ================================================
-         4. BERHASIL
-      ================================================= */
-
       showStatus(
-        "✓ Galeri berhasil dibuat dan Google Drive terhubung.",
+        "✓ Galeri berhasil dibuat.",
         "success"
       );
 
@@ -1243,6 +1891,7 @@ form.addEventListener(
         error
       );
 
+
       showStatus(
         "Gagal membuat galeri: " +
         error.message,
@@ -1250,13 +1899,15 @@ form.addEventListener(
       );
 
     }
+    finally{
 
+      saveBtn.disabled =
+        false;
 
-    saveBtn.disabled =
-      false;
+      saveBtn.textContent =
+        "Simpan Galeri";
 
-    saveBtn.textContent =
-      "Simpan Galeri";
+    }
 
   }
 );
@@ -1271,6 +1922,7 @@ async function loadGalleries(){
   const user =
     await checkAuth();
 
+
   if(!user){
 
     return;
@@ -1278,15 +1930,15 @@ async function loadGalleries(){
   }
 
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
+  /*
+    Kita ambil kolom yang sudah ada
+    + beberapa kolom tambahan jika tersedia.
+  */
+
+  let query =
+    supabaseClient
       .from("galleries")
-      .select(
-        "id,photographer_id,client_name,gallery_name,drive_url,drive_folder_id"
-      )
+      .select("*")
       .eq(
         "photographer_id",
         user.id
@@ -1299,12 +1951,20 @@ async function loadGalleries(){
       );
 
 
+  const {
+    data,
+    error
+  } =
+  await query;
+
+
   if(error){
 
     console.error(
       "LOAD GALLERY ERROR:",
       error
     );
+
 
     galleryList.innerHTML =
       `
@@ -1319,10 +1979,20 @@ async function loadGalleries(){
   }
 
 
-  if(
-    !data ||
-    data.length === 0
-  ){
+  const galleries =
+    data || [];
+
+
+  galleryCount.textContent =
+    galleries.length +
+    (
+      galleries.length === 1
+        ? " galeri"
+        : " galeri"
+    );
+
+
+  if(galleries.length === 0){
 
     galleryList.innerHTML =
       `
@@ -1337,57 +2007,263 @@ async function loadGalleries(){
 
 
   galleryList.innerHTML =
-    data.map(
-      function(gallery){
+    galleries
+      .map(
+        function(gallery){
 
-        const driveConnected =
-          gallery.drive_folder_id
-            ? "Google Drive terhubung"
-            : "Drive belum terhubung";
+          return renderGalleryItem(
+            gallery
+          );
+
+        }
+      )
+      .join("");
+
+}
 
 
-        return `
+/* =====================================================
+   RENDER GALLERY
+===================================================== */
 
-          <div
-            class="gallery-item"
-            onclick="openGallery('${gallery.id}')"
-            title="Buka galeri"
-          >
+function renderGalleryItem(gallery){
 
-            <div class="gallery-info">
+  const id =
+    gallery.id;
 
-              <strong>
-                ${escapeHtml(
-                  gallery.gallery_name
-                )}
-              </strong>
 
-              <span>
+  const galleryName =
+    gallery.gallery_name ||
+    "Tanpa nama";
 
-                ${escapeHtml(
-                  gallery.client_name
-                )}
 
-                ·
+  const clientName =
+    gallery.client_name ||
+    "Client";
 
-                ${escapeHtml(
-                  driveConnected
-                )}
 
-              </span>
+  const date =
+    formatDate(
+      gallery.event_date
+    );
 
-            </div>
 
-            <div class="badge">
-              Buka →
-            </div>
+  const initial =
+    getInitial(
+      galleryName
+    );
+
+
+  /*
+    Saat ini jumlah foto belum diambil
+    dari Google Drive API.
+  */
+
+  const photoCount =
+    0;
+
+
+  const maxPhotos =
+    60;
+
+
+  const progress =
+    Math.min(
+      100,
+      Math.round(
+        (
+          photoCount /
+          maxPhotos
+        ) * 100
+      )
+    );
+
+
+  const galleryLink =
+    getGalleryLink(
+      gallery
+    );
+
+
+  const encodedName =
+    encodeURIComponent(
+      galleryName
+    );
+
+
+  const encodedLink =
+    encodeURIComponent(
+      galleryLink
+    );
+
+
+  return `
+
+    <div
+      class="gallery-item"
+      onclick="openGallery('${escapeAttribute(id)}')"
+      title="Buka galeri"
+    >
+
+
+      <!-- AVATAR -->
+
+      <div class="gallery-avatar">
+
+        ${escapeHtml(initial)}
+
+      </div>
+
+
+      <!-- MAIN -->
+
+      <div class="gallery-main">
+
+
+        <div class="gallery-name">
+
+          ${escapeHtml(galleryName)}
+
+        </div>
+
+
+        <div class="gallery-meta">
+
+          <span>
+            ${escapeHtml(date)}
+          </span>
+
+          <span>·</span>
+
+          <span>
+            Maks. ${maxPhotos} foto
+          </span>
+
+          <span>·</span>
+
+          <span>
+            Sisa 30 hari
+          </span>
+
+        </div>
+
+
+        <div class="gallery-progress">
+
+          <div class="progress-track">
+
+            <div
+              class="progress-fill"
+              style="width:${progress}%"
+            ></div>
 
           </div>
 
-        `;
+          <div class="progress-count">
 
-      }
-    ).join("");
+            ${photoCount}/${maxPhotos}
+
+          </div>
+
+        </div>
+
+
+        <div class="gallery-status">
+
+          <span class="status-eye">
+            ◎
+          </span>
+
+          Belum dibuka klien
+
+        </div>
+
+
+      </div>
+
+
+      <!-- ACTIONS -->
+
+      <div
+        class="gallery-actions"
+        onclick="event.stopPropagation()"
+      >
+
+
+        <!-- WHATSAPP -->
+
+        <button
+          class="gallery-action whatsapp"
+          title="Share ke WhatsApp"
+          onclick="shareWhatsApp(
+            '${encodedName}',
+            '${encodedLink}'
+          )"
+        >
+          ◔
+        </button>
+
+
+        <!-- COPY -->
+
+        <button
+          class="gallery-action"
+          title="Salin pesan dan link"
+          onclick="copyGalleryMessage(
+            '${encodedName}',
+            '${encodedLink}'
+          )"
+        >
+          ▣
+        </button>
+
+
+        <!-- EDIT -->
+
+        <button
+          class="gallery-action"
+          title="Edit galeri"
+          onclick="editGallery(
+            '${escapeAttribute(id)}'
+          )"
+        >
+          ◱
+        </button>
+
+
+        <!-- EXPIRY -->
+
+        <button
+          class="gallery-action"
+          title="Ubah batas waktu"
+          onclick="changeExpiry(
+            '${escapeAttribute(id)}'
+          )"
+        >
+          ◷
+        </button>
+
+
+        <!-- DELETE -->
+
+        <button
+          class="gallery-action delete"
+          title="Hapus galeri"
+          onclick="deleteGallery(
+            '${escapeAttribute(id)}',
+            '${escapeAttribute(galleryName)}'
+          )"
+        >
+          ♜
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+  `;
 
 }
 
@@ -1400,13 +2276,10 @@ function openGallery(galleryId){
 
   if(!galleryId){
 
-    console.error(
-      "Gallery ID tidak ditemukan."
-    );
-
     return;
 
   }
+
 
   window.location.href =
     "gallery-view.html?id=" +
@@ -1418,12 +2291,424 @@ function openGallery(galleryId){
 
 
 /* =====================================================
+   GALLERY LINK
+===================================================== */
+
+function getGalleryLink(gallery){
+
+  /*
+    Untuk sementara link diarahkan
+    ke gallery-view.html.
+
+    Nanti ketika public gallery sudah jadi,
+    tinggal kita ubah ke:
+
+    https://memora.app/nama-slug
+  */
+
+  const base =
+    window.location.origin;
+
+
+  return (
+    base +
+    "/gallery-view.html?id=" +
+    encodeURIComponent(
+      gallery.id
+    )
+  );
+
+}
+
+
+/* =====================================================
+   WHATSAPP
+===================================================== */
+
+function shareWhatsApp(
+  encodedName,
+  encodedLink
+){
+
+  const name =
+    decodeURIComponent(
+      encodedName
+    );
+
+
+  const link =
+    decodeURIComponent(
+      encodedLink
+    );
+
+
+  const message =
+`Halo, ${name} 👋
+
+Foto kamu sudah tersedia di galeri Memora.
+
+Silakan buka melalui link berikut:
+${link}
+
+Selamat melihat foto-fotonya 🤍`;
+
+
+  const whatsappUrl =
+    "https://wa.me/?text=" +
+    encodeURIComponent(
+      message
+    );
+
+
+  window.open(
+    whatsappUrl,
+    "_blank"
+  );
+
+}
+
+
+/* =====================================================
+   COPY MESSAGE + LINK
+===================================================== */
+
+async function copyGalleryMessage(
+  encodedName,
+  encodedLink
+){
+
+  const name =
+    decodeURIComponent(
+      encodedName
+    );
+
+
+  const link =
+    decodeURIComponent(
+      encodedLink
+    );
+
+
+  const message =
+`Halo, ${name} 👋
+
+Foto kamu sudah tersedia di galeri Memora.
+
+Silakan buka melalui link berikut:
+${link}
+
+Selamat melihat foto-fotonya 🤍`;
+
+
+  try{
+
+    await navigator.clipboard.writeText(
+      message
+    );
+
+
+    showToast(
+      "Pesan dan link berhasil disalin."
+    );
+
+  }
+  catch(error){
+
+    console.error(error);
+
+
+    /*
+      fallback browser lama
+    */
+
+    const textarea =
+      document.createElement("textarea");
+
+
+    textarea.value =
+      message;
+
+
+    document.body.appendChild(
+      textarea
+    );
+
+
+    textarea.select();
+
+
+    document.execCommand(
+      "copy"
+    );
+
+
+    textarea.remove();
+
+
+    showToast(
+      "Pesan dan link berhasil disalin."
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   EDIT GALLERY
+===================================================== */
+
+function editGallery(galleryId){
+
+  /*
+    Popup edit kita bangun di tahap berikutnya.
+  */
+
+  showToast(
+    "Popup Edit Galeri akan kita buat berikutnya."
+  );
+
+}
+
+
+/* =====================================================
+   CHANGE EXPIRY
+===================================================== */
+
+function changeExpiry(galleryId){
+
+  /*
+    Sistem batas waktu kita sambungkan
+    ke database setelah kolom expiry
+    dibuat.
+  */
+
+  showToast(
+    "Pengaturan batas waktu akan kita buat berikutnya."
+  );
+
+}
+
+
+/* =====================================================
+   DELETE GALLERY
+===================================================== */
+
+function deleteGallery(
+  galleryId,
+  galleryName
+){
+
+  deleteTargetId =
+    galleryId;
+
+
+  deleteGalleryName.textContent =
+    galleryName;
+
+
+  deleteModal.classList.add(
+    "show"
+  );
+
+}
+
+
+/* =====================================================
+   CLOSE DELETE MODAL
+===================================================== */
+
+function closeDeleteModal(){
+
+  deleteTargetId =
+    null;
+
+
+  deleteModal.classList.remove(
+    "show"
+  );
+
+}
+
+
+/* =====================================================
+   CONFIRM DELETE
+===================================================== */
+
+async function confirmDelete(){
+
+  if(!deleteTargetId){
+
+    return;
+
+  }
+
+
+  confirmDeleteBtn.disabled =
+    true;
+
+  confirmDeleteBtn.textContent =
+    "Menghapus...";
+
+
+  try{
+
+    const user =
+      await checkAuth();
+
+
+    if(!user){
+
+      return;
+
+    }
+
+
+    const {
+      error
+    } =
+    await supabaseClient
+      .from("galleries")
+      .delete()
+      .eq(
+        "id",
+        deleteTargetId
+      )
+      .eq(
+        "photographer_id",
+        user.id
+      );
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+    closeDeleteModal();
+
+
+    showToast(
+      "Galeri berhasil dihapus."
+    );
+
+
+    await loadGalleries();
+
+  }
+  catch(error){
+
+    console.error(
+      "DELETE GALLERY ERROR:",
+      error
+    );
+
+
+    showToast(
+      "Gagal menghapus galeri."
+    );
+
+  }
+  finally{
+
+    confirmDeleteBtn.disabled =
+      false;
+
+    confirmDeleteBtn.textContent =
+      "Hapus Galeri";
+
+  }
+
+}
+
+
+/* =====================================================
+   FORMAT DATE
+===================================================== */
+
+function formatDate(date){
+
+  if(!date){
+
+    return "Tanggal belum diatur";
+
+  }
+
+
+  const parsed =
+    new Date(
+      date + "T00:00:00"
+    );
+
+
+  if(
+    Number.isNaN(
+      parsed.getTime()
+    )
+  ){
+
+    return date;
+
+  }
+
+
+  return new Intl.DateTimeFormat(
+    "id-ID",
+    {
+      year:"numeric",
+      month:"2-digit",
+      day:"2-digit"
+    }
+  ).format(parsed);
+
+}
+
+
+/* =====================================================
+   INITIAL
+===================================================== */
+
+function getInitial(name){
+
+  if(!name){
+
+    return "?";
+
+  }
+
+
+  const words =
+    name
+      .trim()
+      .split(/\s+/);
+
+
+  if(words.length === 1){
+
+    return words[0]
+      .substring(0,2)
+      .toUpperCase();
+
+  }
+
+
+  return (
+    words[0][0] +
+    words[1][0]
+  ).toUpperCase();
+
+}
+
+
+/* =====================================================
    ESCAPE HTML
 ===================================================== */
 
 function escapeHtml(value){
 
-  return String(value)
+  return String(value ?? "")
     .replace(
       /&/g,
       "&amp;"
@@ -1449,6 +2734,29 @@ function escapeHtml(value){
 
 
 /* =====================================================
+   ESCAPE ATTRIBUTE
+===================================================== */
+
+function escapeAttribute(value){
+
+  return String(value ?? "")
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+    .replace(
+      /'/g,
+      "\\'"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    );
+
+}
+
+
+/* =====================================================
    DASHBOARD
 ===================================================== */
 
@@ -1458,6 +2766,27 @@ function goDashboard(){
     "dashboard.html";
 
 }
+
+
+/* =====================================================
+   CLOSE MODAL CLICK OUTSIDE
+===================================================== */
+
+deleteModal.addEventListener(
+  "click",
+  function(event){
+
+    if(
+      event.target ===
+      deleteModal
+    ){
+
+      closeDeleteModal();
+
+    }
+
+  }
+);
 
 
 /* =====================================================
@@ -1480,4 +2809,5 @@ checkAuth()
 </script>
 
 </body>
+
 </html>
