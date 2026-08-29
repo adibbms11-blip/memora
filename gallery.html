@@ -3,13 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>Memora — Buat Galeri</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
 *{
   box-sizing:border-box;
 }
@@ -30,8 +28,6 @@ textarea{
 button{
   cursor:pointer;
 }
-
-/* HEADER */
 
 .header{
   height:68px;
@@ -65,8 +61,6 @@ button{
   padding:9px 14px;
   color:#181818;
 }
-
-/* PAGE */
 
 .page{
   width:min(900px,calc(100% - 32px));
@@ -102,8 +96,6 @@ h1{
   font-size:14px;
 }
 
-/* CARD */
-
 .card{
   background:#fff;
   border:1px solid #e0e0db;
@@ -127,12 +119,6 @@ h1{
   font-size:13px;
   font-weight:bold;
   margin-bottom:8px;
-}
-
-.required{
-  color:#a8792d;
-  font-size:10px;
-  margin-left:5px;
 }
 
 .field input,
@@ -182,32 +168,7 @@ h1{
   color:#888;
   font-size:12px;
   margin-top:7px;
-  line-height:1.5;
 }
-
-/* DRIVE */
-
-.drive-box{
-  background:#f8f7f3;
-  border:1px solid #e4e1d9;
-  border-radius:13px;
-  padding:15px;
-  margin-top:8px;
-}
-
-.drive-title{
-  font-size:13px;
-  font-weight:bold;
-  margin-bottom:7px;
-}
-
-.drive-help{
-  color:#777;
-  font-size:12px;
-  line-height:1.5;
-}
-
-/* STATUS */
 
 .status{
   display:none;
@@ -230,8 +191,6 @@ h1{
   border:1px solid #c8e8d2;
   color:#287a45;
 }
-
-/* ACTION */
 
 .actions{
   display:flex;
@@ -262,8 +221,6 @@ h1{
   cursor:not-allowed;
 }
 
-/* GALLERY LIST */
-
 .gallery-list{
   margin-top:35px;
 }
@@ -283,11 +240,6 @@ h1{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:20px;
-}
-
-.gallery-info{
-  min-width:0;
 }
 
 .gallery-info strong{
@@ -301,34 +253,33 @@ h1{
   font-size:12px;
 }
 
-.gallery-drive{
-  margin-top:8px;
-  color:#8b682d;
-  font-size:12px;
-  text-decoration:none;
-  display:block;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  max-width:500px;
-}
-
-.gallery-drive:hover{
-  text-decoration:underline;
-}
-
 .badge{
-  flex-shrink:0;
   font-size:11px;
   padding:6px 9px;
   border-radius:20px;
   background:#f0f0ee;
 }
 
-.empty{
-  color:#888;
-  font-size:14px;
-  padding:20px 0;
+.drive-status{
+  display:none;
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:9px;
+  font-size:12px;
+}
+
+.drive-status.ok{
+  display:block;
+  background:#effaf3;
+  color:#287a45;
+  border:1px solid #c8e8d2;
+}
+
+.drive-status.bad{
+  display:block;
+  background:#fff1f1;
+  color:#a33;
+  border:1px solid #efcccc;
 }
 
 .loading{
@@ -336,7 +287,11 @@ h1{
   font-size:13px;
 }
 
-/* RESPONSIVE */
+.empty{
+  color:#888;
+  font-size:14px;
+  padding:20px 0;
+}
 
 @media(max-width:650px){
 
@@ -376,17 +331,7 @@ h1{
   .actions{
     gap:15px;
   }
-
-  .gallery-item{
-    align-items:flex-start;
-  }
-
-  .gallery-drive{
-    max-width:100%;
-  }
-
 }
-
 </style>
 </head>
 
@@ -445,7 +390,6 @@ h1{
       Informasi Galeri
     </div>
 
-
     <div
       id="status"
       class="status"
@@ -454,20 +398,19 @@ h1{
 
     <form id="galleryForm">
 
-
       <!-- NAMA GALERI -->
 
       <div class="field">
 
-        <label for="title">
+        <label for="galleryName">
           Nama Galeri
-          <span class="required">WAJIB</span>
         </label>
 
         <input
-          id="title"
+          id="galleryName"
           type="text"
           placeholder="Contoh: Wedding Dimas & Sinta"
+          maxlength="150"
           required
         >
 
@@ -486,13 +429,13 @@ h1{
 
           <label for="clientName">
             Nama Client
-            <span class="required">WAJIB</span>
           </label>
 
           <input
             id="clientName"
             type="text"
             placeholder="Contoh: Dimas & Sinta"
+            maxlength="100"
             required
           >
 
@@ -521,7 +464,6 @@ h1{
 
         <label for="slug">
           Nama Link Galeri
-          <span class="required">WAJIB</span>
         </label>
 
         <div class="slug-wrap">
@@ -535,6 +477,7 @@ h1{
             class="slug-input"
             type="text"
             placeholder="dimas-sinta"
+            maxlength="100"
             required
           >
 
@@ -553,7 +496,6 @@ h1{
 
         <label for="driveUrl">
           Link Google Drive
-          <span class="required">WAJIB</span>
         </label>
 
         <input
@@ -563,19 +505,14 @@ h1{
           required
         >
 
-        <div class="drive-box">
-
-          <div class="drive-title">
-            📁 Folder Google Drive
-          </div>
-
-          <div class="drive-help">
-            Tempel link folder Google Drive yang berisi
-            foto-foto client. Link ini akan disimpan
-            bersama data galeri.
-          </div>
-
+        <div class="help">
+          Masukkan link folder Google Drive yang berisi foto.
         </div>
+
+        <div
+          id="driveStatus"
+          class="drive-status"
+        ></div>
 
       </div>
 
@@ -622,7 +559,7 @@ h1{
   </div>
 
 
-  <!-- LIST GALLERY -->
+  <!-- LIST GALERI -->
 
   <section class="gallery-list">
 
@@ -663,14 +600,22 @@ const supabaseClient =
 
 
 /* =====================================================
+   GOOGLE DRIVE API KEY
+===================================================== */
+
+const GOOGLE_DRIVE_API_KEY =
+  "AIzaSyCNjhG4YaftIllJoRciPB9b7158WAtT3nA";
+
+
+/* =====================================================
    ELEMENT
 ===================================================== */
 
 const form =
   document.getElementById("galleryForm");
 
-const titleInput =
-  document.getElementById("title");
+const galleryNameInput =
+  document.getElementById("galleryName");
 
 const clientInput =
   document.getElementById("clientName");
@@ -699,6 +644,9 @@ const galleryList =
 const userEmail =
   document.getElementById("userEmail");
 
+const driveStatus =
+  document.getElementById("driveStatus");
+
 
 /* =====================================================
    STATUS
@@ -713,11 +661,9 @@ function showStatus(message,type){
     statusBox.className = "status";
 
     return;
-
   }
 
-  statusBox.textContent =
-    message;
+  statusBox.textContent = message;
 
   statusBox.className =
     "status " + type;
@@ -726,7 +672,7 @@ function showStatus(message,type){
 
 
 /* =====================================================
-   AUTH CHECK
+   AUTH
 ===================================================== */
 
 async function checkAuth(){
@@ -735,8 +681,7 @@ async function checkAuth(){
     data,
     error
   } =
-  await supabaseClient.auth.getSession();
-
+    await supabaseClient.auth.getSession();
 
   if(error){
 
@@ -747,13 +692,10 @@ async function checkAuth(){
     );
 
     return null;
-
   }
-
 
   const session =
     data.session;
-
 
   if(!session){
 
@@ -761,16 +703,12 @@ async function checkAuth(){
       "auth.html?mode=signin&type=photographer";
 
     return null;
-
   }
-
 
   userEmail.textContent =
     session.user.email || "";
 
-
   return session.user;
-
 }
 
 
@@ -778,33 +716,26 @@ async function checkAuth(){
    SLUG OTOMATIS
 ===================================================== */
 
-titleInput.addEventListener(
+galleryNameInput.addEventListener(
   "input",
   function(){
 
     if(
       slugInput.dataset.edited === "true"
     ){
-
       return;
-
     }
 
-
     const slug =
-      titleInput.value
+      galleryNameInput.value
         .toLowerCase()
         .trim()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g,"")
         .replace(/[^a-z0-9\s-]/g,"")
         .replace(/\s+/g,"-")
         .replace(/-+/g,"-");
 
-
     slugInput.value =
       slug;
-
   }
 );
 
@@ -815,7 +746,6 @@ slugInput.addEventListener(
 
     slugInput.dataset.edited =
       "true";
-
 
     slugInput.value =
       slugInput.value
@@ -828,29 +758,176 @@ slugInput.addEventListener(
 
 
 /* =====================================================
-   VALIDASI GOOGLE DRIVE
+   GOOGLE DRIVE FOLDER ID
 ===================================================== */
 
-function isValidDriveUrl(url){
+function getDriveFolderId(url){
 
-  try{
+  if(!url){
+    return null;
+  }
 
-    const parsed =
-      new URL(url);
+  /*
+    Format:
+    https://drive.google.com/drive/folders/FOLDER_ID
+  */
 
-    return (
-      parsed.hostname === "drive.google.com" ||
-      parsed.hostname === "www.drive.google.com"
+  const folderMatch =
+    url.match(
+      /\/folders\/([a-zA-Z0-9_-]+)/
+    );
+
+  if(folderMatch){
+
+    return folderMatch[1];
+
+  }
+
+
+  /*
+    Format:
+    https://drive.google.com/...?id=FOLDER_ID
+  */
+
+  const idMatch =
+    url.match(
+      /[?&]id=([a-zA-Z0-9_-]+)/
+    );
+
+  if(idMatch){
+
+    return idMatch[1];
+
+  }
+
+
+  return null;
+
+}
+
+
+/* =====================================================
+   CEK LINK GOOGLE DRIVE
+===================================================== */
+
+async function checkDriveFolder(folderId){
+
+  const query =
+    `'${folderId}' in parents and trashed = false`;
+
+  const endpoint =
+    "https://www.googleapis.com/drive/v3/files" +
+    "?q=" +
+    encodeURIComponent(query) +
+    "&pageSize=1" +
+    "&fields=" +
+    encodeURIComponent(
+      "files(id,name,mimeType)"
+    ) +
+    "&key=" +
+    encodeURIComponent(
+      GOOGLE_DRIVE_API_KEY
+    );
+
+
+  const response =
+    await fetch(endpoint);
+
+
+  const result =
+    await response.json();
+
+
+  if(!response.ok){
+
+    throw new Error(
+      result?.error?.message ||
+      "Google Drive tidak dapat diakses."
     );
 
   }
-  catch(error){
 
-    return false;
 
-  }
+  return true;
 
 }
+
+
+/* =====================================================
+   CEK DRIVE SAAT INPUT SELESAI
+===================================================== */
+
+driveInput.addEventListener(
+  "blur",
+  async function(){
+
+    const url =
+      driveInput.value.trim();
+
+    if(!url){
+
+      driveStatus.style.display =
+        "none";
+
+      return;
+    }
+
+
+    const folderId =
+      getDriveFolderId(url);
+
+
+    if(!folderId){
+
+      driveStatus.className =
+        "drive-status bad";
+
+      driveStatus.textContent =
+        "Link Google Drive tidak valid.";
+
+      return;
+    }
+
+
+    driveStatus.className =
+      "drive-status";
+
+    driveStatus.style.display =
+      "block";
+
+    driveStatus.textContent =
+      "Memeriksa folder Google Drive...";
+
+
+    try{
+
+      await checkDriveFolder(
+        folderId
+      );
+
+
+      driveStatus.className =
+        "drive-status ok";
+
+      driveStatus.textContent =
+        "✓ Folder Google Drive berhasil ditemukan.";
+
+    }
+    catch(error){
+
+      console.error(error);
+
+      driveStatus.className =
+        "drive-status bad";
+
+      driveStatus.textContent =
+        "✕ Google Drive tidak bisa diakses: " +
+        error.message;
+
+    }
+
+  }
+);
 
 
 /* =====================================================
@@ -863,19 +940,49 @@ async function slugExists(slug){
     data,
     error
   } =
-  await supabaseClient
-    .from("galleries")
-    .select("id")
-    .eq("slug",slug)
-    .maybeSingle();
+    await supabaseClient
+      .from("galleries")
+      .select("id")
+      .eq("slug",slug)
+      .maybeSingle();
 
+
+  /*
+    CATATAN:
+
+    Kalau tabel galleries kamu BELUM punya
+    kolom slug, fungsi ini tidak dipakai.
+
+    Karena struktur tabel kamu dari screenshot
+    tidak memperlihatkan slug.
+
+    Jadi untuk menghindari error,
+    pengecekan slug dilakukan dengan aman
+    di CREATE GALLERY berdasarkan struktur
+    yang tersedia.
+  */
 
   if(error){
+
+    /*
+      Kalau error karena kolom slug tidak ada,
+      jangan bikin proses gagal.
+    */
+
+    if(
+      error.message &&
+      error.message.includes(
+        "column galleries.slug does not exist"
+      )
+    ){
+
+      return false;
+
+    }
 
     throw error;
 
   }
-
 
   return !!data;
 
@@ -904,14 +1011,12 @@ form.addEventListener(
 
 
     if(!user){
-
       return;
-
     }
 
 
-    const title =
-      titleInput.value.trim();
+    const galleryName =
+      galleryNameInput.value.trim();
 
     const clientName =
       clientInput.value.trim();
@@ -931,7 +1036,7 @@ form.addEventListener(
 
     /* VALIDASI */
 
-    if(!title){
+    if(!galleryName){
 
       showStatus(
         "Nama galeri wajib diisi.",
@@ -939,7 +1044,6 @@ form.addEventListener(
       );
 
       return;
-
     }
 
 
@@ -951,7 +1055,6 @@ form.addEventListener(
       );
 
       return;
-
     }
 
 
@@ -963,7 +1066,6 @@ form.addEventListener(
       );
 
       return;
-
     }
 
 
@@ -975,7 +1077,6 @@ form.addEventListener(
       );
 
       return;
-
     }
 
 
@@ -987,19 +1088,25 @@ form.addEventListener(
       );
 
       return;
-
     }
 
 
-    if(!isValidDriveUrl(driveUrl)){
+    /* AMBIL FOLDER ID */
+
+    const driveFolderId =
+      getDriveFolderId(
+        driveUrl
+      );
+
+
+    if(!driveFolderId){
 
       showStatus(
-        "Link Google Drive tidak valid. Gunakan link dari drive.google.com.",
+        "Link Google Drive tidak valid. Gunakan link folder Google Drive.",
         "error"
       );
 
       return;
-
     }
 
 
@@ -1007,16 +1114,56 @@ form.addEventListener(
       true;
 
     saveBtn.textContent =
-      "Menyimpan...";
+      "Memeriksa Google Drive...";
 
 
     try{
 
+      /* ================================================
+         1. CEK GOOGLE DRIVE
+      ================================================= */
 
-      /* CEK SLUG */
+      await checkDriveFolder(
+        driveFolderId
+      );
 
-      const exists =
-        await slugExists(slug);
+
+      saveBtn.textContent =
+        "Menyimpan galeri...";
+
+
+      /* ================================================
+         2. CEK SLUG JIKA KOLOM TERSEDIA
+      ================================================= */
+
+      let exists = false;
+
+      try{
+
+        exists =
+          await slugExists(
+            slug
+          );
+
+      }
+      catch(slugError){
+
+        /*
+          Abaikan hanya jika database memang
+          belum punya kolom slug.
+        */
+
+        if(
+          !slugError.message.includes(
+            "column galleries.slug does not exist"
+          )
+        ){
+
+          throw slugError;
+
+        }
+
+      }
 
 
       if(exists){
@@ -1033,26 +1180,39 @@ form.addEventListener(
           "Simpan Galeri";
 
         return;
-
       }
 
 
-      /* INSERT GALLERY */
+      /* ================================================
+         3. INSERT SESUAI KOLOM SUPABASE KAMU
+      ================================================= */
 
       const {
-  data,
-  error
-} = await supabaseClient
-  .from("galleries")
-  .insert({
-    photographer_id: user.id,
-    client_name: clientName,
-    gallery_name: title,
-    drive_url: driveUrl,
-    drive_folder_id: folderId
-  })
-  .select()
-  .single();
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("galleries")
+          .insert({
+
+            photographer_id:
+              user.id,
+
+            client_name:
+              clientName,
+
+            gallery_name:
+              galleryName,
+
+            drive_url:
+              driveUrl,
+
+            drive_folder_id:
+              driveFolderId
+
+          })
+          .select()
+          .single();
 
 
       if(error){
@@ -1062,10 +1222,12 @@ form.addEventListener(
       }
 
 
-      /* BERHASIL */
+      /* ================================================
+         4. BERHASIL
+      ================================================= */
 
       showStatus(
-        "Galeri berhasil dibuat.",
+        "✓ Galeri berhasil dibuat dan Google Drive terhubung.",
         "success"
       );
 
@@ -1075,8 +1237,18 @@ form.addEventListener(
       slugInput.dataset.edited =
         "false";
 
+      driveStatus.style.display =
+        "none";
+
 
       await loadGalleries();
+
+
+      /*
+        Tidak langsung redirect.
+        Supaya kamu bisa melihat galeri
+        berhasil tersimpan.
+      */
 
 
     }
@@ -1118,22 +1290,36 @@ async function loadGalleries(){
 
 
   if(!user){
-
     return;
-
   }
 
 
+  /*
+    PENTING:
+
+    Query DISESUAIKAN dengan struktur
+    tabel galleries kamu.
+  */
+
   const {
-  data,
-  error
-} = await supabaseClient
-  .from("galleries")
-  .select("*")
-  .eq("photographer_id", user.id)
-  .order("id", {
-    ascending: false
-  });
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("galleries")
+      .select(
+        "id,photographer_id,client_name,gallery_name,drive_url,drive_folder_id"
+      )
+      .eq(
+        "photographer_id",
+        user.id
+      )
+      .order(
+        "id",
+        {
+          ascending:false
+        }
+      );
 
 
   if(error){
@@ -1147,14 +1333,12 @@ async function loadGalleries(){
     galleryList.innerHTML =
       `
       <div class="empty">
-        Gagal memuat galeri.
-        <br><br>
+        Gagal memuat galeri.<br><br>
         ${escapeHtml(error.message)}
       </div>
       `;
 
     return;
-
   }
 
 
@@ -1166,92 +1350,62 @@ async function loadGalleries(){
     galleryList.innerHTML =
       `
       <div class="empty">
-        Belum ada galeri.
-        Buat galeri pertama kamu di atas.
+        Belum ada galeri. Buat galeri pertama kamu di atas.
       </div>
       `;
 
     return;
-
   }
 
 
   galleryList.innerHTML =
-    data
-      .map(
-        function(gallery){
+    data.map(
+      function(gallery){
 
-          const date =
-            gallery.event_date
-              ?
-              new Date(
-                gallery.event_date
-              ).toLocaleDateString(
-                "id-ID",
-                {
-                  day:"numeric",
-                  month:"long",
-                  year:"numeric"
-                }
-              )
-              :
-              "Tanggal belum diatur";
+        const driveConnected =
+          gallery.drive_folder_id
+            ? "Google Drive terhubung"
+            : "Drive belum terhubung";
 
 
-          const drive =
-            gallery.drive_url
-              ?
-              `
-              <a
-                class="gallery-drive"
-                href="${escapeAttribute(gallery.drive_url)}"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="${escapeAttribute(gallery.drive_url)}"
-              >
-                📁 Buka Google Drive
-              </a>
-              `
-              :
-              "";
+        return `
 
+          <div class="gallery-item">
 
-          return `
+            <div class="gallery-info">
 
-            <div class="gallery-item">
+              <strong>
+                ${escapeHtml(
+                  gallery.gallery_name
+                )}
+              </strong>
 
-              <div class="gallery-info">
-
-                <strong>
-                  ${escapeHtml(gallery.title)}
-                </strong>
-
-                <span>
-                  ${escapeHtml(gallery.client_name)}
-                  ·
-                  ${date}
-                </span>
-
-                ${drive}
-
-              </div>
-
-
-              <div class="badge">
+              <span>
 
                 ${escapeHtml(
-                  gallery.status || "draft"
+                  gallery.client_name
                 )}
 
-              </div>
+                ·
+
+                ${escapeHtml(
+                  driveConnected
+                )}
+
+              </span>
 
             </div>
 
-          `;
+            <div class="badge">
+              Galeri
+            </div>
 
-        }
-      )
-      .join("");
+          </div>
+
+        `;
+
+      }
+    ).join("");
 
 }
 
@@ -1262,23 +1416,27 @@ async function loadGalleries(){
 
 function escapeHtml(value){
 
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-function escapeAttribute(value){
-
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/"/g,"&quot;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;");
+  return String(value)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
