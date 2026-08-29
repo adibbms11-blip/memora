@@ -1,0 +1,1274 @@
+<!doctype html>
+<html lang="id">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Memora — Galeri</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#fafaf8;
+  color:#181818;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+button{
+  font:inherit;
+  cursor:pointer;
+}
+
+/* ================================
+   HEADER
+================================ */
+
+.header{
+  height:68px;
+  border-bottom:1px solid #e4e4df;
+  background:#fafaf8;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:0 30px;
+}
+
+.brand{
+  font:600 30px Georgia,serif;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.email{
+  color:#666;
+  font-size:13px;
+}
+
+.back-btn{
+  border:1px solid #ddd;
+  background:#fff;
+  border-radius:10px;
+  padding:9px 14px;
+  color:#181818;
+}
+
+/* ================================
+   PAGE
+================================ */
+
+.page{
+  width:min(1100px,calc(100% - 32px));
+  margin:auto;
+  padding:55px 0 80px;
+}
+
+/* ================================
+   HERO
+================================ */
+
+.hero{
+  margin-bottom:35px;
+}
+
+.eyebrow{
+  color:#a8792d;
+  font-size:12px;
+  font-weight:bold;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:10px;
+}
+
+h1{
+  margin:0;
+  font-size:36px;
+  letter-spacing:-1.2px;
+}
+
+.client{
+  margin-top:9px;
+  color:#666;
+  font-size:14px;
+}
+
+.drive-link{
+  display:inline-block;
+  margin-top:14px;
+  color:#777;
+  font-size:12px;
+  text-decoration:none;
+}
+
+.drive-link:hover{
+  text-decoration:underline;
+}
+
+/* ================================
+   STATUS
+================================ */
+
+.status{
+  padding:14px 16px;
+  border-radius:11px;
+  font-size:13px;
+  margin-bottom:25px;
+}
+
+.status.loading{
+  background:#f2f2ef;
+  color:#777;
+  border:1px solid #e2e2dd;
+}
+
+.status.error{
+  background:#fff1f1;
+  color:#a33;
+  border:1px solid #efcccc;
+}
+
+.status.success{
+  background:#effaf3;
+  color:#287a45;
+  border:1px solid #c8e8d2;
+}
+
+/* ================================
+   PHOTO HEADER
+================================ */
+
+.photo-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.photo-title{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.photo-count{
+  color:#888;
+  font-size:13px;
+}
+
+/* ================================
+   PHOTO GRID
+================================ */
+
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+
+/* ================================
+   PHOTO
+================================ */
+
+.photo{
+  position:relative;
+  aspect-ratio:1/1;
+
+  background:#eee;
+
+  border-radius:14px;
+  overflow:hidden;
+
+  cursor:pointer;
+
+  border:1px solid #e2e2dd;
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.photo:hover{
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 12px 25px
+    rgba(0,0,0,.08);
+}
+
+.photo img{
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+
+  display:block;
+
+  background:#f0f0ed;
+}
+
+/* ================================
+   PHOTO NAME
+================================ */
+
+.photo-name{
+  position:absolute;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  padding:28px 10px 10px;
+
+  color:#fff;
+  font-size:11px;
+
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+
+  background:
+    linear-gradient(
+      transparent,
+      rgba(0,0,0,.65)
+    );
+
+  opacity:0;
+
+  transition:opacity .2s ease;
+}
+
+.photo:hover .photo-name{
+  opacity:1;
+}
+
+/* ================================
+   EMPTY
+================================ */
+
+.empty{
+  grid-column:1/-1;
+
+  text-align:center;
+
+  padding:60px 20px;
+
+  color:#888;
+
+  border:1px solid #e0e0db;
+
+  border-radius:15px;
+
+  background:#fff;
+}
+
+/* ================================
+   LIGHTBOX
+================================ */
+
+.lightbox{
+  display:none;
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:9999;
+
+  background:rgba(0,0,0,.92);
+
+  align-items:center;
+  justify-content:center;
+
+  padding:30px;
+}
+
+.lightbox.active{
+  display:flex;
+}
+
+.lightbox img{
+  max-width:95vw;
+  max-height:90vh;
+
+  object-fit:contain;
+
+  border-radius:6px;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0,0,0,.4);
+}
+
+.close-lightbox{
+  position:absolute;
+
+  top:20px;
+  right:25px;
+
+  width:42px;
+  height:42px;
+
+  border:1px solid rgba(255,255,255,.25);
+
+  background:rgba(255,255,255,.1);
+
+  color:#fff;
+
+  border-radius:50%;
+
+  font-size:22px;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media(max-width:900px){
+
+  .photo-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+}
+
+@media(max-width:650px){
+
+  .header{
+    padding:0 18px;
+  }
+
+  .brand{
+    font-size:25px;
+  }
+
+  .email{
+    display:none;
+  }
+
+  .page{
+    padding-top:35px;
+  }
+
+  h1{
+    font-size:28px;
+  }
+
+  .photo-grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+  }
+
+  .photo-name{
+    opacity:1;
+  }
+
+  .lightbox{
+    padding:15px;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="brand">
+    memora
+  </div>
+
+  <div class="header-right">
+
+    <div
+      class="email"
+      id="userEmail"
+    >
+      Memuat...
+    </div>
+
+    <button
+      class="back-btn"
+      onclick="goBack()"
+    >
+      ← Kembali
+    </button>
+
+  </div>
+
+</header>
+
+
+<main class="page">
+
+  <section class="hero">
+
+    <div class="eyebrow">
+      Galeri Foto
+    </div>
+
+    <h1 id="galleryTitle">
+      Memuat galeri...
+    </h1>
+
+    <div
+      class="client"
+      id="clientName"
+    >
+      Memuat...
+    </div>
+
+    <a
+      id="driveLink"
+      class="drive-link"
+      href="#"
+      target="_blank"
+      rel="noopener"
+      style="display:none"
+    >
+      Buka folder Google Drive ↗
+    </a>
+
+  </section>
+
+
+  <div
+    id="status"
+    class="status loading"
+  >
+    Menghubungkan ke galeri...
+  </div>
+
+
+  <section>
+
+    <div class="photo-header">
+
+      <div class="photo-title">
+        Foto
+      </div>
+
+      <div
+        class="photo-count"
+        id="photoCount"
+      >
+        0 foto
+      </div>
+
+    </div>
+
+    <div
+      id="photoGrid"
+      class="photo-grid"
+    ></div>
+
+  </section>
+
+</main>
+
+
+<!-- LIGHTBOX -->
+
+<div
+  id="lightbox"
+  class="lightbox"
+  onclick="closeLightbox(event)"
+>
+
+  <button
+    class="close-lightbox"
+    onclick="closeLightbox()"
+  >
+    ×
+  </button>
+
+  <img
+    id="lightboxImage"
+    src=""
+    alt="Preview"
+    onclick="event.stopPropagation()"
+  >
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+  "https://kluuablkxxanpkdsfckp.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_MWrUTn7S0cX1Ff50ebZvFQ_GxtiwiTy";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+/* =====================================================
+   GOOGLE DRIVE API KEY
+===================================================== */
+
+const GOOGLE_DRIVE_API_KEY =
+  "AIzaSyCNjhG4YaftIllJoRciPB9b7158WAtT3nA";
+
+
+/* =====================================================
+   ELEMENT
+===================================================== */
+
+const galleryTitle =
+  document.getElementById("galleryTitle");
+
+const clientName =
+  document.getElementById("clientName");
+
+const userEmail =
+  document.getElementById("userEmail");
+
+const driveLink =
+  document.getElementById("driveLink");
+
+const statusBox =
+  document.getElementById("status");
+
+const photoGrid =
+  document.getElementById("photoGrid");
+
+const photoCount =
+  document.getElementById("photoCount");
+
+const lightbox =
+  document.getElementById("lightbox");
+
+const lightboxImage =
+  document.getElementById("lightboxImage");
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function showStatus(message,type){
+
+  statusBox.textContent =
+    message;
+
+  statusBox.className =
+    "status " + type;
+
+}
+
+
+/* =====================================================
+   AUTH
+===================================================== */
+
+async function checkAuth(){
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .auth
+      .getSession();
+
+  if(error){
+
+    showStatus(
+      "Gagal mengecek login: " +
+      error.message,
+      "error"
+    );
+
+    return null;
+
+  }
+
+  const session =
+    data.session;
+
+  if(!session){
+
+    window.location.href =
+      "auth.html?mode=signin&type=photographer";
+
+    return null;
+
+  }
+
+  userEmail.textContent =
+    session.user.email || "";
+
+  return session.user;
+
+}
+
+
+/* =====================================================
+   GET URL PARAMETER
+===================================================== */
+
+function getGalleryParameter(){
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const id =
+    params.get("id");
+
+  const slug =
+    params.get("slug");
+
+  return {
+    id:id ? id.trim() : null,
+    slug:slug ? slug.trim() : null
+  };
+
+}
+
+
+/* =====================================================
+   DRIVE FOLDER ID
+===================================================== */
+
+function getDriveFolderId(url){
+
+  if(!url){
+    return null;
+  }
+
+  const folderMatch =
+    url.match(
+      /\/folders\/([a-zA-Z0-9_-]+)/
+    );
+
+  if(folderMatch){
+
+    return folderMatch[1];
+
+  }
+
+  const idMatch =
+    url.match(
+      /[?&]id=([a-zA-Z0-9_-]+)/
+    );
+
+  if(idMatch){
+
+    return idMatch[1];
+
+  }
+
+  return null;
+
+}
+
+
+/* =====================================================
+   LOAD GALLERY
+===================================================== */
+
+async function loadGallery(){
+
+  const params =
+    getGalleryParameter();
+
+  /*
+    Bisa dibuka dengan:
+
+    gallery-view.html?id=ID_GALERI
+
+    ATAU
+
+    gallery-view.html?slug=NAMA-SLUG
+  */
+
+  if(!params.id && !params.slug){
+
+    galleryTitle.textContent =
+      "Galeri tidak ditemukan";
+
+    showStatus(
+      "Link galeri tidak memiliki ID atau slug.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const user =
+    await checkAuth();
+
+  if(!user){
+    return;
+  }
+
+
+  showStatus(
+    "Memuat galeri...",
+    "loading"
+  );
+
+
+  let query =
+    supabaseClient
+      .from("galleries")
+      .select(
+        "id,photographer_id,client_name,gallery_name,drive_url,drive_folder_id"
+      )
+      .eq(
+        "photographer_id",
+        user.id
+      );
+
+
+  /*
+    PRIORITAS:
+    ID → slug
+  */
+
+  if(params.id){
+
+    query =
+      query.eq(
+        "id",
+        params.id
+      );
+
+  }
+  else if(params.slug){
+
+    query =
+      query.eq(
+        "slug",
+        params.slug
+      );
+
+  }
+
+
+  const {
+    data:gallery,
+    error:galleryError
+  } =
+    await query.maybeSingle();
+
+
+  if(galleryError){
+
+    console.error(
+      "GALLERY ERROR:",
+      galleryError
+    );
+
+    showStatus(
+      "Gagal mengambil data galeri: " +
+      galleryError.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if(!gallery){
+
+    galleryTitle.textContent =
+      "Galeri tidak ditemukan";
+
+    clientName.textContent =
+      "";
+
+    showStatus(
+      "Galeri tidak ditemukan atau kamu tidak memiliki akses.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  /* =================================================
+     INFO GALERI
+  ================================================= */
+
+  galleryTitle.textContent =
+    gallery.gallery_name ||
+    "Galeri";
+
+  clientName.textContent =
+    gallery.client_name ||
+    "";
+
+
+  /* =================================================
+     GOOGLE DRIVE LINK
+  ================================================= */
+
+  if(gallery.drive_url){
+
+    driveLink.href =
+      gallery.drive_url;
+
+    driveLink.style.display =
+      "inline-block";
+
+  }
+
+
+  /* =================================================
+     FOLDER ID
+  ================================================= */
+
+  let folderId =
+    gallery.drive_folder_id ||
+    null;
+
+
+  if(!folderId){
+
+    folderId =
+      getDriveFolderId(
+        gallery.drive_url
+      );
+
+  }
+
+
+  if(!folderId){
+
+    showStatus(
+      "Folder Google Drive belum terhubung ke galeri.",
+      "error"
+    );
+
+    photoGrid.innerHTML =
+      `
+      <div class="empty">
+        Link Google Drive belum tersedia.
+      </div>
+      `;
+
+    return;
+
+  }
+
+
+  /* =================================================
+     LOAD FOTO
+  ================================================= */
+
+  showStatus(
+    "Mengambil foto dari Google Drive...",
+    "loading"
+  );
+
+
+  try{
+
+    const photos =
+      await getDrivePhotos(
+        folderId
+      );
+
+
+    renderPhotos(
+      photos
+    );
+
+
+    showStatus(
+      "✓ Galeri berhasil dimuat.",
+      "success"
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "DRIVE ERROR:",
+      error
+    );
+
+    showStatus(
+      "Google Drive gagal diakses: " +
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   GET GOOGLE DRIVE PHOTOS
+===================================================== */
+
+async function getDrivePhotos(folderId){
+
+  const query =
+    `'${folderId}' in parents and trashed = false and mimeType contains 'image/'`;
+
+
+  const fields =
+    "files(id,name,mimeType,thumbnailLink,webContentLink,webViewLink),nextPageToken";
+
+
+  let allFiles = [];
+
+  let pageToken = null;
+
+
+  do{
+
+    let endpoint =
+      "https://www.googleapis.com/drive/v3/files" +
+      "?q=" +
+      encodeURIComponent(query) +
+      "&fields=" +
+      encodeURIComponent(fields) +
+      "&pageSize=100" +
+      "&orderBy=name" +
+      "&key=" +
+      encodeURIComponent(
+        GOOGLE_DRIVE_API_KEY
+      );
+
+
+    if(pageToken){
+
+      endpoint +=
+        "&pageToken=" +
+        encodeURIComponent(
+          pageToken
+        );
+
+    }
+
+
+    const response =
+      await fetch(
+        endpoint
+      );
+
+
+    const result =
+      await response.json();
+
+
+    if(!response.ok){
+
+      throw new Error(
+        result?.error?.message ||
+        "Google Drive gagal mengirim foto."
+      );
+
+    }
+
+
+    if(result.files){
+
+      allFiles =
+        allFiles.concat(
+          result.files
+        );
+
+    }
+
+
+    pageToken =
+      result.nextPageToken ||
+      null;
+
+  }
+  while(pageToken);
+
+
+  return allFiles;
+
+}
+
+
+/* =====================================================
+   THUMBNAIL
+===================================================== */
+
+function getThumbnail(file){
+
+  if(file.thumbnailLink){
+
+    return file.thumbnailLink
+      .replace(
+        /=s\d+/,
+        "=s1200"
+      );
+
+  }
+
+
+  return (
+    "https://drive.google.com/thumbnail" +
+    "?id=" +
+    encodeURIComponent(
+      file.id
+    ) +
+    "&sz=w1200"
+  );
+
+}
+
+
+/* =====================================================
+   RENDER FOTO
+===================================================== */
+
+function renderPhotos(photos){
+
+  photoGrid.innerHTML =
+    "";
+
+  photoCount.textContent =
+    photos.length +
+    " foto";
+
+
+  if(!photos.length){
+
+    photoGrid.innerHTML =
+      `
+      <div class="empty">
+
+        Tidak ada foto ditemukan
+        di folder Google Drive.
+
+      </div>
+      `;
+
+    return;
+
+  }
+
+
+  photos.forEach(
+    function(file){
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+      item.className =
+        "photo";
+
+
+      const image =
+        document.createElement(
+          "img"
+        );
+
+
+      const thumbnail =
+        getThumbnail(
+          file
+        );
+
+
+      image.src =
+        thumbnail;
+
+      image.alt =
+        file.name;
+
+      image.loading =
+        "lazy";
+
+
+      /*
+        Kalau thumbnail gagal,
+        coba endpoint thumbnail lain.
+      */
+
+      image.onerror =
+        function(){
+
+          image.onerror =
+            null;
+
+          image.src =
+            "https://drive.google.com/thumbnail" +
+            "?id=" +
+            encodeURIComponent(
+              file.id
+            ) +
+            "&sz=w1600";
+
+        };
+
+
+      const name =
+        document.createElement(
+          "div"
+        );
+
+      name.className =
+        "photo-name";
+
+      name.textContent =
+        file.name;
+
+
+      item.appendChild(
+        image
+      );
+
+      item.appendChild(
+        name
+      );
+
+
+      /*
+        FOTO CLICKABLE
+      */
+
+      item.addEventListener(
+        "click",
+        function(){
+
+          openLightbox(
+            thumbnail
+          );
+
+        }
+      );
+
+
+      photoGrid.appendChild(
+        item
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   LIGHTBOX
+===================================================== */
+
+function openLightbox(imageUrl){
+
+  if(!imageUrl){
+    return;
+  }
+
+  lightboxImage.src =
+    imageUrl;
+
+  lightbox.classList.add(
+    "active"
+  );
+
+  document.body.style.overflow =
+    "hidden";
+
+}
+
+
+function closeLightbox(event){
+
+  if(
+    event &&
+    event.target ===
+    lightboxImage
+  ){
+
+    return;
+
+  }
+
+  lightbox.classList.remove(
+    "active"
+  );
+
+  lightboxImage.src =
+    "";
+
+  document.body.style.overflow =
+    "";
+
+}
+
+
+/* =====================================================
+   ESC KEY
+===================================================== */
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key ===
+      "Escape"
+    ){
+
+      closeLightbox();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+function goBack(){
+
+  window.location.href =
+    "dashboard.html";
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadGallery();
+
+</script>
+
+</body>
+</html>
