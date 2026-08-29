@@ -231,17 +231,41 @@ h1{
   margin-bottom:15px;
 }
 
+/* =====================================================
+   GALLERY ITEM CLICKABLE
+===================================================== */
+
 .gallery-item{
+  background:#fff;
+  border:1px solid #e0e0db;
+  border-radius:15px;
+  padding:18px;
+  margin-bottom:10px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  cursor:pointer;
+
   transition:
     transform .15s ease,
-    border-color .15s ease,
-    box-shadow .15s ease;
+    box-shadow .15s ease,
+    border-color .15s ease;
 }
 
 .gallery-item:hover{
   transform:translateY(-2px);
   border-color:#cfcfc8;
-  box-shadow:0 8px 25px rgba(0,0,0,.06);
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
+}
+
+.gallery-item:active{
+  transform:translateY(0);
+}
+
+.gallery-info{
+  min-width:0;
 }
 
 .gallery-info strong{
@@ -260,6 +284,7 @@ h1{
   padding:6px 9px;
   border-radius:20px;
   background:#f0f0ee;
+  flex-shrink:0;
 }
 
 .drive-status{
@@ -333,6 +358,11 @@ h1{
   .actions{
     gap:15px;
   }
+
+  .gallery-item{
+    padding:16px;
+  }
+
 }
 </style>
 </head>
@@ -738,6 +768,7 @@ galleryNameInput.addEventListener(
 
     slugInput.value =
       slug;
+
   }
 );
 
@@ -769,11 +800,6 @@ function getDriveFolderId(url){
     return null;
   }
 
-  /*
-    Format:
-    https://drive.google.com/drive/folders/FOLDER_ID
-  */
-
   const folderMatch =
     url.match(
       /\/folders\/([a-zA-Z0-9_-]+)/
@@ -785,12 +811,6 @@ function getDriveFolderId(url){
 
   }
 
-
-  /*
-    Format:
-    https://drive.google.com/...?id=FOLDER_ID
-  */
-
   const idMatch =
     url.match(
       /[?&]id=([a-zA-Z0-9_-]+)/
@@ -801,7 +821,6 @@ function getDriveFolderId(url){
     return idMatch[1];
 
   }
-
 
   return null;
 
@@ -831,14 +850,11 @@ async function checkDriveFolder(folderId){
       GOOGLE_DRIVE_API_KEY
     );
 
-
   const response =
     await fetch(endpoint);
 
-
   const result =
     await response.json();
-
 
   if(!response.ok){
 
@@ -848,7 +864,6 @@ async function checkDriveFolder(folderId){
     );
 
   }
-
 
   return true;
 
@@ -874,10 +889,8 @@ driveInput.addEventListener(
       return;
     }
 
-
     const folderId =
       getDriveFolderId(url);
-
 
     if(!folderId){
 
@@ -888,8 +901,8 @@ driveInput.addEventListener(
         "Link Google Drive tidak valid.";
 
       return;
-    }
 
+    }
 
     driveStatus.className =
       "drive-status";
@@ -900,13 +913,11 @@ driveInput.addEventListener(
     driveStatus.textContent =
       "Memeriksa folder Google Drive...";
 
-
     try{
 
       await checkDriveFolder(
         folderId
       );
-
 
       driveStatus.className =
         "drive-status ok";
@@ -948,28 +959,7 @@ async function slugExists(slug){
       .eq("slug",slug)
       .maybeSingle();
 
-
-  /*
-    CATATAN:
-
-    Kalau tabel galleries kamu BELUM punya
-    kolom slug, fungsi ini tidak dipakai.
-
-    Karena struktur tabel kamu dari screenshot
-    tidak memperlihatkan slug.
-
-    Jadi untuk menghindari error,
-    pengecekan slug dilakukan dengan aman
-    di CREATE GALLERY berdasarkan struktur
-    yang tersedia.
-  */
-
   if(error){
-
-    /*
-      Kalau error karena kolom slug tidak ada,
-      jangan bikin proses gagal.
-    */
 
     if(
       error.message &&
@@ -1001,21 +991,17 @@ form.addEventListener(
 
     event.preventDefault();
 
-
     showStatus(
       "",
       ""
     );
 
-
     const user =
       await checkAuth();
-
 
     if(!user){
       return;
     }
-
 
     const galleryName =
       galleryNameInput.value.trim();
@@ -1048,7 +1034,6 @@ form.addEventListener(
       return;
     }
 
-
     if(!clientName){
 
       showStatus(
@@ -1058,7 +1043,6 @@ form.addEventListener(
 
       return;
     }
-
 
     if(!slug){
 
@@ -1070,7 +1054,6 @@ form.addEventListener(
       return;
     }
 
-
     if(!/^[a-z0-9-]+$/.test(slug)){
 
       showStatus(
@@ -1080,7 +1063,6 @@ form.addEventListener(
 
       return;
     }
-
 
     if(!driveUrl){
 
@@ -1099,7 +1081,6 @@ form.addEventListener(
       getDriveFolderId(
         driveUrl
       );
-
 
     if(!driveFolderId){
 
@@ -1135,7 +1116,7 @@ form.addEventListener(
 
 
       /* ================================================
-         2. CEK SLUG JIKA KOLOM TERSEDIA
+         2. CEK SLUG
       ================================================= */
 
       let exists = false;
@@ -1149,11 +1130,6 @@ form.addEventListener(
 
       }
       catch(slugError){
-
-        /*
-          Abaikan hanya jika database memang
-          belum punya kolom slug.
-        */
 
         if(
           !slugError.message.includes(
@@ -1186,7 +1162,7 @@ form.addEventListener(
 
 
       /* ================================================
-         3. INSERT SESUAI KOLOM SUPABASE KAMU
+         3. INSERT SUPABASE
       ================================================= */
 
       const {
@@ -1245,14 +1221,6 @@ form.addEventListener(
 
       await loadGalleries();
 
-
-      /*
-        Tidak langsung redirect.
-        Supaya kamu bisa melihat galeri
-        berhasil tersimpan.
-      */
-
-
     }
     catch(error){
 
@@ -1260,7 +1228,6 @@ form.addEventListener(
         "CREATE GALLERY ERROR:",
         error
       );
-
 
       showStatus(
         "Gagal membuat galeri: " +
@@ -1290,18 +1257,10 @@ async function loadGalleries(){
   const user =
     await checkAuth();
 
-
   if(!user){
     return;
   }
 
-
-  /*
-    PENTING:
-
-    Query DISESUAIKAN dengan struktur
-    tabel galleries kamu.
-  */
 
   const {
     data,
@@ -1330,7 +1289,6 @@ async function loadGalleries(){
       "LOAD GALLERY ERROR:",
       error
     );
-
 
     galleryList.innerHTML =
       `
@@ -1370,37 +1328,27 @@ async function loadGalleries(){
             : "Drive belum terhubung";
 
 
+        /*
+          =================================================
+          CLICKABLE
+          =================================================
+
+          Saat card diklik:
+          - buka drive_url
+          - tab baru
+        */
+
+        const safeDriveUrl =
+          gallery.drive_url || "#";
+
+
         return `
-  <div
-    class="gallery-item"
-    onclick="openGallery('${gallery.slug}')"
-    style="cursor:pointer"
-  >
 
-    <div class="gallery-info">
-
-      <strong>
-        ${escapeHtml(gallery.title)}
-      </strong>
-
-      <span>
-        ${escapeHtml(gallery.client_name)}
-        ·
-        ${date}
-        ·
-        Google Drive terhubung
-      </span>
-
-    </div>
-
-    <div class="badge">
-      Galeri
-    </div>
-
-  </div>
-`; `
-
-          <div class="gallery-item">
+          <div
+            class="gallery-item"
+            onclick="openGallery('${escapeJs(safeDriveUrl)}')"
+            title="Buka Google Drive"
+          >
 
             <div class="gallery-info">
 
@@ -1438,30 +1386,37 @@ async function loadGalleries(){
     ).join("");
 
 }
-  
+
 
 /* =====================================================
    OPEN GALLERY
 ===================================================== */
 
-function openGallery(slug){
+function openGallery(url){
 
-  if(!slug){
+  if(
+    !url ||
+    url === "#"
+  ){
+
     showStatus(
-      "Link galeri tidak tersedia.",
+      "Link Google Drive galeri ini belum tersedia.",
       "error"
     );
 
     return;
   }
 
-  window.location.href =
-    "gallery-view.html?slug=" +
-    encodeURIComponent(slug);
+
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
+  );
 
 }
 
-  
+
 /* =====================================================
    ESCAPE HTML
 ===================================================== */
@@ -1488,6 +1443,33 @@ function escapeHtml(value){
     .replace(
       /'/g,
       "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE JAVASCRIPT
+===================================================== */
+
+function escapeJs(value){
+
+  return String(value)
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+    .replace(
+      /'/g,
+      "\\'"
+    )
+    .replace(
+      /"/g,
+      '\\"'
+    )
+    .replace(
+      /\r?\n/g,
+      "\\n"
     );
 
 }
